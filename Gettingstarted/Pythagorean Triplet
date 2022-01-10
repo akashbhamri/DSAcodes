@@ -1,0 +1,45 @@
+Example
+
+Sample Input
+
+5 3 4
+
+Sample Output
+
+true
+
+import java.util.*;
+  
+  public class Main{
+  
+  public static void main(String[] args) {
+    Scanner sc = new Scanner(System.in);
+    int n = sc.nextInt();
+    int a = sc.nextInt();
+    int b = sc.nextInt();
+    int max = n;
+    if(max<a)
+    {
+      max = a;
+    }
+    if(max<b)
+    {
+      max = b;
+    }
+    if(a==max)
+    {
+      System.out.println((n*n)+(b*b)==(a*a));
+    }
+    else if(b==max)
+    {
+      System.out.println((n*n)+(a*a)==(b*b));
+    }
+    else
+    {
+      System.out.println((a*a)+(b*b)==(n*n));
+    }
+  
+
+   
+   }
+  }
