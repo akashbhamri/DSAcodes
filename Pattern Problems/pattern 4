@@ -1,0 +1,46 @@
+Example
+
+Sample Input
+
+5
+
+Sample Output
+
+*	*	*	*	*	
+	*	*	*	*	
+		*	*	*	
+			*	*	
+				*
+import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scn = new Scanner(System.in);
+        int n = scn.nextInt();
+        int nsp = n;
+        int nnp = 0;
+        for(int i=0; i<n; i++)
+        {
+            for(int k = 0; k<nnp; k++)
+            {
+                System.out.print("\t");
+            }
+            for(int j = 0; j<nsp; j++)
+            {
+                System.out.print("*\t");
+
+            }
+            if(i>=0)
+            {
+                nnp++;
+                nsp--;
+            }
+            System.out.println();
+
+        }
+
+
+    }
+}        
+        
