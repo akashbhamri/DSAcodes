@@ -1,0 +1,40 @@
+Example
+Sample Input
+
+5
+
+Sample Output
+*	
+	*	
+		*	
+			*	
+				*	
+import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+     
+        int n = 5;
+        int space = 0;
+        int star = 1;
+        for(int i=0; i<n; i++)
+        {
+            for(int j =0; j<space; j++)
+            {
+                System.out.print("\t");
+            }
+            for(int k=0; k<=star;)
+            {
+                System.out.print("*");
+                break;
+               
+            }
+             space+=1;
+            System.out.println();
+        }
+
+
+    }
+}        
+        
