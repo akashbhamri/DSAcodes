@@ -1,0 +1,46 @@
+4
+1						1	
+1	2				2	1	
+1	2	3		3	2	1	
+1	2	3	4	3	2	1	
+import java.util.*;
+
+public class Main{
+
+public static void main(String[] args) {
+    Scanner scn = new Scanner(System.in);
+    int n = scn.nextInt();
+    int space =(2*n)-3;
+    int num = 1;
+    int num1 = 1;
+    for(int i=1; i<=n; i++)
+    {
+        for(int k=1; k<=num; k++)
+        {
+            System.out.print(k+"\t");
+        }
+        for(int j=0; j<space; j++)
+        {
+            System.out.print("\t");
+        }
+        for(int l=num1; l>=1; l--)
+        {
+            System.out.print(l+"\t");
+        }
+        if(i<n)
+        {
+            space-=2;
+            num++;
+            
+        }
+        if(i<n-1)
+        {
+            num1+=1;
+        }
+        System.out.println();
+
+
+    }
+
+ }
+}
