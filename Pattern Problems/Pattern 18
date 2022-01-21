@@ -1,0 +1,55 @@
+Example
+Sample Input
+
+7
+
+Sample Output
+*	*	*	*	*	*	*	
+	*				*	
+		*		*	
+			*	
+		*	*	*	
+	*	*	*	*	*	
+*	*	*	*	*	*	*	
+import java.util.*;
+
+public class Main{
+
+public static void main(String[] args) {
+    Scanner scn = new Scanner(System.in);
+    int n = scn.nextInt();
+    int star = n;
+    int space = 1;
+    for(int i=1; i<=n; i++)
+    {
+         for(int k = 1; k<space; k++)
+        {
+            System.out.print("\t");
+        }
+        for(int j=1; j<=star; j++)
+        {
+            if(i>1 &&  i<=n/2 && j>=2 && j<star)
+            {
+                System.out.print("\t");
+            }
+            else{
+            System.out.print("*\t");
+            }
+        }
+       
+    
+        if(i<=n/2)
+        {
+            star -=2;
+            space +=1;
+        }
+        if(i>=n/2+1)
+        {
+          star+=2;
+          space -=1;
+        }
+        System.out.println();
+    }
+
+ }
+}
