@@ -1,0 +1,62 @@
+import java.io.*;
+import java.util.*;
+
+public class Main{
+
+public static void main(String[] args) throws Exception {
+    Scanner sc = new Scanner(System.in);
+    int a = sc.nextInt();
+    int b = sc.nextInt();
+    int[][] array1 = new int[a][b];
+    for(int i = 0; i<a; i++)
+    {
+        for(int j = 0; j<b; j++)
+        {
+            
+            array1[i][j] = sc.nextInt();
+        }
+    }
+   
+
+    int c = sc.nextInt();
+    int d = sc.nextInt();
+    int[][] array2 = new int[c][d];
+    for(int k = 0; k<c; k++)
+    {
+        for(int l = 0; l<d; l++)
+        {
+         array2[k][l] = sc.nextInt();
+
+        }
+    }
+
+
+    if(b!=c)
+    {
+        System.out.print("Invalid input");
+    }
+    
+    int[][] prd = new int[a][d];
+
+
+        for(int m = 0; m<a; m++)
+         {
+             for(int n = 0; n<d; n++)
+             {
+                 for(int k = 0; k<c; k++)
+                 {
+                     prd[m][n]+= array1[m][k]*array2[k][n];
+              }
+             }
+         }
+
+               for(int[] n : prd)
+    {
+        for( int q : n)
+        {
+            System.out.print(q+" ");
+        }
+        System.out.println();
+    }
+    }
+}
