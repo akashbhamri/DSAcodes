@@ -1,0 +1,104 @@
+Example
+Sample Input
+
+3
+5
+11
+12
+13
+14
+15
+21
+22
+23
+24
+25
+31
+32
+33
+34
+35
+
+Sample Output
+11
+21
+31
+32
+33
+34
+35
+25
+15
+14
+13
+12
+22
+23
+24
+
+
+import java.io.*;
+import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) throws Exception {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        int[][] a = new int[n][m];
+        for(int i=0; i<n; i++)
+        {
+            for(int j=0; j<m; j++)
+            {
+                a[i][j] = sc.nextInt();
+
+            }
+         }
+
+        int minrow = 0;
+        int mincol = 0;
+        int maxrow = n-1;
+        int maxcol = m-1;
+        int count = 0;
+        int tne = n*m;
+        while(count<tne){
+        
+    
+        for(int i = minrow , j=mincol; i<=maxrow&&count<tne; i++)
+        {
+            System.out.println(a[i][j]);
+            count++;
+         }
+         mincol++;
+        for(int i = maxrow ,  j=mincol; j<=maxcol &&count<tne ; j++)
+        {
+            System.out.println(a[i][j]);
+            count++;
+        }
+        maxrow--;
+        for(int k=maxrow , l = maxcol; k>=minrow &&count<tne; k--)
+        {
+            System.out.println(a[k][l]);
+            count++;
+        }
+        maxcol--;
+        for(int k = maxcol ,g = minrow; k>=mincol &&count<tne; k--)
+        {
+            System.out.println(a[g][k]);
+            count++;
+        }
+        minrow++;
+        }    
+    
+
+
+
+
+
+
+
+
+    }
+
+}
