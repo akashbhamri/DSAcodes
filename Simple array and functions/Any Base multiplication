@@ -1,0 +1,85 @@
+Example
+Sample Input
+
+5
+1220
+31
+
+Sample Output
+43320
+import java.util.*;
+
+public class Main{
+
+public static void main(String[] args) {
+   Scanner sc = new Scanner(System.in);
+
+    int b = sc.nextInt();
+    int n1 = sc.nextInt();
+    int n2 =sc.nextInt();
+
+    int d = getProduct(b, n1, n2);
+    System.out.println(d);
+ }
+
+ public static int getProduct(int b, int n1, int n2){
+
+int rv =0;
+int prd2 = 1;
+   while(n2>0)
+   {
+     int d4 = n2%10;
+     n2 /=10;
+     int pwd = getdigitbydigitprd( b, n1, d4);
+     rv = getsum( b , rv , pwd*prd2);
+     prd2 =prd2*10;
+     
+     }
+     return rv;
+}
+public static int getdigitbydigitprd(int b, int n1, int d2)
+{
+  int rv = 0;
+  int prd1 =1;
+  int mul = 0;
+  int carry1 = 0;
+  while(n1>0||carry1>0)
+  {
+    int d3 = n1%10;
+    n1 /=10;
+     mul = d3*d2+carry1;
+     carry1 = mul/b;
+     mul = mul%b;
+     
+     rv += mul*prd1;
+     prd1=prd1*10;
+    }
+
+return rv;
+}
+
+
+
+public static int getsum(int b, int n1 , int n2)
+{
+  int sum = 0;
+  int prd = 1;
+  int carry = 0;
+  
+  int actualnum1=0;
+  while(n1>0||n2>0||carry>0){
+  
+  int d1 = n1%10;
+  int d2 = n2%10;
+  n1 /=10;
+  n2 /=10;
+  sum = d1+d2+carry;
+  carry = sum/b;
+  sum = sum%b;
+ 
+  actualnum1 += sum*prd;
+  prd =prd*10;
+  }
+  return actualnum1;
+}
+}
