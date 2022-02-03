@@ -1,0 +1,78 @@
+Example
+Sample Input
+
+5
+3
+1
+0
+7
+5
+6
+1
+1
+1
+1
+1
+1
+
+Sample Output
+1
+4
+2
+1
+8
+6
+import java.io.*;
+import java.util.*;
+
+public class Main{
+
+public static void main(String[] args) throws Exception {
+    Scanner sc = new Scanner(System.in);
+    int n = sc.nextInt();
+    int[] a = new int[n];
+    for(int i=0; i<a.length; i++)
+    {
+        a[i] = sc.nextInt();
+    }
+    int m = sc.nextInt();
+    int[] b = new int[m];
+    for(int j =0; j<b.length; j++)
+    {
+        b[j] = sc.nextInt();
+    }
+    int[] sum = new int[n>m?n:m];
+    int p = a.length-1;
+    int o = b.length-1;
+    int n2 = sum.length-1;
+    int c = 0;
+    while(n2>=0)
+    {
+        int d = c;
+        if(p>=0)
+        {
+            d +=a[p];
+        }
+        if(o>=0)
+        {
+            d+=b[o];
+        }
+        c = d/10;
+        d = d%10;
+        sum[n2] = d;
+        p--;
+        o--;
+        n2--;
+    }
+    if(c>0)
+    {
+        System.out.print(c);
+
+    }
+    for(int val : sum)
+    {
+        System.out.println(val);
+    }
+}
+
+}
