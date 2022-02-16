@@ -1,0 +1,72 @@
+The saddle price is defined as the least price in the row but the maximum price in the column of the matrix.
+Example
+Sample Input
+
+4
+11
+12
+13
+14
+21
+22
+23
+24
+31
+32
+33
+34
+41
+42
+43
+44
+
+Sample Output
+41
+import java.io.*;
+import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) throws Exception {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int[][] a = new int[n][n];
+        for(int i=0; i<a.length; i++)
+        {
+            for(int j=0; j<a.length; j++)
+            {
+                a[i][j] = sc.nextInt();
+            }
+        }
+        for(int i =0; i<a.length; i++)
+        {
+            int saddle =0;
+            for(int j=1; j<a[0].length; j++)
+            {
+                if(a[i][saddle]>a[i][j])
+                {
+                    saddle = j;
+                }
+
+            }
+              boolean flag = true;
+            for(int k=0; k<a.length; k++)
+            {
+              
+                if(a[k][saddle]>a[i][saddle])
+                {
+                    flag = false;
+                    break;
+
+                }
+            }
+            if(flag == true)
+            {
+                System.out.println(a[i][saddle]);
+                return;
+            }
+    }
+        System.out.println("Invalid input");
+  }
+
+}
