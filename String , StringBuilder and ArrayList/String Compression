@@ -1,0 +1,78 @@
+Example
+Sample Input
+
+wwwwaaadexxxxxx
+
+Sample Output
+wadex
+w4a3dex6
+
+
+import java.io.*;
+import java.util.*;
+
+public class Main {
+
+	public static String compression1(String str){
+		StringBuilder ns = new StringBuilder();
+		ns.append(str.charAt(0));
+		int val = 0;
+		for(int i=0; i<str.length(); i++)
+		{
+			if(ns.charAt(val)==str.charAt(i))
+			{
+				continue;
+			}
+			else{
+				ns.append(str.charAt(i));
+				val++;
+
+			}
+		}
+
+		return ns.toString();
+	}
+
+	public static String compression2(String str){
+	StringBuilder ns1 = new StringBuilder();
+		ns1.append(str.charAt(0));
+		int val1 = 0;
+		int op = 0;
+		for(int i=0; i<str.length(); i++)
+		{
+			if(ns1.charAt(val1)==str.charAt(i))
+			{
+				op++;
+				if(i==str.length()-1)
+				{
+					ns1.append(String.valueOf(op));
+				}
+
+				continue;
+			}
+			else{
+				if(op!=1){
+				ns1.append(String.valueOf(op));
+				}
+				while(val1!=ns1.length()-1)
+				{
+					val1++;
+				}
+				ns1.append(str.charAt(i));
+				val1++;
+				op=1;
+
+			}
+		}
+
+
+		return ns1.toString();
+	}
+	public static void main(String[] args) {
+		Scanner scn = new Scanner(System.in);
+		String str = scn.next();
+		System.out.println(compression1(str));
+		System.out.println(compression2(str));
+	}
+
+}
