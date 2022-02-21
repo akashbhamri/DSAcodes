@@ -1,0 +1,52 @@
+ For "abecd", the answer should be "a1b3e-2c1d", as 
+   'b'-'a' = 1
+   'e'-'b' = 3
+   'c'-'e' = -2
+   'd'-'c' = 1
+   Example
+Sample Input
+
+pepCODinG
+
+Sample Output
+p-11e11p-45C12O-11D37i5n-39G
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+public class Main
+{
+	public static void main(String[] args) {
+		String s = "pepCODinG";
+		//System.out.println(s.length());
+		StringBuilder sb = new StringBuilder();
+		int val = 0;
+		for(int i=0; i<=s.length()-1; i++,val++)
+		{
+		    //System.out.print(i);
+		   System.out.println(s.charAt(i));
+		
+		    char t= (char)(s.charAt(i));
+		    	    
+	 sb.append(s.charAt(val));
+	 
+	  
+		    char y = (char)(s.charAt(i-1));
+	
+	
+		  String w = Integer.toString(t-y);
+		  
+	 sb.append(w);
+	
+		
+		}
+	
+		System.out.println(sb);
+		
+	 
+	}
+}
