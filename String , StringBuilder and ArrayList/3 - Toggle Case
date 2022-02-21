@@ -1,0 +1,41 @@
+Example
+Sample Input
+
+pepCODinG
+
+Sample Output
+PEPcodINg
+import java.util.*;
+
+public class Main{
+    public static void main(String args[])
+    {
+ Scanner sc = new Scanner(System.in);
+ String s = sc.next();
+ String addstring ="";
+ int val =0;
+ for(int i=1; i<=s.length(); i++)
+ {
+     for(int j=val; j<i; j++)
+     {
+         String b = s.substring(j,i);
+         val++;
+         if(b.toUpperCase()==b)
+         {
+             addstring += b.toLowerCase();
+            
+        }
+        else{
+            addstring +=b.toUpperCase();
+        }
+     }
+   
+
+
+ }
+  System.out.println(addstring);
+
+
+    }
+
+}
