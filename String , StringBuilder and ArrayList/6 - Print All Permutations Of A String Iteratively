@@ -1,0 +1,57 @@
+Example
+Sample Input
+
+abc
+
+Sample Output
+abc
+bac
+cab
+acb
+bca
+cba
+
+import java.io.*;
+import java.util.*;
+
+public class Main {
+
+	public static void solution(String str){
+			    StringBuilder a = new StringBuilder();
+	    a.append(str);
+	
+	    int i = a.length();
+	    int sum = i;
+	    while(i>1)
+	    {
+	      sum*= (i-1);
+	        i = i-1;
+	    }
+	    
+	    for(int j=0; j<sum; j++)
+	    {
+	        
+	        int u = a.length();
+	        a.append(str);
+			int g = j;
+	        while(u>=1)
+	        {
+	            int y = g%u;
+				 g = g/u;
+
+	            char  q = a.charAt(y);
+	            System.out.print(q);
+	            a.deleteCharAt(y);
+	            u = u-1;
+	        }
+	        System.out.println();
+	    }
+		
+	}
+	public static void main(String[] args) {
+		Scanner scn = new Scanner(System.in);
+		String str = scn.next();
+		solution(str);
+	}
+
+}
