@@ -15,34 +15,38 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
+	public static int factorial(int sum)
+	{
+		int val=1;
+		for(int i=2; i<=sum; i++)
+		{
+			val *=i;
+		}
+		return val;
+	}
 
 	public static void solution(String str){
-			    StringBuilder a = new StringBuilder();
-	    a.append(str);
+			
+	   
 	
-	    int i = a.length();
-	    int sum = i;
-	    while(i>1)
-	    {
-	      sum*= (i-1);
-	        i = i-1;
-	    }
-	    
+	    int i = str.length();
+	    int sum = factorial(i);
+	
 	    for(int j=0; j<sum; j++)
 	    {
-	        
+	            StringBuilder a = new StringBuilder(str);
 	        int u = a.length();
-	        a.append(str);
-			int g = j;
+	        
+			int temp = j;
 	        while(u>=1)
 	        {
-	            int y = g%u;
-				 g = g/u;
-
-	            char  q = a.charAt(y);
+				int qua = temp/u;
+				int rem = temp%u;
+				char  q = a.charAt(rem);
 	            System.out.print(q);
-	            a.deleteCharAt(y);
+	            a.deleteCharAt(rem);
 	            u = u-1;
+				temp = qua;
 	        }
 	        System.out.println();
 	    }
