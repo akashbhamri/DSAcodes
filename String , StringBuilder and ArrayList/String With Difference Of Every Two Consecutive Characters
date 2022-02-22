@@ -31,8 +31,13 @@ public class Main
 		   System.out.println(s.charAt(i));
 		
 		    char t= (char)(s.charAt(i));
-		    	    
+		    	    if(i==s.length()-1){
 	 sb.append(s.charAt(val));
+	 break;
+	 }
+	 else{
+	 sb.append(s.charAt(val);
+	 }
 	 
 	  
 		    char y = (char)(s.charAt(i-1));
