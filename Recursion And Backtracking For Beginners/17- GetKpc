@@ -1,0 +1,61 @@
+Example
+Sample Input
+
+78
+
+Sample Output
+[tv, tw, tx, uv, uw, ux]
+
+import java.io.*;
+import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) throws Exception {
+        Scanner sc = new Scanner(System.in);
+        String n = sc.next();
+        ArrayList<String> words = getKPC(n);
+        System.out.println(words);
+ 
+    } 
+       
+static String strtt[] = {".;","abc","def","ghi","jkl","mno","pqrs","tu","vwx","yz"};
+     public static ArrayList<String> getKPC(String str) {
+         if(str.length()==0)
+         {
+             ArrayList<String>pp = new ArrayList<>();
+             pp.add("");
+             return pp;
+         }
+
+
+
+         char ch = str.charAt(0);
+        String ss = str.substring(1);
+        ArrayList<String> al = getKPC(ss);
+         ArrayList<String> ssr = new ArrayList<>();
+
+         String ssf = strtt[ch-'0'];
+         for(int i=0; i<ssf.length(); i++)
+         {
+             char rr = ssf.charAt(i);
+          for(String uu : al)
+          {
+              ssr.add(rr+uu);
+          }
+}
+         return ssr;
+}
+
+ }
+ Time Complexity :
+
+O(n) This time complexity is linear because a recursion call is made along with using "for loop".
+
+
+Space Complexity :
+
+O(1) As no extra space is required, therefore space complexity is constant. However, if we include the space used in the recursive stack then the space complexity is O(n).
+With this we come to the end of this question. After doing this you must have realized how similar this question was to the previous question of "Get Subsequence" 
+.You'll get more questions like this in further lectures.
+We want you to try them on your own now that you have understood the basic logic.
