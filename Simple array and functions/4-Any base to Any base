@@ -43,3 +43,12 @@ import java.util.*;
 
    }   
   }
+  Analysis :
+TIME COMPLEXITY :
+
+The time complexity calculation shouldn’t be difficult because it is already discussed in the previous article. And we are just reusing the functions. So it will be logarithmic. O(log10(n) + log10(n)) = O(log10(n))
+
+
+SPACE COMPLEXITY :
+
+We just need to store a few variables like the answer, multiplier and remainder, hence O(1) auxiliary space is required.
