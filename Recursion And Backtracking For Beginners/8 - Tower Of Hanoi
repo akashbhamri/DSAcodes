@@ -41,3 +41,10 @@ public class Main {
     }
 
 }
+Analysis:
+Time complexity: O(2^n).
+
+Space complexity: O(1)
+
+There is no data structure used, thus no auxiliary space is used. Hence, 
+space complexity is O(1). Note: if we talk about the recursion space then it would be O(n).
