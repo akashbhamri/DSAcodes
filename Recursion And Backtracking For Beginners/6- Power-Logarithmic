@@ -33,5 +33,8 @@ public class Main {
         }
         return fnn;
     }
+    
+    TimeCoplexity = O(logn)
+    Space complexity = O(1)
 
 }
