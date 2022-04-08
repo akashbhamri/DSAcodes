@@ -1,0 +1,26 @@
+input 1,2,3,4,5
+find = 4
+output 3
+
+public class Main
+{
+	public static void main(String[] args) {
+	    int[] arr1 = {1,4,3,5,9}; 
+	System.out.println(find(arr1,0,4));
+	}
+	static int find(int arr[] , int i,int o)
+	{
+	    if(i==arr.length)
+	    {
+	        return -1;
+	    }
+	    if(arr[i]==o)
+	    {
+	        return i;
+	    }
+	    else{
+	        return find(arr,i+1,o);
+	    }
+	    
+	}
+}
