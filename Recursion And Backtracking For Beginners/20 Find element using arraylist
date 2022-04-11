@@ -1,0 +1,27 @@
+input 1,2,3,4,4,5
+output [3,4]
+
+import java.util.*;
+public class Main
+{
+	public static void main(String[] args) {
+	    int[] a = {1,2,3,4,4,5};
+	    
+	    ArrayList<Integer> all = findall(a,0,4,new ArrayList<Integer>());
+	    System.out.println(all);
+	
+	}
+	static ArrayList<Integer> findall(int[] arr, int i, int j, ArrayList<Integer>list)
+	{
+	    if(arr.length==i)
+	    {
+	        return list;
+	    }
+	    if(arr[i]==j)
+	    {
+	        list.add(i);
+	    }
+	    return findall(arr,i+1,j,list);
+	    
+	}
+}
