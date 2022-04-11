@@ -24,4 +24,22 @@ public class Main
 	    return findall(arr,i+1,j,list);
 	    
 	}
+	
+	//below one every time new arraylist will we create and it return empty list but by the help of addAll we was add the value inside that list
+		static ArrayList<Integer> findall2(int[] arr,int i , int j)
+	{
+	    ArrayList<Integer> al = new ArrayList<Integer>();
+	    if(arr.length==i)
+	    {
+	        return al;
+	    }
+	    if(arr[i]==j)
+	    {
+	        al.add(i);
+	    }
+	    ArrayList<Integer> also = findall2(arr,i+1,j);
+	    al.addAll(also);
+	    return al;
+	    
+	}
 }
