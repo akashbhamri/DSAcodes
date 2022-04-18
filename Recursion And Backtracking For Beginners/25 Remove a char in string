@@ -1,0 +1,79 @@
+input = baccad
+output bccd
+public class Main
+{
+  public static void main (String[]args)
+  {
+    //skip("","baccad");
+    //      System.out.println(skipreturn("baccad"));
+    //System.out.println (skipapple ("bccapplecd"));
+   System.out.println(skipappnotapple("bccapplcd"));//if it is not apple it will remove app
+
+
+  }
+  static void skip (String p, String up)
+  {
+
+    if (up.isEmpty ())
+      {
+	System.out.println (p);
+	return;
+      }
+    char c = up.charAt (0);
+    if (c == 'a')
+      {
+	skip (p, up.substring (1));
+      }
+    else
+      {
+	skip (p + c, up.substring (1));
+      }
+  }
+  static String skipreturn (String up)
+  {
+    if (up.isEmpty ())
+      {
+	return "";
+      }
+    char ch = up.charAt (0);
+    if (ch == 'a')
+      {
+	return skipreturn (up.substring (1));
+      }
+    else
+      {
+	return ch + skipreturn (up.substring (1));
+      }
+  }
+  static String skipapple (String up)
+  {
+    if (up.isEmpty ())
+      {
+	return "";
+      }
+    if (up.startsWith ("apple"))
+      {
+	return skipapple (up.substring (5));
+      }
+    else
+      {
+	return up.charAt (0) + skipapple (up.substring (1));
+      }
+  }
+  static String skipappnotapple(String up)
+  {
+    if (up.isEmpty ())
+      {
+	return "";
+      }
+    if (up.startsWith ("app")&& !up.startsWith("apple"))
+      {
+	return skipappnotapple(up.substring (3));
+      }
+    else
+      {
+	return up.charAt (0) +skipappnotapple(up.substring (1));
+      }
+  }
+}
+
