@@ -1,0 +1,97 @@
+Example
+
+Sample Input
+
+4
+-2 
+5 
+9 
+11
+3
+4 
+6 
+8
+Sample Output
+
+-2
+4
+5
+6
+8
+9
+11
+import java.io.*;
+import java.util.*;
+
+public class Main {
+
+  public static int[] mergeTwoSortedArrays(int[] a, int[] b){
+    int[] res = new int[a.length+b.length];
+     int i =0;
+     int j = 0;
+     int k=0;
+    while ( i<a.length && j<b.length) {
+      if(a[i]<b[j])
+      {
+        res[k] = a[i];
+        i++;
+        k++;
+        }
+        else{
+          res[k] = b[j];
+          j++;
+          k++;
+        }
+     }
+     while(i<a.length)
+     {
+       res[k]=a[i];
+       i++;
+       k++;
+     }
+     while(j<b.length)
+     {
+       res[k] = b[j];
+       j++;
+       k++;
+     }
+    
+    return res;
+  }
+
+  public static void print(int[] arr){
+    for(int i = 0 ; i < arr.length; i++){
+      System.out.println(arr[i]);
+    }
+  }
+  public static void main(String[] args){
+    Scanner scn = new Scanner(System.in);
+    int n = scn.nextInt();
+    int[] a = new int[n];
+    for(int i = 0 ; i < n; i++){
+      a[i] = scn.nextInt();
+    }
+    int m = scn.nextInt();
+    int[] b = new int[m];
+    for(int i = 0 ; i < m; i++){
+      b[i] = scn.nextInt();
+    }
+    int[] mergedArray = mergeTwoSortedArrays(a,b);
+    print(mergedArray);
+  }
+
+}
+ANALYSIS :
+
+Time Complexity :
+
+The time complexity of this approach is O(n) where n = a.length + b.length The pointer ‘i’ moves from 0 to a.length and j moves 
+from 0 to b.length only once. So the total number of iterations is equal to a.length + b.length(i.e. the total number of elements 
+in both the arrays). If you're still not convinced, consider k. The pointer k only loops through the resultant array once. As a result, 
+we can conclude that the time complexity is a.length + b.length, i.e. linear O(n).
+
+Space Complexity :
+
+The merged array is actually stored in a temporary array of size a.length + b.length. As a result, the space complexity of our solution 
+is O(n), or linear.
+
