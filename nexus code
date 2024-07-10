@@ -1,12 +1,13 @@
-#!/bin/bash
-
+# Nexus Repository Manager details
 NEXUS_URL="http://your-nexus-url"
-USERNAME="your-username"
-PASSWORD="your-password"
+CREDENTIALS="username:password"
+RETENTION_DAYS=$((5 * 365))
+# Get the current date in seconds since epoch
+CURRENT_DATE=$(date +%s)
 
-# Test credentials authentication
-if curl -u $USERNAME:$PASSWORD -s "$NEXUS_URL/service/rest/v1/repositories" | jq -e '.' > /dev/null; then
-    echo "Credentials are valid for Nexus URL: $NEXUS_URL"
-else
-    echo "Error: Invalid credentials for Nexus URL: $NEXUS_URL"
-fi
+# File to store output in Jenkins workspace
+OUTPUT_FILE="$WORKSPACE/nexus_components_$(date +%Y%m%d_%H%M%S).txt"
+
+echo "Starting Nexus Components Cleanup Report - $(date)"
+echo "-------------------------------------------------"
+echo "Output file location: $OUTPUT_FILE"
