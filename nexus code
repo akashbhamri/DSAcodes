@@ -1,81 +1,12 @@
 #!/bin/bash
 
-# Nexus Repository Manager details
 NEXUS_URL="http://your-nexus-url"
-CREDENTIALS="username:password"
-RETENTION_DAYS=$((5 * 365))
+USERNAME="your-username"
+PASSWORD="your-password"
 
-# Get the current date in seconds since epoch
-CURRENT_DATE=$(date +%s)
-
-# File to store output
-OUTPUT_FILE="nexus_components_$(date +%Y%m%d_%H%M%S).txt"
-
-# Function to decode base64 and parse JSON
-decode_base64() {
-  echo $1 | base64 --decode | jq .
-}
-
-# Function to get the size of a component and convert to human-readable format
-get_component_size() {
-  COMPONENT_ID=$1
-  ASSETS=$(curl -u $CREDENTIALS -X GET "$NEXUS_URL/service/rest/v1/components/$COMPONENT_ID/assets" | jq -r '.items[] | @base64')
-  TOTAL_SIZE=0
-
-  for ASSET in $ASSETS; do
-    DECODED_ASSET=$(decode_base64 $ASSET)
-    ASSET_SIZE=$(echo $DECODED_ASSET | jq -r '.size')
-    TOTAL_SIZE=$((TOTAL_SIZE + ASSET_SIZE))
-  done
-
-  # Convert bytes to human-readable format (MB, GB, TB)
-  if [ $TOTAL_SIZE -gt $((1024*1024*1024)) ]; then
-    SIZE=$(echo "scale=2; $TOTAL_SIZE / 1024 / 1024 / 1024" | bc)
-    echo "${SIZE} GB"
-  elif [ $TOTAL_SIZE -gt $((1024*1024)) ]; then
-    SIZE=$(echo "scale=2; $TOTAL_SIZE / 1024 / 1024" | bc)
-    echo "${SIZE} MB"
-  elif [ $TOTAL_SIZE -gt 1024 ]; then
-    SIZE=$(echo "scale=2; $TOTAL_SIZE / 1024" | bc)
-    echo "${SIZE} KB"
-  else
-    echo "${TOTAL_SIZE} bytes"
-  fi
-}
-
-# Function to get repository and blob store details of a component
-get_component_details() {
-  COMPONENT_ID=$1
-  REPOSITORY=$(curl -u $CREDENTIALS -X GET "$NEXUS_URL/service/rest/v1/components/$COMPONENT_ID" | jq -r '.repository')
-  BLOB_STORE=$(curl -u $CREDENTIALS -X GET "$NEXUS_URL/service/rest/v1/components/$COMPONENT_ID" | jq -r '.repositoryBlobStoreName')
-  echo "Repository: $REPOSITORY, Blob Store: $BLOB_STORE"
-}
-
-# Iterate over components and store data in output file
-echo "Nexus Components Cleanup Report - $(date)" > $OUTPUT_FILE
-echo "-------------------------------------------------" >> $OUTPUT_FILE
-
-# Iterate over components
-for COMPONENT in $(curl -u $CREDENTIALS -X GET "$NEXUS_URL/service/rest/v1/components" | jq -r '.items[] | @base64'); do
-  DECODED_COMPONENT=$(decode_base64 $COMPONENT)
-  LAST_MODIFIED=$(echo $DECODED_COMPONENT | jq -r '.lastModified')
-  
-  # Convert lastModified date to seconds since epoch
-  LAST_MODIFIED_DATE=$(date -d $LAST_MODIFIED +%s)
-  
-  # Calculate the age of the component
-  AGE_DAYS=$(( (CURRENT_DATE - LAST_MODIFIED_DATE) / 86400 ))
-  
-  if [ $AGE_DAYS -ge $RETENTION_DAYS ]; then
-    COMPONENT_ID=$(echo $DECODED_COMPONENT | jq -r '.id')
-    COMPONENT_NAME=$(echo $DECODED_COMPONENT | jq -r '.name')
-    COMPONENT_VERSION=$(echo $DECODED_COMPONENT | jq -r '.version')
-    COMPONENT_SIZE=$(get_component_size $COMPONENT_ID)
-    COMPONENT_FORMAT=$(echo $DECODED_COMPONENT | jq -r '.format')
-    COMPONENT_DETAILS=$(get_component_details $COMPONENT_ID)
-    
-    echo "Component ID: $COMPONENT_ID, Name: $COMPONENT_NAME, Version: $COMPONENT_VERSION, Format: $COMPONENT_FORMAT, Last Modified: $LAST_MODIFIED, Size: $COMPONENT_SIZE, $COMPONENT_DETAILS" >> $OUTPUT_FILE
-  fi
-done
-
-echo "Cleanup report saved to: $OUTPUT_FILE"
+# Test credentials authentication
+if curl -u $USERNAME:$PASSWORD -s "$NEXUS_URL/service/rest/v1/repositories" | jq -e '.' > /dev/null; then
+    echo "Credentials are valid for Nexus URL: $NEXUS_URL"
+else
+    echo "Error: Invalid credentials for Nexus URL: $NEXUS_URL"
+fi
