@@ -5,14 +5,11 @@ NEXUS_URL="http://your-nexus-url"
 CREDENTIALS="username:password"
 REPOSITORY_NAME="repository-name"
 
-# Function to decode base64 and parse JSON
-decode_base64() {
-  echo $1 | base64 --decode | jq .
-}
-
 # Function to list and display details of all components in a repository
 list_components() {
   # Make the API call and handle errors
+  echo "Fetching components from Nexus..."
+
   response=$(curl -s -u $CREDENTIALS -X GET "$NEXUS_URL/service/rest/v1/components?repository=$REPOSITORY_NAME")
 
   if [ $? -ne 0 ]; then
@@ -20,10 +17,14 @@ list_components() {
     exit 1
   fi
 
-  # Parse the JSON response and display component details
-  echo "Response from Nexus API:"
-  echo "$response"
+  # Check if API returned an error response
+  error=$(echo "$response" | jq -r '.error')
+  if [ ! -z "$error" ] && [ "$error" != "null" ]; then
+    echo "Error from Nexus API: $error"
+    exit 1
+  fi
 
+  # Parse the JSON response and display component details
   echo "Components found:"
   echo "$response" | jq -r '.items[] | "Component ID: \(.id), Name: \(.name), Version: \(.version), Format: \(.format)"'
 }
