@@ -1,13 +1,39 @@
-# Nexus Repository Manager details
-NEXUS_URL="http://your-nexus-url"
-CREDENTIALS="username:password"
-RETENTION_DAYS=$((5 * 365))
-# Get the current date in seconds since epoch
-CURRENT_DATE=$(date +%s)
+# Function to decode base64 and parse JSON
+decode_base64() {
+  echo $1 | base64 --decode | jq .
+}
 
-# File to store output in Jenkins workspace
-OUTPUT_FILE="$WORKSPACE/nexus_components_$(date +%Y%m%d_%H%M%S).txt"
+# Function to get the size of a component and convert to human-readable format
+get_component_size() {
+  COMPONENT_ID=$1
+  ASSETS=$(curl -u $CREDENTIALS -X GET "$NEXUS_URL/service/rest/v1/components/$COMPONENT_ID/assets" | jq -r '.items[] | @base64')
+  TOTAL_SIZE=0
 
-echo "Starting Nexus Components Cleanup Report - $(date)"
-echo "-------------------------------------------------"
-echo "Output file location: $OUTPUT_FILE"
+  for ASSET in $ASSETS; do
+    DECODED_ASSET=$(decode_base64 $ASSET)
+    ASSET_SIZE=$(echo $DECODED_ASSET | jq -r '.size')
+    TOTAL_SIZE=$((TOTAL_SIZE + ASSET_SIZE))
+  done
+
+  # Convert bytes to human-readable format (MB, GB, TB)
+  if [ $TOTAL_SIZE -gt $((1024*1024*1024)) ]; then
+    SIZE=$(echo "scale=2; $TOTAL_SIZE / 1024 / 1024 / 1024" | bc)
+    echo "${SIZE} GB"
+  elif [ $TOTAL_SIZE -gt $((1024*1024)) ]; then
+    SIZE=$(echo "scale=2; $TOTAL_SIZE / 1024 / 1024" | bc)
+    echo "${SIZE} MB"
+  elif [ $TOTAL_SIZE -gt 1024 ]; then
+    SIZE=$(echo "scale=2; $TOTAL_SIZE / 1024" | bc)
+    echo "${SIZE} KB"
+  else
+    echo "${TOTAL_SIZE} bytes"
+  fi
+}
+
+# Function to get repository and blob store details of a component
+get_component_details() {
+  COMPONENT_ID=$1
+  REPOSITORY=$(curl -u $CREDENTIALS -X GET "$NEXUS_URL/service/rest/v1/components/$COMPONENT_ID" | jq -r '.repository')
+  BLOB_STORE=$(curl -u $CREDENTIALS -X GET "$NEXUS_URL/service/rest/v1/components/$COMPONENT_ID" | jq -r '.repositoryBlobStoreName')
+  echo "Repository: $REPOSITORY, Blob Store: $BLOB_STORE"
+}
