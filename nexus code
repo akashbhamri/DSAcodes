@@ -21,6 +21,10 @@ list_components() {
   fi
 
   # Parse the JSON response and display component details
+  echo "Response from Nexus API:"
+  echo "$response"
+
+  echo "Components found:"
   echo "$response" | jq -r '.items[] | "Component ID: \(.id), Name: \(.name), Version: \(.version), Format: \(.format)"'
 }
 
