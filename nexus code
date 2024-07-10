@@ -12,8 +12,9 @@ decode_base64() {
 # Function to get the size of a component and convert to human-readable format
 get_component_size() {
   COMPONENT_ID=$1
-  echo "Fetching assets for component ID: $COMPONENT_ID"
-  ASSETS=$(curl -u $CREDENTIALS -X GET "$NEXUS_URL/service/rest/v1/components/$COMPONENT_ID/assets" | jq -r '.items[] | @base64')
+  ASSETS_URL="$NEXUS_URL/service/rest/v1/components/$COMPONENT_ID/assets"
+  echo "Fetching assets from URL: $ASSETS_URL"
+  ASSETS=$(curl -u $CREDENTIALS -X GET "$ASSETS_URL" | jq -r '.items[] | @base64')
   TOTAL_SIZE=0
 
   for ASSET in $ASSETS; do
@@ -42,8 +43,9 @@ get_component_size() {
 # Function to get repository and blob store details of a component
 get_component_details() {
   COMPONENT_ID=$1
-  echo "Fetching repository and blob store details for component ID: $COMPONENT_ID"
-  COMPONENT_DATA=$(curl -u $CREDENTIALS -X GET "$NEXUS_URL/service/rest/v1/components/$COMPONENT_ID")
+  COMPONENT_URL="$NEXUS_URL/service/rest/v1/components/$COMPONENT_ID"
+  echo "Fetching repository and blob store details from URL: $COMPONENT_URL"
+  COMPONENT_DATA=$(curl -u $CREDENTIALS -X GET "$COMPONENT_URL")
   REPOSITORY=$(echo $COMPONENT_DATA | jq -r '.repository')
   BLOB_STORE=$(echo $COMPONENT_DATA | jq -r '.repositoryBlobStoreName')
   echo "Repository: $REPOSITORY, Blob Store: $BLOB_STORE"
