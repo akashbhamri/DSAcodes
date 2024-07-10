@@ -5,11 +5,25 @@ NEXUS_URL="http://your-nexus-url"
 CREDENTIALS="username:password"
 REPOSITORY_NAME="repository-name"
 
-# Function to list all component IDs in a repository
-list_component_ids() {
-  curl -u $CREDENTIALS -X GET "$NEXUS_URL/service/rest/v1/components?repository=$REPOSITORY_NAME" | jq -r '.items[].id'
+# Function to decode base64 and parse JSON
+decode_base64() {
+  echo $1 | base64 --decode | jq .
 }
 
-# List and display component IDs
-echo "Listing all component IDs in repository: $REPOSITORY_NAME"
-list_component_ids
+# Function to list and display details of all components in a repository
+list_components() {
+  # Make the API call and handle errors
+  response=$(curl -s -u $CREDENTIALS -X GET "$NEXUS_URL/service/rest/v1/components?repository=$REPOSITORY_NAME")
+
+  if [ $? -ne 0 ]; then
+    echo "Error: Failed to fetch components from Nexus."
+    exit 1
+  fi
+
+  # Parse the JSON response and display component details
+  echo "$response" | jq -r '.items[] | "Component ID: \(.id), Name: \(.name), Version: \(.version), Format: \(.format)"'
+}
+
+# Main execution
+echo "Fetching and displaying Nexus components details..."
+list_components
