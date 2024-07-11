@@ -3,21 +3,62 @@
 # Nexus Repository Manager details
 NEXUS_URL="https://your-nexus-url"
 CREDENTIALS="username:password"
-REPOSITORY_NAME="your-repository-name"
+REPOSITORY_NAME="$1"  # Provided as a parameter to the script
 
-# Make a simple API call to list components in the specified repository
-response=$(curl -u $CREDENTIALS -X GET "$NEXUS_URL/service/rest/v1/components?repository=$REPOSITORY_NAME" -w "\nHTTP_STATUS:%{http_code}" -s)
+# File to store output in Jenkins workspace
+OUTPUT_FILE="$WORKSPACE/nexus_components_$(date +%Y%m%d_%H%M%S).txt"
 
-# Extract the HTTP status code from the response
-http_status=$(echo "$response" | grep "HTTP_STATUS" | awk -F: '{print $2}')
+# Function to decode base64 and parse JSON
+decode_base64() {
+  echo $1 | base64 --decode | jq .
+}
 
-# Print the response for debugging
-echo "Response from Nexus:"
-echo "$response"
+# Function to get the size of a component and convert to human-readable format
+convert_size() {
+  BYTES=$1
+  if [ $BYTES -ge $((1024 * 1024 * 1024)) ]; then
+    SIZE=$(echo "scale=2; $BYTES / 1024 / 1024 / 1024" | bc)
+    echo "${SIZE} GB"
+  elif [ $BYTES -ge $((1024 * 1024)) ]; then
+    SIZE=$(echo "scale=2; $BYTES / 1024 / 1024" | bc)
+    echo "${SIZE} MB"
+  elif [ $BYTES -ge 1024 ]; then
+    SIZE=$(echo "scale=2; $BYTES / 1024" | bc)
+    echo "${SIZE} KB"
+  else
+    echo "${BYTES} bytes"
+  fi
+}
 
-# Check the HTTP status code
-if [ "$http_status" -eq 200 ]; then
-  echo "API call successful. Nexus URL, credentials, and repository name are correct."
-else
-  echo "API call failed with status code: $http_status. Check your Nexus URL, credentials, and repository name."
-fi
+# Iterate over components and store data in output file
+echo "Nexus Components Report - $(date)" > $OUTPUT_FILE
+echo "-------------------------------------------------" >> $OUTPUT_FILE
+
+# Function to list and display components in the specified repository
+list_components() {
+  echo "Fetching components in repository: $REPOSITORY_NAME"
+  response=$(curl -u $CREDENTIALS -X GET "$NEXUS_URL/service/rest/v1/components?repository=$REPOSITORY_NAME" -w "\nHTTP_STATUS:%{http_code}" -s)
+  http_status=$(echo "$response" | grep "HTTP_STATUS" | awk -F: '{print $2}')
+  
+  if [ "$http_status" -eq 200 ]; then
+    COMPONENTS=$(echo "$response" | jq -r '.items[] | @base64')
+
+    for COMPONENT in $COMPONENTS; do
+      DECODED_COMPONENT=$(decode_base64 $COMPONENT)
+      LAST_MODIFIED=$(echo $DECODED_COMPONENT | jq -r '.lastModified')
+      COMPONENT_NAME=$(echo $DECODED_COMPONENT | jq -r '.name')
+      COMPONENT_VERSION=$(echo $DECODED_COMPONENT | jq -r '.version')
+      COMPONENT_SIZE=$(echo $DECODED_COMPONENT | jq -r '.assets[].size' | awk '{s+=$1} END {print s}')
+      HUMAN_READABLE_SIZE=$(convert_size $COMPONENT_SIZE)
+
+      echo -e "Component Name: $COMPONENT_NAME\tVersion: $COMPONENT_VERSION\tLast Modified: $LAST_MODIFIED\tSize: $HUMAN_READABLE_SIZE" >> $OUTPUT_FILE
+    done
+  else
+    echo "API call failed with status code: $http_status. Check your Nexus URL, credentials, and repository name."
+  fi
+}
+
+# Call the function to list and display components
+list_components
+
+echo "Report saved to: $OUTPUT_FILE"
