@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Nexus Repository Manager details
-NEXUS_URL="https://your-nexus-url"
+NEXUS_URL="https://nexus.app.syfbank.com:8443"
 CREDENTIALS="username:password"
 REPOSITORY_NAME="$1"  # Provided as a parameter to the script
 
@@ -42,7 +42,15 @@ printf "%-40s %-20s %-30s %-15s\n" "--------------" "-------" "-------------" "-
 list_components() {
   continuation_token=""
   while : ; do
-    response=$(curl -u $CREDENTIALS -X GET "$NEXUS_URL/service/rest/v1/components?repository=$REPOSITORY_NAME&continuationToken=$continuation_token" -w "\nHTTP_STATUS:%{http_code}" -s)
+    if [ -z "$continuation_token" ]; then
+      URL="$NEXUS_URL/service/rest/v1/components?repository=$REPOSITORY_NAME"
+    else
+      URL="$NEXUS_URL/service/rest/v1/components?repository=$REPOSITORY_NAME&continuationToken=$continuation_token"
+    fi
+    
+    echo "Fetching URL: $URL"  # Debug statement
+    
+    response=$(curl -u $CREDENTIALS -X GET "$URL" -w "\nHTTP_STATUS:%{http_code}" -s)
     http_status=$(echo "$response" | grep "HTTP_STATUS" | awk -F: '{print $2}')
     
     if [ "$http_status" -eq 200 ]; then
