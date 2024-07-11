@@ -16,7 +16,9 @@ decode_base64() {
 # Function to get the size of a component and convert to human-readable format
 convert_size() {
   BYTES=$1
-  if [ $BYTES -ge $((1024 * 1024 * 1024)) ]; then
+  if [ -z "$BYTES" ]; then
+    echo "0 bytes"
+  elif [ $BYTES -ge $((1024 * 1024 * 1024)) ]; then
     SIZE=$(echo "scale=2; $BYTES / 1024 / 1024 / 1024" | bc)
     echo "${SIZE} GB"
   elif [ $BYTES -ge $((1024 * 1024)) ]; then
@@ -51,11 +53,19 @@ list_components() {
     echo "Fetching URL: $URL"  # Debug statement
     
     response=$(curl -u $CREDENTIALS -X GET "$URL" -w "\nHTTP_STATUS:%{http_code}" -s)
+    echo "Full Response: $response"  # Debug statement to show the response content
+    
     http_status=$(echo "$response" | grep "HTTP_STATUS" | awk -F: '{print $2}')
+    echo "HTTP Status: '$http_status'"  # Debug statement to show the HTTP status code
     
     if [ "$http_status" -eq 200 ]; then
-      continuation_token=$(echo "$response" | grep -v "HTTP_STATUS" | jq -r '.continuationToken')
-      COMPONENTS=$(echo "$response" | grep -v "HTTP_STATUS" | jq -r '.items[] | @base64')
+      # Remove the status line from the response
+      response_body=$(echo "$response" | sed '$d')
+      
+      continuation_token=$(echo "$response_body" | jq -r '.continuationToken')
+      echo "Continuation Token: '$continuation_token'"  # Debug statement to show the continuation token
+      
+      COMPONENTS=$(echo "$response_body" | jq -r '.items[] | @base64')
 
       for COMPONENT in $COMPONENTS; do
         DECODED_COMPONENT=$(decode_base64 $COMPONENT)
