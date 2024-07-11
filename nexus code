@@ -3,32 +3,14 @@
 # Nexus Repository Manager details
 NEXUS_URL="http://your-nexus-url"
 CREDENTIALS="username:password"
-REPOSITORY_NAME="repository-name"
+REPOSITORY_NAME="your-repository-name"
 
-# Function to list and display details of all components in a repository
-list_components() {
-  # Make the API call and handle errors
-  echo "Fetching components from Nexus..."
+# Make a simple API call to list repositories
+response=$(curl -u $CREDENTIALS -X GET "$NEXUS_URL/service/rest/v1/repositories" -w "%{http_code}" -o /dev/null -s)
 
-  response=$(curl -s -u $CREDENTIALS -X GET "$NEXUS_URL/service/rest/v1/components?repository=$REPOSITORY_NAME")
-
-  if [ $? -ne 0 ]; then
-    echo "Error: Failed to fetch components from Nexus."
-    exit 1
-  fi
-
-  # Check if API returned an error response
-  error=$(echo "$response" | jq -r '.error')
-  if [ ! -z "$error" ] && [ "$error" != "null" ]; then
-    echo "Error from Nexus API: $error"
-    exit 1
-  fi
-
-  # Parse the JSON response and display component details
-  echo "Components found:"
-  echo "$response" | jq -r '.items[] | "Component ID: \(.id), Name: \(.name), Version: \(.version), Format: \(.format)"'
-}
-
-# Main execution
-echo "Fetching and displaying Nexus components details..."
-list_components
+# Check the HTTP status code
+if [ "$response" -eq 200 ]; then
+  echo "API call successful. Nexus URL and credentials are correct."
+else
+  echo "API call failed with status code: $response. Check your Nexus URL and credentials."
+fi
