@@ -3,89 +3,25 @@
 # Nexus Repository Manager details
 NEXUS_URL="https://nexus.app.syfbank.com:8443"
 CREDENTIALS="username:password"
-REPOSITORY_NAME="$1"  # Provided as a parameter to the script
 
-# File to store output in Jenkins workspace with CSV extension
-OUTPUT_FILE="$WORKSPACE/nexus_components_$(date +%Y%m%d_%H%M%S).csv"
+# Output file
+OUTPUT_FILE="nexus_repositories_$(date +%Y%m%d_%H%M%S).txt"
 
-# Function to decode base64 and parse JSON
-decode_base64() {
-  echo $1 | base64 --decode | jq .
-}
+# Function to list repositories
+list_repositories() {
+  echo "Fetching list of repositories from Nexus..."
 
-# Function to get the size of a component and convert to human-readable format
-convert_size() {
-  BYTES=$1
-  if [ $BYTES -ge $((1024 * 1024 * 1024)) ]; then
-    SIZE=$(echo "scale=2; $BYTES / 1024 / 1024 / 1024" | bc)
-    echo "${SIZE} GB"
-  elif [ $BYTES -ge $((1024 * 1024)) ]; then
-    SIZE=$(echo "scale=2; $BYTES / 1024 / 1024" | bc)
-    echo "${SIZE} MB"
-  elif [ $BYTES -ge 1024 ]; then
-    SIZE=$(echo "scale=2; $BYTES / 1024" | bc)
-    echo "${SIZE} KB"
+  response=$(curl -u $CREDENTIALS -X GET "$NEXUS_URL/service/rest/v1/repositories" -s)
+  http_status=$(echo "$response" | jq -r '. | length')  # Check if JSON is returned
+
+  if [ "$http_status" -ge 1 ]; then
+    echo "List of Repositories:" > $OUTPUT_FILE
+    echo "$response" | jq -r '.[] | "\(.name) (\(.format))"' >> $OUTPUT_FILE
+    echo "Repositories list saved to $OUTPUT_FILE"
   else
-    echo "${BYTES} bytes"
+    echo "Failed to fetch repositories. Check your Nexus URL, credentials, and try again."
   fi
 }
 
-# Write CSV header
-echo "Repository Name,Blob Store Name,Uploader Name,Last Modified,Size,Last Downloaded" > $OUTPUT_FILE
-
-# Function to list and display components in the specified repository
-list_components() {
-  continuation_token=""
-  while : ; do
-    if [ -z "$continuation_token" ]; then
-      URL="$NEXUS_URL/service/rest/v1/components?repository=$REPOSITORY_NAME"
-    else
-      URL="$NEXUS_URL/service/rest/v1/components?repository=$REPOSITORY_NAME&continuationToken=$continuation_token"
-    fi
-    
-    echo "Fetching URL: $URL"  # Debug statement
-    
-    response=$(curl -u $CREDENTIALS -X GET "$URL" -w "\nHTTP_STATUS:%{http_code}" -s)
-    echo "Response: $response"  # Debug statement
-    http_status=$(echo "$response" | grep "HTTP_STATUS" | awk -F: '{print $2}')
-    
-    if [ "$http_status" -eq 200 ]; then
-      continuation_token=$(echo "$response" | grep -v "HTTP_STATUS" | jq -r '.continuationToken')
-      COMPONENTS=$(echo "$response" | grep -v "HTTP_STATUS" | jq -r '.items[] | @base64')
-
-      for COMPONENT in $COMPONENTS; do
-        DECODED_COMPONENT=$(decode_base64 $COMPONENT)
-        echo "Decoded Component: $DECODED_COMPONENT"  # Debug statement
-
-        LAST_MODIFIED=$(echo $DECODED_COMPONENT | jq -r '.lastModified')
-        COMPONENT_NAME=$(echo $DECODED_COMPONENT | jq -r '.name')
-        COMPONENT_VERSION=$(echo $DECODED_COMPONENT | jq -r '.version')
-        COMPONENT_SIZE=$(echo $DECODED_COMPONENT | jq -r '.assets[].size' | awk '{s+=$1} END {print s}')
-        HUMAN_READABLE_SIZE=$(convert_size $COMPONENT_SIZE)
-
-        # Get repository and blob store details
-        REPOSITORY=$(echo $DECODED_COMPONENT | jq -r '.repository')
-        BLOB_STORE=$(curl -u $CREDENTIALS -X GET "$NEXUS_URL/service/rest/v1/repositories/$REPOSITORY" | jq -r '.storage.blobStoreName')
-        UPLOADER=$(echo $DECODED_COMPONENT | jq -r '.uploader')
-        LAST_DOWNLOADED=$(echo $DECODED_COMPONENT | jq -r '.lastDownloaded')
-
-        echo "Repository: $REPOSITORY, Blob Store: $BLOB_STORE, Uploader: $UPLOADER, Last Downloaded: $LAST_DOWNLOADED"  # Debug statement
-
-        # Write component details to CSV
-        echo "$REPOSITORY,$BLOB_STORE,$UPLOADER,$LAST_MODIFIED,$HUMAN_READABLE_SIZE,$LAST_DOWNLOADED" >> $OUTPUT_FILE
-      done
-
-      if [ -z "$continuation_token" ]; then
-        break
-      fi
-    else
-      echo "API call failed with status code: $http_status. Check your Nexus URL, credentials, and repository name."
-      break
-    fi
-  done
-}
-
-# Call the function to list and display components
-list_components
-
-echo "Report saved to: $OUTPUT_FILE"
+# Call the function to list repositories
+list_repositories
