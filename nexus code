@@ -1,16 +1,22 @@
 #!/bin/bash
 
 # Nexus Repository Manager details
-NEXUS_URL="http://your-nexus-url"
+NEXUS_URL="https://your-nexus-url"
 CREDENTIALS="username:password"
-REPOSITORY_NAME="your-repository-name"
 
-# Make a simple API call to list repositories
-response=$(curl -u $CREDENTIALS -X GET "$NEXUS_URL/service/rest/v1/repositories" -w "%{http_code}" -o /dev/null -s)
+# Make a simple API call to list repositories with detailed output
+response=$(curl -u $CREDENTIALS -X GET "$NEXUS_URL/service/rest/v1/repositories" -w "\nHTTP_STATUS:%{http_code}" -s)
+
+# Extract the HTTP status code from the response
+http_status=$(echo "$response" | grep "HTTP_STATUS" | awk -F: '{print $2}')
+
+# Print the response for debugging
+echo "Response from Nexus:"
+echo "$response"
 
 # Check the HTTP status code
-if [ "$response" -eq 200 ]; then
+if [ "$http_status" -eq 200 ]; then
   echo "API call successful. Nexus URL and credentials are correct."
 else
-  echo "API call failed with status code: $response. Check your Nexus URL and credentials."
+  echo "API call failed with status code: $http_status. Check your Nexus URL and credentials."
 fi
