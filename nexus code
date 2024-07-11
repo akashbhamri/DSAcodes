@@ -34,6 +34,10 @@ convert_size() {
 echo "Nexus Components Report - $(date)" > $OUTPUT_FILE
 echo "-------------------------------------------------" >> $OUTPUT_FILE
 
+# Add header to the output file
+printf "%-40s %-20s %-30s %-15s\n" "Component Name" "Version" "Last Modified" "Size" >> $OUTPUT_FILE
+printf "%-40s %-20s %-30s %-15s\n" "--------------" "-------" "-------------" "----" >> $OUTPUT_FILE
+
 # Function to list and display components in the specified repository
 list_components() {
   echo "Fetching components in repository: $REPOSITORY_NAME"
@@ -57,7 +61,7 @@ list_components() {
 
       HUMAN_READABLE_SIZE=$(convert_size $COMPONENT_SIZE)
 
-      echo -e "Component Name: $COMPONENT_NAME\tVersion: $COMPONENT_VERSION\tLast Modified: $LAST_MODIFIED\tSize: $HUMAN_READABLE_SIZE" >> $OUTPUT_FILE
+      printf "%-40s %-20s %-30s %-15s\n" "$COMPONENT_NAME" "$COMPONENT_VERSION" "$LAST_MODIFIED" "$HUMAN_READABLE_SIZE" >> $OUTPUT_FILE
     done
   else
     echo "API call failed with status code: $http_status. Check your Nexus URL, credentials, and repository name."
