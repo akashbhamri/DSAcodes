@@ -41,16 +41,20 @@ list_components() {
   http_status=$(echo "$response" | grep "HTTP_STATUS" | awk -F: '{print $2}')
   
   if [ "$http_status" -eq 200 ]; then
-    COMPONENTS=$(echo "$response" | jq -r '.items[] | @base64')
+    COMPONENTS=$(echo "$response" | grep -v "HTTP_STATUS" | jq -r '.items[] | @base64')
 
     for COMPONENT in $COMPONENTS; do
       DECODED_COMPONENT=$(decode_base64 $COMPONENT)
       echo "Decoded Component: $DECODED_COMPONENT"  # Debug statement
 
       LAST_MODIFIED=$(echo $DECODED_COMPONENT | jq -r '.lastModified')
+      echo "Last Modified: $LAST_MODIFIED"  # Debug statement
+
       COMPONENT_NAME=$(echo $DECODED_COMPONENT | jq -r '.name')
       COMPONENT_VERSION=$(echo $DECODED_COMPONENT | jq -r '.version')
       COMPONENT_SIZE=$(echo $DECODED_COMPONENT | jq -r '.assets[].size' | awk '{s+=$1} END {print s}')
+      echo "Raw Component Size: $COMPONENT_SIZE"  # Debug statement
+
       HUMAN_READABLE_SIZE=$(convert_size $COMPONENT_SIZE)
 
       echo -e "Component Name: $COMPONENT_NAME\tVersion: $COMPONENT_VERSION\tLast Modified: $LAST_MODIFIED\tSize: $HUMAN_READABLE_SIZE" >> $OUTPUT_FILE
