@@ -45,6 +45,8 @@ list_components() {
 
     for COMPONENT in $COMPONENTS; do
       DECODED_COMPONENT=$(decode_base64 $COMPONENT)
+      echo "Decoded Component: $DECODED_COMPONENT"  # Debug statement
+
       LAST_MODIFIED=$(echo $DECODED_COMPONENT | jq -r '.lastModified')
       COMPONENT_NAME=$(echo $DECODED_COMPONENT | jq -r '.name')
       COMPONENT_VERSION=$(echo $DECODED_COMPONENT | jq -r '.version')
