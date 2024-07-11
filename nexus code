@@ -7,7 +7,7 @@ CREDENTIALS="username:password"
 # Output file
 OUTPUT_FILE="nexus_repositories_$(date +%Y%m%d_%H%M%S).csv"
 
-# Function to list repositories
+# Function to list repositories with name, format, and blob store
 list_repositories() {
   echo "Fetching list of repositories from Nexus..."
 
@@ -19,7 +19,7 @@ list_repositories() {
     echo "Repository Name,Format,Blob Store" > $OUTPUT_FILE
     
     # Extract and write repository details
-    echo "$response" | jq -r '.[] | [.name, .format, .storage.blobStoreName] | @csv' >> $OUTPUT_FILE
+    echo "$response" | jq -r '.[] | [.name, .format, .configuration["storage"]["blobStoreName"]] | @csv' >> $OUTPUT_FILE
 
     echo "Repositories list saved to $OUTPUT_FILE"
   else
