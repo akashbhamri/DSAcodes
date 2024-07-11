@@ -3,9 +3,10 @@
 # Nexus Repository Manager details
 NEXUS_URL="https://your-nexus-url"
 CREDENTIALS="username:password"
+REPOSITORY_NAME="your-repository-name"
 
-# Make a simple API call to list repositories with detailed output
-response=$(curl -u $CREDENTIALS -X GET "$NEXUS_URL/service/rest/v1/repositories" -w "\nHTTP_STATUS:%{http_code}" -s)
+# Make a simple API call to list components in the specified repository
+response=$(curl -u $CREDENTIALS -X GET "$NEXUS_URL/service/rest/v1/components?repository=$REPOSITORY_NAME" -w "\nHTTP_STATUS:%{http_code}" -s)
 
 # Extract the HTTP status code from the response
 http_status=$(echo "$response" | grep "HTTP_STATUS" | awk -F: '{print $2}')
@@ -16,7 +17,7 @@ echo "$response"
 
 # Check the HTTP status code
 if [ "$http_status" -eq 200 ]; then
-  echo "API call successful. Nexus URL and credentials are correct."
+  echo "API call successful. Nexus URL, credentials, and repository name are correct."
 else
-  echo "API call failed with status code: $http_status. Check your Nexus URL and credentials."
+  echo "API call failed with status code: $http_status. Check your Nexus URL, credentials, and repository name."
 fi
