@@ -5,7 +5,7 @@ NEXUS_URL="https://nexus.app.syfbank.com:8443"
 CREDENTIALS="username:password"
 
 # Output file
-OUTPUT_FILE="nexus_repositories_$(date +%Y%m%d_%H%M%S).txt"
+OUTPUT_FILE="nexus_repositories_$(date +%Y%m%d_%H%M%S).csv"
 
 # Function to list repositories
 list_repositories() {
@@ -15,8 +15,12 @@ list_repositories() {
   http_status=$(echo "$response" | jq -r '. | length')  # Check if JSON is returned
 
   if [ "$http_status" -ge 1 ]; then
-    echo "List of Repositories:" > $OUTPUT_FILE
-    echo "$response" | jq -r '.[] | "\(.name) (\(.format))"' >> $OUTPUT_FILE
+    # Write CSV header
+    echo "Repository Name,Format,Blob Store" > $OUTPUT_FILE
+    
+    # Extract and write repository details
+    echo "$response" | jq -r '.[] | [.name, .format, .storage.blobStoreName] | @csv' >> $OUTPUT_FILE
+
     echo "Repositories list saved to $OUTPUT_FILE"
   else
     echo "Failed to fetch repositories. Check your Nexus URL, credentials, and try again."
