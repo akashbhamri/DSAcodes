@@ -5,8 +5,8 @@ NEXUS_URL="https://nexus.app.syfbank.com:8443"
 CREDENTIALS="username:password"
 REPOSITORY_NAME="$1"  # Provided as a parameter to the script
 
-# File to store output in Jenkins workspace
-OUTPUT_FILE="$WORKSPACE/nexus_components_$(date +%Y%m%d_%H%M%S).txt"
+# File to store output in Jenkins workspace with CSV extension
+OUTPUT_FILE="$WORKSPACE/nexus_components_$(date +%Y%m%d_%H%M%S).csv"
 
 # Function to decode base64 and parse JSON
 decode_base64() {
@@ -16,9 +16,7 @@ decode_base64() {
 # Function to get the size of a component and convert to human-readable format
 convert_size() {
   BYTES=$1
-  if [ -z "$BYTES" ]; then
-    echo "0 bytes"
-  elif [ $BYTES -ge $((1024 * 1024 * 1024)) ]; then
+  if [ $BYTES -ge $((1024 * 1024 * 1024)) ]; then
     SIZE=$(echo "scale=2; $BYTES / 1024 / 1024 / 1024" | bc)
     echo "${SIZE} GB"
   elif [ $BYTES -ge $((1024 * 1024)) ]; then
@@ -32,13 +30,8 @@ convert_size() {
   fi
 }
 
-# Iterate over components and store data in output file
-echo "Nexus Components Report - $(date)" > $OUTPUT_FILE
-echo "-------------------------------------------------" >> $OUTPUT_FILE
-
-# Add header to the output file
-printf "%-40s %-20s %-30s %-15s\n" "Component Name" "Version" "Last Modified" "Size" >> $OUTPUT_FILE
-printf "%-40s %-20s %-30s %-15s\n" "--------------" "-------" "-------------" "----" >> $OUTPUT_FILE
+# Write CSV header
+echo "Repository Name,Blob Store Name,Uploader Name,Last Modified,Size,Last Downloaded" > $OUTPUT_FILE
 
 # Function to list and display components in the specified repository
 list_components() {
@@ -53,35 +46,33 @@ list_components() {
     echo "Fetching URL: $URL"  # Debug statement
     
     response=$(curl -u $CREDENTIALS -X GET "$URL" -w "\nHTTP_STATUS:%{http_code}" -s)
-    echo "Full Response: $response"  # Debug statement to show the response content
-    
+    echo "Response: $response"  # Debug statement
     http_status=$(echo "$response" | grep "HTTP_STATUS" | awk -F: '{print $2}')
-    echo "HTTP Status: '$http_status'"  # Debug statement to show the HTTP status code
     
     if [ "$http_status" -eq 200 ]; then
-      # Remove the status line from the response
-      response_body=$(echo "$response" | sed '$d')
-      
-      continuation_token=$(echo "$response_body" | jq -r '.continuationToken')
-      echo "Continuation Token: '$continuation_token'"  # Debug statement to show the continuation token
-      
-      COMPONENTS=$(echo "$response_body" | jq -r '.items[] | @base64')
+      continuation_token=$(echo "$response" | grep -v "HTTP_STATUS" | jq -r '.continuationToken')
+      COMPONENTS=$(echo "$response" | grep -v "HTTP_STATUS" | jq -r '.items[] | @base64')
 
       for COMPONENT in $COMPONENTS; do
         DECODED_COMPONENT=$(decode_base64 $COMPONENT)
         echo "Decoded Component: $DECODED_COMPONENT"  # Debug statement
 
         LAST_MODIFIED=$(echo $DECODED_COMPONENT | jq -r '.lastModified')
-        echo "Last Modified: $LAST_MODIFIED"  # Debug statement
-
         COMPONENT_NAME=$(echo $DECODED_COMPONENT | jq -r '.name')
         COMPONENT_VERSION=$(echo $DECODED_COMPONENT | jq -r '.version')
         COMPONENT_SIZE=$(echo $DECODED_COMPONENT | jq -r '.assets[].size' | awk '{s+=$1} END {print s}')
-        echo "Raw Component Size: $COMPONENT_SIZE"  # Debug statement
-
         HUMAN_READABLE_SIZE=$(convert_size $COMPONENT_SIZE)
 
-        printf "%-40s %-20s %-30s %-15s\n" "$COMPONENT_NAME" "$COMPONENT_VERSION" "$LAST_MODIFIED" "$HUMAN_READABLE_SIZE" >> $OUTPUT_FILE
+        # Get repository and blob store details
+        REPOSITORY=$(echo $DECODED_COMPONENT | jq -r '.repository')
+        BLOB_STORE=$(curl -u $CREDENTIALS -X GET "$NEXUS_URL/service/rest/v1/repositories/$REPOSITORY" | jq -r '.storage.blobStoreName')
+        UPLOADER=$(echo $DECODED_COMPONENT | jq -r '.uploader')
+        LAST_DOWNLOADED=$(echo $DECODED_COMPONENT | jq -r '.lastDownloaded')
+
+        echo "Repository: $REPOSITORY, Blob Store: $BLOB_STORE, Uploader: $UPLOADER, Last Downloaded: $LAST_DOWNLOADED"  # Debug statement
+
+        # Write component details to CSV
+        echo "$REPOSITORY,$BLOB_STORE,$UPLOADER,$LAST_MODIFIED,$HUMAN_READABLE_SIZE,$LAST_DOWNLOADED" >> $OUTPUT_FILE
       done
 
       if [ -z "$continuation_token" ]; then
