@@ -40,32 +40,40 @@ printf "%-40s %-20s %-30s %-15s\n" "--------------" "-------" "-------------" "-
 
 # Function to list and display components in the specified repository
 list_components() {
-  echo "Fetching components in repository: $REPOSITORY_NAME"
-  response=$(curl -u $CREDENTIALS -X GET "$NEXUS_URL/service/rest/v1/components?repository=$REPOSITORY_NAME" -w "\nHTTP_STATUS:%{http_code}" -s)
-  http_status=$(echo "$response" | grep "HTTP_STATUS" | awk -F: '{print $2}')
-  
-  if [ "$http_status" -eq 200 ]; then
-    COMPONENTS=$(echo "$response" | grep -v "HTTP_STATUS" | jq -r '.items[] | @base64')
+  continuation_token=""
+  while : ; do
+    response=$(curl -u $CREDENTIALS -X GET "$NEXUS_URL/service/rest/v1/components?repository=$REPOSITORY_NAME&continuationToken=$continuation_token" -w "\nHTTP_STATUS:%{http_code}" -s)
+    http_status=$(echo "$response" | grep "HTTP_STATUS" | awk -F: '{print $2}')
+    
+    if [ "$http_status" -eq 200 ]; then
+      continuation_token=$(echo "$response" | grep -v "HTTP_STATUS" | jq -r '.continuationToken')
+      COMPONENTS=$(echo "$response" | grep -v "HTTP_STATUS" | jq -r '.items[] | @base64')
 
-    for COMPONENT in $COMPONENTS; do
-      DECODED_COMPONENT=$(decode_base64 $COMPONENT)
-      echo "Decoded Component: $DECODED_COMPONENT"  # Debug statement
+      for COMPONENT in $COMPONENTS; do
+        DECODED_COMPONENT=$(decode_base64 $COMPONENT)
+        echo "Decoded Component: $DECODED_COMPONENT"  # Debug statement
 
-      LAST_MODIFIED=$(echo $DECODED_COMPONENT | jq -r '.lastModified')
-      echo "Last Modified: $LAST_MODIFIED"  # Debug statement
+        LAST_MODIFIED=$(echo $DECODED_COMPONENT | jq -r '.lastModified')
+        echo "Last Modified: $LAST_MODIFIED"  # Debug statement
 
-      COMPONENT_NAME=$(echo $DECODED_COMPONENT | jq -r '.name')
-      COMPONENT_VERSION=$(echo $DECODED_COMPONENT | jq -r '.version')
-      COMPONENT_SIZE=$(echo $DECODED_COMPONENT | jq -r '.assets[].size' | awk '{s+=$1} END {print s}')
-      echo "Raw Component Size: $COMPONENT_SIZE"  # Debug statement
+        COMPONENT_NAME=$(echo $DECODED_COMPONENT | jq -r '.name')
+        COMPONENT_VERSION=$(echo $DECODED_COMPONENT | jq -r '.version')
+        COMPONENT_SIZE=$(echo $DECODED_COMPONENT | jq -r '.assets[].size' | awk '{s+=$1} END {print s}')
+        echo "Raw Component Size: $COMPONENT_SIZE"  # Debug statement
 
-      HUMAN_READABLE_SIZE=$(convert_size $COMPONENT_SIZE)
+        HUMAN_READABLE_SIZE=$(convert_size $COMPONENT_SIZE)
 
-      printf "%-40s %-20s %-30s %-15s\n" "$COMPONENT_NAME" "$COMPONENT_VERSION" "$LAST_MODIFIED" "$HUMAN_READABLE_SIZE" >> $OUTPUT_FILE
-    done
-  else
-    echo "API call failed with status code: $http_status. Check your Nexus URL, credentials, and repository name."
-  fi
+        printf "%-40s %-20s %-30s %-15s\n" "$COMPONENT_NAME" "$COMPONENT_VERSION" "$LAST_MODIFIED" "$HUMAN_READABLE_SIZE" >> $OUTPUT_FILE
+      done
+
+      if [ -z "$continuation_token" ]; then
+        break
+      fi
+    else
+      echo "API call failed with status code: $http_status. Check your Nexus URL, credentials, and repository name."
+      break
+    fi
+  done
 }
 
 # Call the function to list and display components
