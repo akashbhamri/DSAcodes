@@ -3,9 +3,9 @@
 # Nexus Repository Manager details
 NEXUS_URL="https://nexus.app.syfbank.com:8443"
 CREDENTIALS="username:password"
-REPOSITORY_NAME="$1"  # Provided as a parameter to the script
 BLOB_STORE="$2"  # Blob store provided as a parameter to the script
 
+# Function to decode base64 and parse JSON
 decode_base64() {
   echo $1 | base64 --decode | jq .
 }
@@ -27,12 +27,12 @@ convert_size() {
   fi
 }
 
-# Create a CSV file in the Jenkins workspace
-OUTPUT_FILE="$WORKSPACE/nexus_components_${REPOSITORY_NAME}_$(date +%Y%m%d_%H%M%S).csv"
-echo "Repository Name,Blob Store Name,Uploader Name,Parent Structure,Last Modified,Size,Last Downloaded" > $OUTPUT_FILE
-
 # Function to list and display components in the specified repository
 list_components() {
+  local REPOSITORY_NAME=$1
+  local OUTPUT_FILE="$WORKSPACE/nexus_components_${REPOSITORY_NAME}_$(date +%Y%m%d_%H%M%S).csv"
+  echo "Repository Name,Blob Store Name,Uploader Name,Parent Structure,Last Modified,Size,Last Downloaded" > $OUTPUT_FILE
+
   local continuation_token=""
   while : ; do
     if [ -z "$continuation_token" ]; then
@@ -112,7 +112,10 @@ list_components() {
   done
 }
 
-# Call the function to list and display components
-list_components
+# Read repository list from parameter
+IFS=',' read -ra REPOSITORIES <<< "$REPOSITORY_NAME"
+for REPO in "${REPOSITORIES[@]}"; do
+  list_components $REPO
+done
 
-echo "Report saved to: $OUTPUT_FILE"
+echo "Reports saved in the workspace."
