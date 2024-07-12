@@ -6,7 +6,6 @@ CREDENTIALS="username:password"
 REPOSITORY_NAME="$1"  # Provided as a parameter to the script
 BLOB_STORE="$2"  # Blob store provided as a parameter to the script
 
-# Function to decode base64 and parse JSON
 decode_base64() {
   echo $1 | base64 --decode | jq .
 }
@@ -56,9 +55,9 @@ list_components() {
         DECODED_COMPONENT=$(decode_base64 $COMPONENT)
         echo "Decoded Component: $DECODED_COMPONENT"  # Debug statement
 
-        LAST_MODIFIED=$(echo $DECODED_COMPONENT | jq -r '.lastModified')
-        COMPONENT_NAME=$(echo $DECODED_COMPONENT | jq -r '.name')
-        COMPONENT_VERSION=$(echo $DECODED_COMPONENT | jq -r '.version')
+        LAST_MODIFIED=$(echo $DECODED_COMPONENT | jq -r '.lastModified // empty')
+        COMPONENT_NAME=$(echo $DECODED_COMPONENT | jq -r '.name // empty')
+        COMPONENT_VERSION=$(echo $DECODED_COMPONENT | jq -r '.version // empty')
         
         # Initialize variables for aggregation
         MAX_LAST_MODIFIED=""
@@ -72,13 +71,13 @@ list_components() {
         for ASSET in $ASSETS; do
           DECODED_ASSET=$(decode_base64 $ASSET)
           
-          ASSET_SIZE=$(echo $DECODED_ASSET | jq -r '.size')
+          ASSET_SIZE=$(echo $DECODED_ASSET | jq -r '.size // 0')
           COMPONENT_SIZE=$((COMPONENT_SIZE + ASSET_SIZE))
           
-          ASSET_LAST_MODIFIED=$(echo $DECODED_ASSET | jq -r '.lastModified')
-          ASSET_LAST_DOWNLOADED=$(echo $DECODED_ASSET | jq -r '.lastDownloaded')
-          ASSET_UPLOADER=$(echo $DECODED_ASSET | jq -r '.uploader')
-          ASSET_PATH=$(echo $DECODED_ASSET | jq -r '.path')
+          ASSET_LAST_MODIFIED=$(echo $DECODED_ASSET | jq -r '.lastModified // empty')
+          ASSET_LAST_DOWNLOADED=$(echo $DECODED_ASSET | jq -r '.lastDownloaded // empty')
+          ASSET_UPLOADER=$(echo $DECODED_ASSET | jq -r '.uploader // empty')
+          ASSET_PATH=$(echo $DECODED_ASSET | jq -r '.path // empty')
           
           # Aggregate data
           if [[ -z "$MAX_LAST_MODIFIED" || "$ASSET_LAST_MODIFIED" > "$MAX_LAST_MODIFIED" ]]; then
