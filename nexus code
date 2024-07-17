@@ -1,9 +1,14 @@
 #!/bin/bash
 
-# Nexus Repository Manager details
-NEXUS_URL="https://nexus.app.syfbank.com:8443"
-CREDENTIALS="username:password"
-BLOB_STORE="$2"  # Blob store provided as a parameter to the script
+# UrbanCode Deploy (uDeploy) details
+UDEPLOY_URL="https://udeploy.example.com"
+UDEPLOY_USER="username"
+UDEPLOY_PASSWORD="password"
+COMPONENT_NAMES="$1"  # Comma-separated list of components provided as a parameter to the script
+OUTPUT_DIR="/path/to/save/csv"
+
+# Ensure output directory exists
+mkdir -p "$OUTPUT_DIR"
 
 # Function to decode base64 and parse JSON
 decode_base64() {
@@ -27,95 +32,71 @@ convert_size() {
   fi
 }
 
-# Function to list and display components in the specified repository
-list_components() {
-  local REPOSITORY_NAME=$1
-  local OUTPUT_FILE="$WORKSPACE/nexus_components_${REPOSITORY_NAME}_$(date +%Y%m%d_%H%M%S).csv"
-  echo "Repository Name,Blob Store Name,Uploader Name,Parent Structure,Last Modified,Size,Last Downloaded" > $OUTPUT_FILE
+# Function to list and display component details
+list_component_details() {
+  local COMPONENT_NAME=$1
+  local OUTPUT_FILE="$OUTPUT_DIR/udeploy_components_${COMPONENT_NAME}_$(date +%Y%m%d_%H%M%S).csv"
+  echo "Component Name,Version,Size,Created,Created By,Teams,Last Modified" > $OUTPUT_FILE
 
-  local continuation_token=""
-  while : ; do
-    if [ -z "$continuation_token" ]; then
-      URL="$NEXUS_URL/service/rest/v1/components?repository=$REPOSITORY_NAME"
-    else
-      URL="$NEXUS_URL/service/rest/v1/components?repository=$REPOSITORY_NAME&continuationToken=$continuation_token"
-    fi
-    
-    echo "Fetching URL: $URL"  # Debug statement
-    
-    response=$(curl -u $CREDENTIALS -X GET "$URL" -w "\nHTTP_STATUS:%{http_code}" -s)
-    echo "Response: $response"  # Debug statement
-    http_status=$(echo "$response" | grep "HTTP_STATUS" | awk -F: '{print $2}')
-    
-    if [ "$http_status" -eq 200 ]; then
-      continuation_token=$(echo "$response" | grep -v "HTTP_STATUS" | jq -r '.continuationToken')
-      COMPONENTS=$(echo "$response" | grep -v "HTTP_STATUS" | jq -r '.items[] | @base64')
+  local COMPONENT_ID=$(curl -u $UDEPLOY_USER:$UDEPLOY_PASSWORD -X GET "$UDEPLOY_URL/rest/deploy/component?name=$COMPONENT_NAME" | jq -r '.[0].id')
+  
+  if [ -z "$COMPONENT_ID" ]; then
+    echo "Component $COMPONENT_NAME not found."
+    return
+  fi
 
-      for COMPONENT in $COMPONENTS; do
-        DECODED_COMPONENT=$(decode_base64 $COMPONENT)
-        echo "Decoded Component: $DECODED_COMPONENT"  # Debug statement
+  local VERSIONS_URL="$UDEPLOY_URL/rest/deploy/component/$COMPONENT_ID/versions"
 
-        LAST_MODIFIED=$(echo $DECODED_COMPONENT | jq -r '.lastModified // empty')
-        COMPONENT_NAME=$(echo $DECODED_COMPONENT | jq -r '.name // empty')
-        COMPONENT_VERSION=$(echo $DECODED_COMPONENT | jq -r '.version // empty')
-        
-        # Initialize variables for aggregation
-        MAX_LAST_MODIFIED=""
-        MAX_LAST_DOWNLOADED=""
-        UPLOADER=""
-        COMPONENT_SIZE=0
-        PARENT_STRUCTURE=""
+  response=$(curl -u $UDEPLOY_USER:$UDEPLOY_PASSWORD -X GET "$VERSIONS_URL" -w "\nHTTP_STATUS:%{http_code}" -s)
+  http_status=$(echo "$response" | grep "HTTP_STATUS" | awk -F: '{print $2}')
 
-        # Extract assets and iterate over them
-        ASSETS=$(echo $DECODED_COMPONENT | jq -r '.assets[] | @base64')
-        for ASSET in $ASSETS; do
-          DECODED_ASSET=$(decode_base64 $ASSET)
-          
-          ASSET_SIZE=$(echo $DECODED_ASSET | jq -r '.size // 0')
-          COMPONENT_SIZE=$((COMPONENT_SIZE + ASSET_SIZE))
-          
-          ASSET_LAST_MODIFIED=$(echo $DECODED_ASSET | jq -r '.lastModified // empty')
-          ASSET_LAST_DOWNLOADED=$(echo $DECODED_ASSET | jq -r '.lastDownloaded // empty')
-          ASSET_UPLOADER=$(echo $DECODED_ASSET | jq -r '.uploader // empty')
-          ASSET_PATH=$(echo $DECODED_ASSET | jq -r '.path // empty')
-          
-          # Aggregate data
-          if [[ -z "$MAX_LAST_MODIFIED" || "$ASSET_LAST_MODIFIED" > "$MAX_LAST_MODIFIED" ]]; then
-            MAX_LAST_MODIFIED=$ASSET_LAST_MODIFIED
-          fi
-          if [[ -z "$MAX_LAST_DOWNLOADED" || "$ASSET_LAST_DOWNLOADED" > "$MAX_LAST_DOWNLOADED" ]]; then
-            MAX_LAST_DOWNLOADED=$ASSET_LAST_DOWNLOADED
-          fi
-          if [[ -z "$UPLOADER" ]]; then
-            UPLOADER=$ASSET_UPLOADER
-          fi
-          if [[ -z "$PARENT_STRUCTURE" ]]; then
-            PARENT_STRUCTURE=$(dirname "$ASSET_PATH")
-          fi
-        done
+  if [ "$http_status" -eq 200 ]; then
+    VERSIONS=$(echo "$response" | grep -v "HTTP_STATUS" | jq -r '.[] | @base64')
 
-        HUMAN_READABLE_SIZE=$(convert_size $COMPONENT_SIZE)
-
-        echo "Repository: $REPOSITORY_NAME, Blob Store: $BLOB_STORE, Uploader: $UPLOADER, Last Downloaded: $MAX_LAST_DOWNLOADED"  # Debug statement
-
-        # Write component details to CSV file
-        printf "%s,%s,%s,%s,%s,%s,%s\n" "$REPOSITORY_NAME" "$BLOB_STORE" "$UPLOADER" "$PARENT_STRUCTURE" "$MAX_LAST_MODIFIED" "$HUMAN_READABLE_SIZE" "$MAX_LAST_DOWNLOADED" >> $OUTPUT_FILE
-      done
-
-      if [ -z "$continuation_token" ]; then
-        break
+    for VERSION in $VERSIONS; do
+      DECODED_VERSION=$(decode_base64 $VERSION)
+      
+      VERSION_NAME=$(echo $DECODED_VERSION | jq -r '.name')
+      LAST_MODIFIED=$(echo $DECODED_VERSION | jq -r '.lastModified')
+      CREATED=$(echo $DECODED_VERSION | jq -r '.created')
+      CREATED_BY=$(echo $DECODED_VERSION | jq -r '.createdBy')
+      
+      # Fetch version details to get the size
+      VERSION_ID=$(echo $DECODED_VERSION | jq -r '.id')
+      VERSION_SIZE_URL="$UDEPLOY_URL/rest/deploy/version/$VERSION_ID/artifacts"
+      VERSION_SIZE_RESPONSE=$(curl -u $UDEPLOY_USER:$UDEPLOY_PASSWORD -X GET "$VERSION_SIZE_URL" -w "\nHTTP_STATUS:%{http_code}" -s)
+      
+      VERSION_SIZE_HTTP_STATUS=$(echo "$VERSION_SIZE_RESPONSE" | grep "HTTP_STATUS" | awk -F: '{print $2}')
+      if [ "$VERSION_SIZE_HTTP_STATUS" -eq 200 ]; then
+        VERSION_SIZE=$(echo "$VERSION_SIZE_RESPONSE" | grep -v "HTTP_STATUS" | jq -r '.[] | .size' | awk '{s+=$1} END {print s}')
+      else
+        VERSION_SIZE=0
       fi
-    else
-      echo "API call failed with status code: $http_status. Check your Nexus URL, credentials, and repository name."
-      break
-    fi
-  done
+      
+      HUMAN_READABLE_SIZE=$(convert_size $VERSION_SIZE)
+      
+      # Fetch team details
+      TEAMS_URL="$UDEPLOY_URL/rest/deploy/version/$VERSION_ID/teams"
+      TEAMS_RESPONSE=$(curl -u $UDEPLOY_USER:$UDEPLOY_PASSWORD -X GET "$TEAMS_URL" -w "\nHTTP_STATUS:%{http_code}" -s)
+      TEAMS_HTTP_STATUS=$(echo "$TEAMS_RESPONSE" | grep "HTTP_STATUS" | awk -F: '{print $2}')
+      if [ "$TEAMS_HTTP_STATUS" -eq 200 ]; then
+        TEAMS=$(echo "$TEAMS_RESPONSE" | grep -v "HTTP_STATUS" | jq -r '.[].name' | paste -sd "," -)
+      else
+        TEAMS="None"
+      fi
+      
+      # Write component version details to CSV file
+      printf "%s,%s,%s,%s,%s,%s,%s\n" "$COMPONENT_NAME" "$VERSION_NAME" "$HUMAN_READABLE_SIZE" "$CREATED" "$CREATED_BY" "$TEAMS" "$LAST_MODIFIED" >> $OUTPUT_FILE
+    done
+  else
+    echo "API call failed with status code: $http_status. Check your uDeploy URL, credentials, and component name."
+  fi
 }
 
-# Read repository list from parameter
-IFS=',' read -ra REPOSITORIES <<< "$REPOSITORY_NAME"
-for REPO in "${REPOSITORIES[@]}"; do
-  list_components $REPO
+# Read component list from parameter
+IFS=',' read -ra COMPONENTS <<< "$COMPONENT_NAMES"
+for COMPONENT in "${COMPONENTS[@]}"; do
+  list_component_details $COMPONENT
 done
 
-echo "Reports saved in the workspace."
+echo "Reports saved in the output directory."
