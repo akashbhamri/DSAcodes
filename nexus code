@@ -38,7 +38,9 @@ list_component_details() {
   local OUTPUT_FILE="$OUTPUT_DIR/udeploy_components_${COMPONENT_NAME}_$(date +%Y%m%d_%H%M%S).csv"
   echo "Component Name,Version,Size,Created,Created By,Teams,Last Modified" > $OUTPUT_FILE
 
+  echo "Fetching component ID for: $COMPONENT_NAME"  # Debug statement
   local COMPONENT_ID=$(curl -u $UDEPLOY_USER:$UDEPLOY_PASSWORD -X GET "$UDEPLOY_URL/rest/deploy/component?name=$COMPONENT_NAME" | jq -r '.[0].id')
+  echo "Component ID: $COMPONENT_ID"  # Debug statement
   
   if [ -z "$COMPONENT_ID" ]; then
     echo "Component $COMPONENT_NAME not found."
@@ -46,8 +48,10 @@ list_component_details() {
   fi
 
   local VERSIONS_URL="$UDEPLOY_URL/rest/deploy/component/$COMPONENT_ID/versions"
+  echo "Fetching versions from: $VERSIONS_URL"  # Debug statement
 
   response=$(curl -u $UDEPLOY_USER:$UDEPLOY_PASSWORD -X GET "$VERSIONS_URL" -w "\nHTTP_STATUS:%{http_code}" -s)
+  echo "Response: $response"  # Debug statement
   http_status=$(echo "$response" | grep "HTTP_STATUS" | awk -F: '{print $2}')
 
   if [ "$http_status" -eq 200 ]; then
@@ -55,6 +59,7 @@ list_component_details() {
 
     for VERSION in $VERSIONS; do
       DECODED_VERSION=$(decode_base64 $VERSION)
+      echo "Decoded Version: $DECODED_VERSION"  # Debug statement
       
       VERSION_NAME=$(echo $DECODED_VERSION | jq -r '.name')
       LAST_MODIFIED=$(echo $DECODED_VERSION | jq -r '.lastModified')
@@ -64,8 +69,10 @@ list_component_details() {
       # Fetch version details to get the size
       VERSION_ID=$(echo $DECODED_VERSION | jq -r '.id')
       VERSION_SIZE_URL="$UDEPLOY_URL/rest/deploy/version/$VERSION_ID/artifacts"
+      echo "Fetching size from: $VERSION_SIZE_URL"  # Debug statement
       VERSION_SIZE_RESPONSE=$(curl -u $UDEPLOY_USER:$UDEPLOY_PASSWORD -X GET "$VERSION_SIZE_URL" -w "\nHTTP_STATUS:%{http_code}" -s)
       
+      echo "Version Size Response: $VERSION_SIZE_RESPONSE"  # Debug statement
       VERSION_SIZE_HTTP_STATUS=$(echo "$VERSION_SIZE_RESPONSE" | grep "HTTP_STATUS" | awk -F: '{print $2}')
       if [ "$VERSION_SIZE_HTTP_STATUS" -eq 200 ]; then
         VERSION_SIZE=$(echo "$VERSION_SIZE_RESPONSE" | grep -v "HTTP_STATUS" | jq -r '.[] | .size' | awk '{s+=$1} END {print s}')
@@ -77,7 +84,10 @@ list_component_details() {
       
       # Fetch team details
       TEAMS_URL="$UDEPLOY_URL/rest/deploy/version/$VERSION_ID/teams"
+      echo "Fetching teams from: $TEAMS_URL"  # Debug statement
       TEAMS_RESPONSE=$(curl -u $UDEPLOY_USER:$UDEPLOY_PASSWORD -X GET "$TEAMS_URL" -w "\nHTTP_STATUS:%{http_code}" -s)
+      
+      echo "Teams Response: $TEAMS_RESPONSE"  # Debug statement
       TEAMS_HTTP_STATUS=$(echo "$TEAMS_RESPONSE" | grep "HTTP_STATUS" | awk -F: '{print $2}')
       if [ "$TEAMS_HTTP_STATUS" -eq 200 ]; then
         TEAMS=$(echo "$TEAMS_RESPONSE" | grep -v "HTTP_STATUS" | jq -r '.[].name' | paste -sd "," -)
@@ -96,7 +106,8 @@ list_component_details() {
 # Read component list from parameter
 IFS=',' read -ra COMPONENTS <<< "$COMPONENT_NAMES"
 for COMPONENT in "${COMPONENTS[@]}"; do
+  echo "Processing component: $COMPONENT"  # Debug statement
   list_component_details $COMPONENT
 done
 
-echo "Reports saved in the output directory."
+echo "Reports saved in the output directory: $OUTPUT_DIR"
