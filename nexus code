@@ -1,7 +1,28 @@
-exus: Facilitates dependency management and artifact storage for builds.
-	2.	uDeploy (UrbanCode Deploy): Manages application deployment automation across multiple environments.
-	3.	Bitbucket: Hosts Git repositories, enabling pull requests and collaboration.
-	4.	CloudBees CD: Orchestrates end-to-end software delivery pipeline with automation.
-	5.	CloudBees CI: Enhances Jenkins with enterprise-level continuous integration capabilities.
-	6.	Sonar: Ensures code quality by detecting bugs, vulnerabilities, and duplications.
-	7.	Jenkins: Supports continuous integration and continuous delivery in DevOps pipelines.
+	1.	Nexus:
+	•	Manages and stores binary software artifacts.
+	•	Centralized repository for dependencies.
+	•	Facilitates artifact sharing and collaboration.
+	2.	uDeploy (UrbanCode Deploy):
+	•	Automates deployment processes across environments.
+	•	Manages deployment pipelines.
+	•	Ensures consistency and repeatability in deployments.
+	3.	Bitbucket:
+	•	Hosts Git repositories for source code management.
+	•	Facilitates code collaboration via pull requests.
+	•	Integrates with CI/CD pipelines.
+	4.	CloudBees CD:
+	•	Automates release management and deployment pipelines.
+	•	Orchestrates complex software delivery workflows.
+	•	Provides visibility and governance over releases.
+	5.	CloudBees CI:
+	•	Enhances Jenkins for scalable CI processes.
+	•	Provides robust monitoring and management of CI pipelines.
+	•	Ensures consistent integration practices across teams.
+	6.	Sonar:
+	•	Continuously analyzes code quality.
+	•	Detects bugs, vulnerabilities, and code smells.
+	•	Provides actionable feedback to improve codebase.
+	7.	Jenkins:
+	•	Automates building, testing, and deployment processes.
+	•	Supports integration with various development tools.
+	•	Enables continuous integration and delivery practices.
