@@ -1,28 +1,15 @@
-	1.	Nexus:
-	•	Manages and stores binary software artifacts.
-	•	Centralized repository for dependencies.
-	•	Facilitates artifact sharing and collaboration.
-	2.	uDeploy (UrbanCode Deploy):
-	•	Automates deployment processes across environments.
-	•	Manages deployment pipelines.
-	•	Ensures consistency and repeatability in deployments.
-	3.	Bitbucket:
-	•	Hosts Git repositories for source code management.
-	•	Facilitates code collaboration via pull requests.
-	•	Integrates with CI/CD pipelines.
-	4.	CloudBees CD:
-	•	Automates release management and deployment pipelines.
-	•	Orchestrates complex software delivery workflows.
-	•	Provides visibility and governance over releases.
-	5.	CloudBees CI:
-	•	Enhances Jenkins for scalable CI processes.
-	•	Provides robust monitoring and management of CI pipelines.
-	•	Ensures consistent integration practices across teams.
-	6.	Sonar:
-	•	Continuously analyzes code quality.
-	•	Detects bugs, vulnerabilities, and code smells.
-	•	Provides actionable feedback to improve codebase.
-	7.	Jenkins:
-	•	Automates building, testing, and deployment processes.
-	•	Supports integration with various development tools.
-	•	Enables continuous integration and delivery practices.
+Here's a revised version of the content in the description field:
+
+---
+
+We are planning to perform a uDeploy version upgrade in the production environment. To ensure we have a backup of the current version and files, we need to sync and back up the data. The Unix team is unable to take a VM snapshot due to the large size of the data, which is approximately 9TB. 
+
+Therefore, we need to sync the data and create a backup on the DR server. However, the production server does not have enough space to store the backup, necessitating the backup to be taken directly on the DR server via SSH.
+
+Currently, the rmpci role is restricted to performing actions on the remote server through SSH and does not have write permissions in the target directory. We attempted to use the jkslave account, but it also lacks the necessary write access.
+
+Hence, we require root access to sync the data from the production server to the DR server.
+
+---
+
+Feel free to adjust any specific details as needed!
