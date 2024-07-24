@@ -1,26 +1,31 @@
-I hope this message finds you well. I am writing to bring to your attention an issue we have encountered with our system’s decryption process.
+Incident Report: UDeploy Production Outage
 
-During routine monitoring, we observed that there have been a few decryption failures:
+Date: [Insert Date]
 
-	•	Key: [desedekeyyyyb]
-	•	References: 14070
-	•	Replaced: 14067
-	•	Decryption Failures: 3
+Summary:
 
-These decryption failures are concerning as they could potentially compromise the integrity and security of our data. The failures were identified during the analysis of the key statistics and table operations. Here is a summary of the findings:
+On [Insert Date], UDeploy production experienced downtime due to the database’s Fast Recovery Area (FRA) reaching full capacity. This issue was resolved by increasing the FRA size from 100 GB to 200 GB. UDeploy is now operational.
 
-	•	Key Replacements: 16511
-	•	Decryption Failures: 3
-	•	Row Reads: 19827069
-	•	Row Updates: 3423325
+Incident Details:
 
-We have thoroughly reviewed our processes and configurations and have not identified any anomalies on our end that could have caused these decryption failures. As this issue impacts our data security protocols, we are seeking your expertise to identify the root cause and provide a resolution.
+	•	Initial Discovery: UDeploy stopped responding, and the issue was traced to the database.
+	•	Database Investigation: The database team confirmed that the FRA was 100% occupied.
+	•	Cause: Both restore points and database transactions were written to the same FRA path. A restore point, created at our request for a UDeploy update activity, was not dropped as it awaited our confirmation.
+	•	Immediate Action: Increased FRA size from 100 GB to 200 GB.
+	•	Result: UDeploy was brought back online and is functioning as expected.
 
-Could you please investigate this matter and advise on the following points:
+Root Cause:
 
-	1.	Potential Causes: What might be causing these decryption failures? Are there any known issues with the current version of the software we are using?
-	2.	Logs and Diagnostics: Would you need additional logs or diagnostic information from our side to assist in the investigation?
-	3.	Resolution Steps: What steps can we take to prevent these decryption failures in the future? Are there any configuration changes or updates required?
-	4.	Impact Assessment: What is the potential impact of these decryption failures on our system’s functionality and data integrity?
+The restore point created for the UDeploy update activity was not dropped because we had not confirmed its removal with the database team. This caused the FRA to fill up, preventing database operations.
 
-We would appreciate your prompt attention to this matter as it is critical to maintain the integrity and security of our data. Please let us know if there are any immediate actions we should take while you investigate this issue.
+Resolution:
+
+	•	Increased FRA size from 100 GB to 200 GB.
+	•	Verified that UDeploy is functioning correctly after the adjustment.
+
+Action Items:
+
+	1.	Communication: Establish a protocol for confirming the removal of restore points post-update activities.
+	2.	Documentation: Create a checklist for update activities, including necessary follow-up actions.
+
+Please let me know if there are any further questions or if additional information is needed.
