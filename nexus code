@@ -1,31 +1,39 @@
-Incident Report: UDeploy Production Outage
+# Jenkins Worker Nodes Cleanup Documentation
 
-Date: [Insert Date]
+## Purpose
+This document provides an overview of the cleanup process for Jenkins worker nodes, focusing on the paths within the `appdata/install/jenkins/workspace/` directory in the production environment. The goal is to manage disk space efficiently by retaining files for a specified duration and addressing alerts about filled storage.
 
-Summary:
+## Paths to Cleanup
+The following paths within the `appdata/install/jenkins/workspace/` directory are targeted for cleanup:
+1. `appdata/install/jenkins/workspace/path1/`
 
-On [Insert Date], UDeploy production experienced downtime due to the database’s Fast Recovery Area (FRA) reaching full capacity. This issue was resolved by increasing the FRA size from 100 GB to 200 GB. UDeploy is now operational.
+### Details for Each Path
+- **`appdata/install/jenkins/workspace/path1/`**: This directory contains the workspace of CloudBees CI pipelines. A retention policy of 30 days is proposed, pending confirmation from the relevant stakeholders.
 
-Incident Details:
+## Retention Policy
+Files older than **30 days** are to be deleted from the specified paths unless otherwise noted by the stakeholders.
 
-	•	Initial Discovery: UDeploy stopped responding, and the issue was traced to the database.
-	•	Database Investigation: The database team confirmed that the FRA was 100% occupied.
-	•	Cause: Both restore points and database transactions were written to the same FRA path. A restore point, created at our request for a UDeploy update activity, was not dropped as it awaited our confirmation.
-	•	Immediate Action: Increased FRA size from 100 GB to 200 GB.
-	•	Result: UDeploy was brought back online and is functioning as expected.
+## Summary of Cleanup Process
+- **Scope**: Clean up files and directories in the specified paths that are older than 30 days.
+- **Frequency**: The cleanup process should be run regularly (e.g., daily or weekly).
+- **Verification**: After each cleanup, verify that no critical files required for ongoing projects or jobs have been removed.
 
-Root Cause:
+## Existing Cleanup Scripts
+- **Temporary Directory Cleanup**: A script is already in place for cleaning the `tmp` directory for both production and development environments.
 
-The restore point created for the UDeploy update activity was not dropped because we had not confirmed its removal with the database team. This caused the FRA to fill up, preventing database operations.
+## Alerts and Monitoring
+- The production Jenkins worker nodes are receiving daily alerts about filled `appdata`. Regular cleanup is necessary to address this issue and prevent disk space exhaustion.
 
-Resolution:
+## Action Items
+1. **Confirm Retention Policy**: Verify with the relevant stakeholders if the 30-day retention policy for `appdata/install/jenkins/workspace/path1/` is acceptable.
+2. **Automate Cleanup Process**: Implement or update automation scripts to clean up files older than 30 days in the specified paths.
+3. **Monitor Disk Usage**: Regularly monitor disk space usage and alerts to ensure the cleanup process is effective.
 
-	•	Increased FRA size from 100 GB to 200 GB.
-	•	Verified that UDeploy is functioning correctly after the adjustment.
+## Best Practices
+- **Regular Monitoring**: Regularly monitor disk space usage to identify when the next cleanup should occur.
+- **Exclusions**: Maintain a list of exclusions for files and directories that should not be deleted, regardless of age.
+- **Backup**: Ensure that critical files are backed up before running the cleanup process.
+- **Documentation**: Keep a record of each cleanup operation, including the date, time, and files deleted.
 
-Action Items:
-
-	1.	Communication: Establish a protocol for confirming the removal of restore points post-update activities.
-	2.	Documentation: Create a checklist for update activities, including necessary follow-up actions.
-
-Please let me know if there are any further questions or if additional information is needed.
+## Conclusion
+Implementing a regular cleanup routine for Jenkins worker nodes is crucial for maintaining an efficient and optimized Jenkins environment. By adhering to the specified retention policy and regularly monitoring the paths, disk space usage can be effectively managed. Ensure that the proposed retention policy is confirmed with stakeholders and that existing scripts are maintained to prevent disk space issues.
