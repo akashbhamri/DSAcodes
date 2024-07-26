@@ -1,153 +1,168 @@
-### Udeploy Production Server Cleanup Document
+#!/bin/bash
 
-**Document Title:** Udeploy Production Server Cleanup Procedure
+# Nexus Repository Manager details
+NEXUS_URL="https://nexus.app.syfbank.com:8443"
+CREDENTIALS="username:password"
+BLOB_STORE="$2"  # Blob store provided as a parameter to the script
 
-**Purpose:**  
-This document outlines the procedure for cleaning up specific directories on the Udeploy production server to manage disk space efficiently. The paths covered in this document are:
-- `/appbin/IBM/ucd/server/var/repository/blob/data`
-- `iBM/UCD/server/var/sa/dialogue`
-- `iBM/UCD/server/archieve`
-- `iBM/UCD/server/logs/store`
+# Function to decode base64 and parse JSON
+decode_base64() {
+  echo $1 | base64 --decode | jq .
+}
 
-**Overview:**  
-Regular cleanup of these directories is essential to ensure the server runs smoothly without running out of disk space. This document provides an overview of each path, the type of data it contains, and guidelines on how to determine what data can be safely removed.
+# Function to get the size of a component and convert to human-readable format
+convert_size() {
+  BYTES=$1
+  if [ $BYTES -ge $((1024 * 1024 * 1024)) ]; then
+    SIZE=$(echo "scale=2; $BYTES / 1024 / 1024 / 1024" | bc)
+    echo "${SIZE} GB"
+  elif [ $BYTES -ge $((1024 * 1024)) ]; then
+    SIZE=$(echo "scale=2; $BYTES / 1024 / 1024" | bc)
+    echo "${SIZE} MB"
+  elif [ $BYTES -ge 1024 ]; then
+    SIZE=$(echo "scale=2; $BYTES / 1024" | bc)
+    echo "${SIZE} KB"
+  else
+    echo "${BYTES} bytes"
+  fi
+}
 
----
+# Function to delete a component
+delete_component() {
+  local COMPONENT_URL="$1"
+  local REPOSITORY_NAME="$2"
+  local COMPONENT_NAME="$3"
+  local COMPONENT_VERSION="$4"
+  local PARENT_STRUCTURE="$5"
+  local LAST_MODIFIED="$6"
+  local SIZE="$7"
+  local LAST_DOWNLOADED="$8"
+  local OUTPUT_FILE="$9"
 
-#### 1. Path: `/appbin/IBM/ucd/server/var/repository/blob/data`
+  response=$(curl -u "$CREDENTIALS" -X DELETE "$COMPONENT_URL" -w "\nHTTP_STATUS:%{http_code}" -s)
+  http_status=$(echo "$response" | grep "HTTP_STATUS" | awk -F: '{print $2}')
+  
+  if [ "$http_status" -eq 204 ]; then
+    echo "Successfully deleted $COMPONENT_NAME version $COMPONENT_VERSION from $REPOSITORY_NAME."
+    echo "$REPOSITORY_NAME,$COMPONENT_NAME,$COMPONENT_VERSION,$PARENT_STRUCTURE,$LAST_MODIFIED,$SIZE,$LAST_DOWNLOADED,DELETED" >> "$OUTPUT_FILE"
+  else
+    echo "Failed to delete $COMPONENT_NAME version $COMPONENT_VERSION from $REPOSITORY_NAME. Status code: $http_status"
+    echo "$REPOSITORY_NAME,$COMPONENT_NAME,$COMPONENT_VERSION,$PARENT_STRUCTURE,$LAST_MODIFIED,$SIZE,$LAST_DOWNLOADED,FAILED" >> "$OUTPUT_FILE"
+  fi
+}
 
-**Description:**  
-This directory contains blob data, including deployment packages, artifacts, and metadata used by IBM UrbanCode Deploy.
+# Function to list and delete components in the specified repository
+list_and_delete_components() {
+  local REPOSITORY_NAME="$1"
+  local COMPONENT_NAMES=($(echo "$2" | tr ',' ' '))
+  local COMPONENT_VERSIONS=($(echo "$3" | tr ',' ' '))
+  local PARENT_STRUCTURES=($(echo "$4" | tr ',' ' '))
+  local LAST_MODIFIED_DATES=($(echo "$5" | tr ',' ' '))
+  local SIZES=($(echo "$6" | tr ',' ' '))
+  local LAST_DOWNLOADED_DATES=($(echo "$7" | tr ',' ' '))
+  local OUTPUT_FILE="$8"
 
-**Cleanup Guidelines:**
-- **Retention Policy:** Retain the most recent 6 months of deployment artifacts.
-- **Old Data Removal:** Identify and delete artifacts older than 6 months.
-- **Verification:** Ensure that no active or future deployments rely on the artifacts being deleted.
+  echo "Repository Name,Component Name,Version,Parent Structure,Last Modified,Size,Last Downloaded,Deletion Status" > "$OUTPUT_FILE"
 
-**Head Snapshot:**  
-Before cleanup, list the contents with timestamps and sizes:
-```sh
-ls -lh /appbin/IBM/ucd/server/var/repository/blob/data
-```
+  local continuation_token=""
+  while : ; do
+    if [ -z "$continuation_token" ]; then
+      URL="$NEXUS_URL/service/rest/v1/components?repository=$REPOSITORY_NAME"
+    else
+      URL="$NEXUS_URL/service/rest/v1/components?repository=$REPOSITORY_NAME&continuationToken=$continuation_token"
+    fi
+    
+    echo "Fetching URL: $URL"  # Debug statement
+    
+    response=$(curl -u "$CREDENTIALS" -X GET "$URL" -w "\nHTTP_STATUS:%{http_code}" -s)
+    echo "Response: $response"  # Debug statement
+    http_status=$(echo "$response" | grep "HTTP_STATUS" | awk -F: '{print $2}')
+    
+    if [ "$http_status" -eq 200 ]; then
+      continuation_token=$(echo "$response" | grep -v "HTTP_STATUS" | jq -r '.continuationToken')
+      COMPONENTS=$(echo "$response" | grep -v "HTTP_STATUS" | jq -r '.items[] | @base64')
 
-**Tail Snapshot:**  
-After cleanup, list the contents again to verify:
-```sh
-ls -lh /appbin/IBM/ucd/server/var/repository/blob/data
-```
+      for COMPONENT in $COMPONENTS; do
+        DECODED_COMPONENT=$(decode_base64 "$COMPONENT")
+        echo "Decoded Component: $DECODED_COMPONENT"  # Debug statement
 
----
+        COMPONENT_NAME=$(echo "$DECODED_COMPONENT" | jq -r '.name // empty')
+        COMPONENT_VERSION=$(echo "$DECODED_COMPONENT" | jq -r '.version // empty')
+        LAST_MODIFIED=$(echo "$DECODED_COMPONENT" | jq -r '.lastModified // empty')
 
-#### 2. Path: `iBM/UCD/server/var/sa/dialogue`
+        # Initialize variables for aggregation
+        MAX_LAST_MODIFIED=""
+        MAX_LAST_DOWNLOADED=""
+        UPLOADER=""
+        COMPONENT_SIZE=0
+        PARENT_STRUCTURE=""
 
-**Description:**  
-This directory contains dialogue files related to server communication and automation processes in Udeploy.
+        # Extract assets and iterate over them
+        ASSETS=$(echo "$DECODED_COMPONENT" | jq -r '.assets[] | @base64')
+        for ASSET in $ASSETS; do
+          DECODED_ASSET=$(decode_base64 "$ASSET")
+          
+          ASSET_SIZE=$(echo "$DECODED_ASSET" | jq -r '.size // 0')
+          COMPONENT_SIZE=$((COMPONENT_SIZE + ASSET_SIZE))
+          
+          ASSET_LAST_MODIFIED=$(echo "$DECODED_ASSET" | jq -r '.lastModified // empty')
+          ASSET_LAST_DOWNLOADED=$(echo "$DECODED_ASSET" | jq -r '.lastDownloaded // empty')
+          ASSET_UPLOADER=$(echo "$DECODED_ASSET" | jq -r '.uploader // empty')
+          ASSET_PATH=$(echo "$DECODED_ASSET" | jq -r '.path // empty')
+          
+          # Aggregate data
+          if [[ -z "$MAX_LAST_MODIFIED" || "$ASSET_LAST_MODIFIED" > "$MAX_LAST_MODIFIED" ]]; then
+            MAX_LAST_MODIFIED=$ASSET_LAST_MODIFIED
+          fi
+          if [[ -z "$MAX_LAST_DOWNLOADED" || "$ASSET_LAST_DOWNLOADED" > "$MAX_LAST_DOWNLOADED" ]]; then
+            MAX_LAST_DOWNLOADED=$ASSET_LAST_DOWNLOADED
+          fi
+          if [[ -z "$UPLOADER" ]]; then
+            UPLOADER=$ASSET_UPLOADER
+          fi
+          if [[ -z "$PARENT_STRUCTURE" ]]; then
+            PARENT_STRUCTURE=$(dirname "$ASSET_PATH")
+          fi
+        done
 
-**Cleanup Guidelines:**
-- **Retention Policy:** Retain the most recent 3 months of dialogue files.
-- **Old Data Removal:** Identify and delete dialogue files older than 3 months.
-- **Verification:** Ensure that no ongoing automation processes require the files being deleted.
+        HUMAN_READABLE_SIZE=$(convert_size "$COMPONENT_SIZE")
 
-**Head Snapshot:**  
-Before cleanup, list the contents with timestamps and sizes:
-```sh
-ls -lh iBM/UCD/server/var/sa/dialogue
-```
+        for i in "${!COMPONENT_NAMES[@]}"; do
+          # Check all the provided conditions
+          if [[ "$COMPONENT_NAME" == "${COMPONENT_NAMES[$i]}" ]] && \
+             [[ "$COMPONENT_VERSION" == "${COMPONENT_VERSIONS[$i]}" ]] && \
+             [[ -z "${PARENT_STRUCTURES[$i]}" || "$PARENT_STRUCTURE" == "${PARENT_STRUCTURES[$i]}" ]] && \
+             [[ -z "${LAST_MODIFIED_DATES[$i]}" || "$MAX_LAST_MODIFIED" == "${LAST_MODIFIED_DATES[$i]}" ]] && \
+             [[ -z "${SIZES[$i]}" || "$HUMAN_READABLE_SIZE" == "${SIZES[$i]}" ]] && \
+             [[ -z "${LAST_DOWNLOADED_DATES[$i]}" || "$MAX_LAST_DOWNLOADED" == "${LAST_DOWNLOADED_DATES[$i]}" ]]; then
 
-**Tail Snapshot:**  
-After cleanup, list the contents again to verify:
-```sh
-ls -lh iBM/UCD/server/var/sa/dialogue
-```
+            COMPONENT_URL=$(echo "$DECODED_COMPONENT" | jq -r '.assets[0].downloadUrl' | sed "s|/repository/|/repository/$REPOSITORY_NAME/|g" | sed 's|/download/|/component/|g')
 
----
+            delete_component "$COMPONENT_URL" "$REPOSITORY_NAME" "$COMPONENT_NAME" "$COMPONENT_VERSION" "$PARENT_STRUCTURE" "$MAX_LAST_MODIFIED" "$HUMAN_READABLE_SIZE" "$MAX_LAST_DOWNLOADED" "$OUTPUT_FILE"
+          fi
+        done
+      done
 
-#### 3. Path: `iBM/UCD/server/archieve`
+      if [ -z "$continuation_token" ]; then
+        break
+      fi
+    else
+      echo "API call failed with status code: $http_status. Check your Nexus URL, credentials, and repository name."
+      break
+    fi
+  done
+}
 
-**Description:**  
-This directory stores archived data, which may include old logs, reports, or other historical data.
+# Main script execution
+REPOSITORY_NAME="$1"
+COMPONENT_NAME_FILTER="$2"
+COMPONENT_VERSION_FILTER="$3"
+PARENT_STRUCTURE_FILTER="$4"
+LAST_MODIFIED_FILTER="$5"
+SIZE_FILTER="$6"
+LAST_DOWNLOADED_FILTER="$7"
+OUTPUT_FILE="$WORKSPACE/nexus_deleted_components_$(date +%Y%m%d_%H%M%S).csv"
 
-**Cleanup Guidelines:**
-- **Retention Policy:** Retain the most recent 1 year of archived data.
-- **Old Data Removal:** Identify and delete archived data older than 1 year.
-- **Verification:** Confirm that the data being deleted is not needed for compliance or audit purposes.
+list_and_delete_components "$REPOSITORY_NAME" "$COMPONENT_NAME_FILTER" "$COMPONENT_VERSION_FILTER" "$PARENT_STRUCTURE_FILTER" "$LAST_MODIFIED_FILTER" "$SIZE_FILTER" "$LAST_DOWNLOADED_FILTER" "$OUTPUT_FILE"
 
-**Head Snapshot:**  
-Before cleanup, list the contents with timestamps and sizes:
-```sh
-ls -lh iBM/UCD/server/archieve
-```
-
-**Tail Snapshot:**  
-After cleanup, list the contents again to verify:
-```sh
-ls -lh iBM/UCD/server/archieve
-```
-
----
-
-#### 4. Path: `iBM/UCD/server/logs/store`
-
-**Description:**  
-This directory contains log files generated by the Udeploy server.
-
-**Cleanup Guidelines:**
-- **Retention Policy:** Retain the most recent 6 months of logs.
-- **Old Data Removal:** Identify and delete logs older than 6 months.
-- **Verification:** Ensure that the logs being deleted are not required for troubleshooting or audit purposes.
-
-**Head Snapshot:**  
-Before cleanup, list the contents with timestamps and sizes:
-```sh
-ls -lh iBM/UCD/server/logs/store
-```
-
-**Tail Snapshot:**  
-After cleanup, list the contents again to verify:
-```sh
-ls -lh iBM/UCD/server/logs/store
-```
-
----
-
-**Procedure:**
-
-1. **Backup Data:**
-   - Before performing any deletions, ensure that critical data is backed up.
-   - Use a secure backup location to store copies of the data being removed.
-
-2. **Identify Old Data:**
-   - Use the `find` command to list files older than the retention policy.
-   - Example command for finding files older than 6 months:
-     ```sh
-     find /path/to/directory -type f -mtime +180
-     ```
-
-3. **Delete Old Data:**
-   - Carefully review the list of files to be deleted.
-   - Use the `rm` command to remove old files:
-     ```sh
-     rm /path/to/old/file
-     ```
-
-4. **Verify Cleanup:**
-   - After deleting the files, verify that the directory sizes have reduced.
-   - Take snapshots of the directory contents before and after cleanup to document the changes.
-
-**Current Status:**
-- The `/appbin` directory has a total capacity of 12TB, with 9.3TB currently filled. To manage this space effectively, consider increasing the filesystem size.
-- We have collected 2GB of old components from Udeploy, sent a confirmation email to the app team, received replies from some team members, and raised a RITM to clean up those components for which confirmation was received.
-
-**Approval:**
-- Obtain necessary approvals from the application team before proceeding with the cleanup.
-- Ensure that the cleanup process is documented and reviewed periodically.
-
-**Notes:**
-- Regularly review and update the retention policies based on business needs and compliance requirements.
-- Automate the cleanup process where possible to maintain consistency and efficiency.
-
----
-
-**Document Version:** 1.0  
-**Prepared by:** [Your Name]  
-**Date:** [Current Date]
+echo "Reports saved in $OUTPUT_FILE."
