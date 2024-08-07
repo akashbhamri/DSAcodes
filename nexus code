@@ -1,168 +1,102 @@
 #!/bin/bash
 
-# Nexus Repository Manager details
-NEXUS_URL="https://nexus.app.syfbank.com:8443"
-CREDENTIALS="username:password"
-BLOB_STORE="$2"  # Blob store provided as a parameter to the script
+########################################
+####### Karishma Farhin Shaik ##########
+########################################
 
-# Function to decode base64 and parse JSON
-decode_base64() {
-  echo $1 | base64 --decode | jq .
-}
+# Bitbucket Server URL and credentials
+BASE_URL='BASE_URL'
+USERNAME='$USER'
+PASSWORD='$PASS'
+# OUTPUT_FILE='Repo_licensed_users.csv'
+GROUP_NAME='stash-users'
+STASH_USERS_FILE='stash_users.csv'
+UNLICENSED_LOG='unlicensed_users.txt'
+# Initialize pagination variables
+limit=1000
 
-# Function to get the size of a component and convert to human-readable format
-convert_size() {
-  BYTES=$1
-  if [ $BYTES -ge $((1024 * 1024 * 1024)) ]; then
-    SIZE=$(echo "scale=2; $BYTES / 1024 / 1024 / 1024" | bc)
-    echo "${SIZE} GB"
-  elif [ $BYTES -ge $((1024 * 1024)) ]; then
-    SIZE=$(echo "scale=2; $BYTES / 1024 / 1024" | bc)
-    echo "${SIZE} MB"
-  elif [ $BYTES -ge 1024 ]; then
-    SIZE=$(echo "scale=2; $BYTES / 1024" | bc)
-    echo "${SIZE} KB"
-  else
-    echo "${BYTES} bytes"
-  fi
-}
+# Create or clear the output file and write CSV header
+echo "Project Key,Repository,Username,Email,Permission,Last Authentication Date" >"$OUTPUT_FILE"
 
-# Function to delete a component
-delete_component() {
-  local COMPONENT_URL="$1"
-  local REPOSITORY_NAME="$2"
-  local COMPONENT_NAME="$3"
-  local COMPONENT_VERSION="$4"
-  local PARENT_STRUCTURE="$5"
-  local LAST_MODIFIED="$6"
-  local SIZE="$7"
-  local LAST_DOWNLOADED="$8"
-  local OUTPUT_FILE="$9"
+# Function to fetch users in the stash-users group
+fetch_stash_users() {
+    start=0
+    has_more=true
 
-  response=$(curl -u "$CREDENTIALS" -X DELETE "$COMPONENT_URL" -w "\nHTTP_STATUS:%{http_code}" -s)
-  http_status=$(echo "$response" | grep "HTTP_STATUS" | awk -F: '{print $2}')
-  
-  if [ "$http_status" -eq 204 ]; then
-    echo "Successfully deleted $COMPONENT_NAME version $COMPONENT_VERSION from $REPOSITORY_NAME."
-    echo "$REPOSITORY_NAME,$COMPONENT_NAME,$COMPONENT_VERSION,$PARENT_STRUCTURE,$LAST_MODIFIED,$SIZE,$LAST_DOWNLOADED,DELETED" >> "$OUTPUT_FILE"
-  else
-    echo "Failed to delete $COMPONENT_NAME version $COMPONENT_VERSION from $REPOSITORY_NAME. Status code: $http_status"
-    echo "$REPOSITORY_NAME,$COMPONENT_NAME,$COMPONENT_VERSION,$PARENT_STRUCTURE,$LAST_MODIFIED,$SIZE,$LAST_DOWNLOADED,FAILED" >> "$OUTPUT_FILE"
-  fi
-}
-
-# Function to list and delete components in the specified repository
-list_and_delete_components() {
-  local REPOSITORY_NAME="$1"
-  local COMPONENT_NAMES=($(echo "$2" | tr ',' ' '))
-  local COMPONENT_VERSIONS=($(echo "$3" | tr ',' ' '))
-  local PARENT_STRUCTURES=($(echo "$4" | tr ',' ' '))
-  local LAST_MODIFIED_DATES=($(echo "$5" | tr ',' ' '))
-  local SIZES=($(echo "$6" | tr ',' ' '))
-  local LAST_DOWNLOADED_DATES=($(echo "$7" | tr ',' ' '))
-  local OUTPUT_FILE="$8"
-
-  echo "Repository Name,Component Name,Version,Parent Structure,Last Modified,Size,Last Downloaded,Deletion Status" > "$OUTPUT_FILE"
-
-  local continuation_token=""
-  while : ; do
-    if [ -z "$continuation_token" ]; then
-      URL="$NEXUS_URL/service/rest/v1/components?repository=$REPOSITORY_NAME"
-    else
-      URL="$NEXUS_URL/service/rest/v1/components?repository=$REPOSITORY_NAME&continuationToken=$continuation_token"
-    fi
-    
-    echo "Fetching URL: $URL"  # Debug statement
-    
-    response=$(curl -u "$CREDENTIALS" -X GET "$URL" -w "\nHTTP_STATUS:%{http_code}" -s)
-    echo "Response: $response"  # Debug statement
-    http_status=$(echo "$response" | grep "HTTP_STATUS" | awk -F: '{print $2}')
-    
-    if [ "$http_status" -eq 200 ]; then
-      continuation_token=$(echo "$response" | grep -v "HTTP_STATUS" | jq -r '.continuationToken')
-      COMPONENTS=$(echo "$response" | grep -v "HTTP_STATUS" | jq -r '.items[] | @base64')
-
-      for COMPONENT in $COMPONENTS; do
-        DECODED_COMPONENT=$(decode_base64 "$COMPONENT")
-        echo "Decoded Component: $DECODED_COMPONENT"  # Debug statement
-
-        COMPONENT_NAME=$(echo "$DECODED_COMPONENT" | jq -r '.name // empty')
-        COMPONENT_VERSION=$(echo "$DECODED_COMPONENT" | jq -r '.version // empty')
-        LAST_MODIFIED=$(echo "$DECODED_COMPONENT" | jq -r '.lastModified // empty')
-
-        # Initialize variables for aggregation
-        MAX_LAST_MODIFIED=""
-        MAX_LAST_DOWNLOADED=""
-        UPLOADER=""
-        COMPONENT_SIZE=0
-        PARENT_STRUCTURE=""
-
-        # Extract assets and iterate over them
-        ASSETS=$(echo "$DECODED_COMPONENT" | jq -r '.assets[] | @base64')
-        for ASSET in $ASSETS; do
-          DECODED_ASSET=$(decode_base64 "$ASSET")
-          
-          ASSET_SIZE=$(echo "$DECODED_ASSET" | jq -r '.size // 0')
-          COMPONENT_SIZE=$((COMPONENT_SIZE + ASSET_SIZE))
-          
-          ASSET_LAST_MODIFIED=$(echo "$DECODED_ASSET" | jq -r '.lastModified // empty')
-          ASSET_LAST_DOWNLOADED=$(echo "$DECODED_ASSET" | jq -r '.lastDownloaded // empty')
-          ASSET_UPLOADER=$(echo "$DECODED_ASSET" | jq -r '.uploader // empty')
-          ASSET_PATH=$(echo "$DECODED_ASSET" | jq -r '.path // empty')
-          
-          # Aggregate data
-          if [[ -z "$MAX_LAST_MODIFIED" || "$ASSET_LAST_MODIFIED" > "$MAX_LAST_MODIFIED" ]]; then
-            MAX_LAST_MODIFIED=$ASSET_LAST_MODIFIED
-          fi
-          if [[ -z "$MAX_LAST_DOWNLOADED" || "$ASSET_LAST_DOWNLOADED" > "$MAX_LAST_DOWNLOADED" ]]; then
-            MAX_LAST_DOWNLOADED=$ASSET_LAST_DOWNLOADED
-          fi
-          if [[ -z "$UPLOADER" ]]; then
-            UPLOADER=$ASSET_UPLOADER
-          fi
-          if [[ -z "$PARENT_STRUCTURE" ]]; then
-            PARENT_STRUCTURE=$(dirname "$ASSET_PATH")
-          fi
+    while $has_more; do
+        response=$(curl -s -u "$USERNAME:$PASSWORD" "$BASE_URL/admin/groups/more-members?context=$GROUP_NAME&limit=$limit&start=$start")
+        echo "$response" | jq -r '.values[] | select(.lastAuthenticationTimestamp) | [.name], [.emailAddress], [.lastAuthenticationTimestamp] | @csv' |
+        while IFS=, read -r username email timestamp; do
+            # Convert timestamp
+            human_read=$(date -d @$((timestamp / 1000)) +'%Y-%m-%d')
+            echo "$username,$email,$human_read" >> "$STASH_USERS_FILE"
         done
 
-        HUMAN_READABLE_SIZE=$(convert_size "$COMPONENT_SIZE")
-
-        for i in "${!COMPONENT_NAMES[@]}"; do
-          # Check all the provided conditions
-          if [[ "$COMPONENT_NAME" == "${COMPONENT_NAMES[$i]}" ]] && \
-             [[ "$COMPONENT_VERSION" == "${COMPONENT_VERSIONS[$i]}" ]] && \
-             [[ -z "${PARENT_STRUCTURES[$i]}" || "$PARENT_STRUCTURE" == "${PARENT_STRUCTURES[$i]}" ]] && \
-             [[ -z "${LAST_MODIFIED_DATES[$i]}" || "$MAX_LAST_MODIFIED" == "${LAST_MODIFIED_DATES[$i]}" ]] && \
-             [[ -z "${SIZES[$i]}" || "$HUMAN_READABLE_SIZE" == "${SIZES[$i]}" ]] && \
-             [[ -z "${LAST_DOWNLOADED_DATES[$i]}" || "$MAX_LAST_DOWNLOADED" == "${LAST_DOWNLOADED_DATES[$i]}" ]]; then
-
-            COMPONENT_URL=$(echo "$DECODED_COMPONENT" | jq -r '.assets[0].downloadUrl' | sed "s|/repository/|/repository/$REPOSITORY_NAME/|g" | sed 's|/download/|/component/|g')
-
-            delete_component "$COMPONENT_URL" "$REPOSITORY_NAME" "$COMPONENT_NAME" "$COMPONENT_VERSION" "$PARENT_STRUCTURE" "$MAX_LAST_MODIFIED" "$HUMAN_READABLE_SIZE" "$MAX_LAST_DOWNLOADED" "$OUTPUT_FILE"
-          fi
-        done
-      done
-
-      if [ -z "$continuation_token" ]; then
-        break
-      fi
-    else
-      echo "API call failed with status code: $http_status. Check your Nexus URL, credentials, and repository name."
-      break
-    fi
-  done
+        is_last_page=$(echo "$response" | jq -r '.isLastPage')
+        has_more=$([ "$is_last_page" = "false" ] && echo false || echo true)
+        start=$((start + limit))
+    done
 }
 
-# Main script execution
-REPOSITORY_NAME="$1"
-COMPONENT_NAME_FILTER="$2"
-COMPONENT_VERSION_FILTER="$3"
-PARENT_STRUCTURE_FILTER="$4"
-LAST_MODIFIED_FILTER="$5"
-SIZE_FILTER="$6"
-LAST_DOWNLOADED_FILTER="$7"
-OUTPUT_FILE="$WORKSPACE/nexus_deleted_components_$(date +%Y%m%d_%H%M%S).csv"
+fetch_project_admins() {
+    # 1. Fetch Project Admins
+    fetch_project_admins $project_key
+}
 
-list_and_delete_components "$REPOSITORY_NAME" "$COMPONENT_NAME_FILTER" "$COMPONENT_VERSION_FILTER" "$PARENT_STRUCTURE_FILTER" "$LAST_MODIFIED_FILTER" "$SIZE_FILTER" "$LAST_DOWNLOADED_FILTER" "$OUTPUT_FILE"
+fetch_project_users() {
+    # 2. Fetch Project Users
+    echo "project user details"
+    project_users_file="BB_${project_key}_Project_Users.csv"
+    echo "Project Key, User Name, Display Name, Permission" > "$project_users_file"
+    fetch_project_users $project_key
+}
 
-echo "Reports saved in $OUTPUT_FILE."
+fetch_project_groups() {
+    # 3. Fetch Project Groups
+    echo "project groups method calling"
+    fetch_project_groups $project_key
+}
+
+fetch_project_groups_users() {
+    # 4. Fetch Project Group users
+    fetch_project_groups_users $project_key
+}
+
+project_groups_users_sort() {
+    # 6. Sorting Group users in final sheet
+    project_groups_users_file="BB_${project_key}_Project_Groups_Users.csv"
+    echo "Project Key, Group Name, Permission, UserName, DisplayName" > "$project_groups_users_file"
+    project_groups_users_sort
+}
+
+create_project_csv() {
+    # 7. Create the csv file for the project
+    project_file="${project_key}_Repo_users.csv"
+    echo "Project Key,Repository Name,Username,Email,Permission,Last Authentication Date" > "$project_file"
+}
+
+fetch_repositories() {
+    # 8. Fetch repositories in the project
+    repo_slugs=$(fetch_repos $project_key)
+}
+
+fetch_repo_users() {
+    # Iterate through each repository
+    for repo_slug in $repo_slugs; do
+        repo_user_details=$(fetch_repo_users $project_key $repo_slug)
+        fetch_repo_admins $project_key $repo_slug
+        process_user_details
+    done
+}
+
+process_user_details() {
+    # Process each user detail
+    echo "$repo_user_details" | while IFS=, read -r project_key repo_slug username emailAddress permission; do
+        if grep -q "^$username," "$STASH_USERS_FILE"; then
+            readable_date=$(grep "$username," "$STASH_USERS_FILE" | cut -d , -f3)
+            echo "$project_key,$repo_slug,$username,$emailAddress,$permission,$readable_date" >> "$project_file"
+        else
+            echo "$project_key,$repo_slug,$username,$emailAddress,$permission" >> "$project_file"
+        fi
+    done
+}
