@@ -1,81 +1,24 @@
-Here's a detailed, step-by-step guide on how to recover a deleted repository in Nexus, with explanations and instructions for each step:
+Hi Kanag,
 
-### 1. **Stop Automatic Deletions**
-   - **What to Do:**
-     1. Log in to the Nexus Repository Manager UI.
-     2. Go to the **"System"** menu and select **"Tasks"**.
-     3. Look for any tasks named **"Compact Blob Store"** or similar.
-     4. Click on the task to open it and then click **"Disable"**.
+We’ve been experiencing recurring issues with MFE nodes going down over the past four months. We suspect that this might be related to Java heap size and thread count configurations. Could you please provide guidance on the current Java heap and thread count settings, and suggest any necessary adjustments?
 
-   - **Why:** Compact Blob Store tasks remove files that are marked as deleted. Disabling these tasks ensures that your deleted files aren’t permanently erased during the recovery process.
+Additionally, our dev server is facing TMP utilization problems due to `jestgbi` and `nexus iq`. We need to:
+- Determine if it is safe to delete the TMP files.
+- Identify ways to prevent TMP space issues in the future.
+- Evaluate whether we need to add more space to the TMP directory as it’s affecting node stability.
 
-### 2. **Shut Down Nexus**
-   - **What to Do:**
-     1. Access the server where Nexus is installed.
-     2. Run the command to stop the Nexus service:
-        ```bash
-        sudo systemctl stop nexus
-        ```
-     - (Or use the appropriate command if your system is different.)
+Your assistance in resolving these issues would be greatly appreciated.
 
-   - **Why:** Shutting down Nexus prevents any automatic processes from running and allows you to safely make changes to the blob store without interference.
+Best regards,
+[Your Name]
 
-### 3. **Remove the `deletions.index` File**
-   - **What to Do:**
-     1. Navigate to the root directory of the blob store where your repository’s files are stored. This is usually located in:
-        ```bash
-        /path/to/nexus-data/blobs/
-        ```
-     2. Find and delete the `deletions.index` file:
-        ```bash
-        rm /path/to/nexus-data/blobs/deletions.index
-        ```
+Hi Team,
 
-   - **Why:** The `deletions.index` file lists all files that Nexus has marked for deletion. If this file is not removed, Nexus will delete the recovered files again the next time it runs.
+In order to proceed with increasing CPU and memory for our MFE nodes, we need to provide the current Java heap size and thread count settings. Could you please confirm these details for our MFE nodes?
 
-### 4. **Recreate the Repository**
-   - **What to Do:**
-     1. Restart Nexus using:
-        ```bash
-        sudo systemctl start nexus
-        ```
-     2. Log back into the Nexus UI.
-     3. Go to **"Repositories"** under the **"Server Administration and Configuration"** section.
-     4. Click **"Create repository"** and select the type of repository (e.g., Maven, NuGet) that was deleted.
-     5. Use the exact same **name** and **blob store** that the deleted repository had.
-     6. Save the repository.
+Once we have this information, we will coordinate with you to adjust the resources accordingly.
 
-   - **Why:** Nexus needs the repository to have the exact same name and configuration to correctly associate the recovered files with it.
+Thank you for your assistance.
 
-### 5. **Mark Files as Not Deleted**
-   - **What to Do:**
-     1. Access the blob store directory where your repository’s files are located.
-     2. Run a script to mark the files as not deleted. Here’s an example script for a Maven repository:
-        ```bash
-        find /path/to/nexus-data/blobs/default/content/vol-*/repo/maven-releases/ -name "*.properties" -exec sed -i '/^deleted=/d' {} \;
-        ```
-     - Replace `maven-releases` with your repository’s name, and adjust the path as necessary.
-
-   - **Why:** This script removes the `deleted` marker from the properties files, indicating to Nexus that these files are still valid and should be part of the repository.
-
-### 6. **Reconcile the Repository**
-   - **What to Do:**
-     1. In the Nexus UI, go to **"System" > "Tasks"**.
-     2. Click **"Create task"** and select **"Repair - Reconcile component database from blob store"**.
-     3. Choose the blob store associated with your repository.
-     4. Check the **"Restore blob metadata"** option.
-     5. Leave other options unchecked, and then save and run the task.
-
-   - **Why:** This task scans the blob store, re-links the files to the repository, and ensures the metadata is restored correctly.
-
-### 7. **Rebuild the `deletions.index` File**
-   - **What to Do:**
-     1. After the reconciliation task is complete, navigate back to the blob store directory.
-     2. Run a command to rebuild the `deletions.index` file, typically by recreating it with updated information, depending on your system’s specifics.
-     3. Alternatively, let Nexus handle this automatically during its next maintenance cycle.
-
-   - **Why:** Rebuilding the `deletions.index` file ensures Nexus correctly tracks which files are deleted or active, preventing future errors or unexpected deletions.
-
----
-
-Following these steps will help you successfully recover your deleted repository in Nexus, making sure all the data is restored and properly synced with the repository.
+Best regards,
+[Your Name]
