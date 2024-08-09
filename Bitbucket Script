@@ -1,0 +1,223 @@
+#!/bin/bash
+#####################################
+####### Karishma Farhin Shaik #######
+#####################################
+
+# Bitbucket Server URL and credentials
+BASE_URL="BASE_URL"
+USERNAME="$USER"
+PASSWORD="$PASS"
+#OUTPUT_FILE="Repo_licensed_users.csv"
+GROUP_NAME="stash-users"
+STASH_USERS_FILE="stash_users.csv"
+UNLICENSED_LOG="unlicensed_users.txt"
+# Initialize pagination variables
+limit=1000
+
+# Create or clear the output file and write CSV header
+echo "Project Key,Repository,Username,Email,Permission,Last Authentication Date" >"$OUTPUT_FILE"
+# Function to fetch users in the stash-users group
+fetch_stash_users() {
+    start=0
+    has_more=true
+    while $has_more; do
+        response=$(curl -s -u "$USERNAME:$PASSWORD" "$BASE_URL/admin/groups/more-members?context=$GROUP_NAME&limit=$limit&start=$start")
+        echo "$response" | jq -r '.values[] | select(.lastAuthenticationTimestamp) | [.name], [.emailAddress], [.lastAuthenticationTimestamp]' |
+        while IFS=, read -r username email time; do
+            #convert timestamp
+            human_read=$(date -d @$((timestamp / 1000)) +'%Y-%m-%d')
+            echo "$username,$email,$human_read" >>"$STASH_USERS_FILE"
+        done
+
+        is_last_page=$(echo "$response" | jq '.isLastPage')
+        has_more=$( [ "$is_last_page" == "false" ] && echo true || echo false )
+        start=$((start + limit))
+    done
+}
+fetch_stash_users() {
+}
+
+# Function to fetch projects
+fetch_projects() {
+    curl -s -u "$USERNAME:$PASSWORD" -X GET "$BASE_URL/projects?start=${start_value}&limit=${limit_value}" | jq -r '.values[] | .key' >>project_keys.txt
+}
+
+# Function to fetch repositories in a project
+fetch_repos() {
+    local project_key=$1
+    start=0
+    has_more=true
+    while $has_more; do
+        response=$(curl -s -u "$USERNAME:$PASSWORD" "$BASE_URL/projects/$project_key/repos?limit=$limit&start=$start")
+        echo "$response" | jq -r '.values[] | "\(.slug)"'
+        is_last_page=$(echo "$response" | jq '.isLastPage')
+        has_more=$( [ "$is_last_page" == "false" ] && echo true || echo false )
+        start=$((start + limit))
+    done
+}
+
+# Function to fetch users with access to a repository
+fetch_repo_users() {
+    local project_key=$1
+    local repo_slug=$2
+    start=0
+    has_more=true
+    while $has_more; do
+        response=$(curl -s -u "$USERNAME:$PASSWORD" "$BASE_URL/projects/$project_key/repos/$repo_slug/permissions/users?limit=$limit&start=$start")
+        echo "$response" | jq -r --arg repo_slug "$repo_slug" '.values[] | "\($project_key),\($repo_slug),\(.user.name),\(.user.emailAddress),\(.permission)"'
+        is_last_page=$(echo "$response" | jq '.isLastPage')
+        has_more=$( [ "$is_last_page" == "false" ] && echo true || echo false )
+        start=$((start + limit))
+    done
+}
+
+
+
+# Function to fetch repo admins
+fetch_repo_admins(){
+    curl -u "$USERNAME:$PASSWORD" -X GET "$BASE_URL/projects/$project_key/repos/$repo_slug/permissions/users/?start=0&limit=20000" | jq -r '.values[] | select(.permission == "REPO_ADMIN") | .user.emailAddress' >>"${project_key}_Repo_Admins.txt"
+}
+
+# Function to fetch Project admins
+fetch_project_admins(){
+    curl -u "$USERNAME:$PASSWORD" -X GET "$BASE_URL/projects/$project_key/permissions/users/?start=0&limit=20000" | jq -r '.values[] | select(.permission == "PROJECT_ADMIN") | .user.emailAddress' >>"${project_key}_Project_Admins.txt"
+    project_admin_emails=$(cat "${project_key}_Project_Admins.txt" | tr '\n' ',' | sed 's/,$//')
+    echo "${project_admin_emails}"
+}
+
+# Function to fetch Project users
+fetch_project_users(){
+    echo "Project users fetching"
+    response=$(curl -u "$USERNAME:$PASSWORD" "$BASE_URL/projects/$project_key/permissions/users/?start=0&limit=20000")
+    project_user_details=$(echo "$response" | jq -r --arg project_key "$project_key" '.values[] | "\($project_key),\(.user.name),\(.user.displayName),\(.permission)"')
+    echo "$project_user_details" | while IFS=, read -r project_key username displayName permission; do
+        if grep "$username" "$STASH_USERS_FILE"; then
+            # convert the timestamp to a human-readable date format
+            echo "$username is licensed" >> licensed_project_users.txt
+            echo "$project_key,$username,$displayName,$permission" >>"$licensed_project_users_file"
+        else
+            echo "User $username is unlicensed" >>unlicensed_project_users.txt
+        fi
+    done
+}
+
+# Function to fetch Project groups
+fetch_project_groups(){
+    echo "Project groups fetching"
+    curl -s -k -u "$USERNAME:$PASSWORD" -X GET "$BASE_URL/projects/$project_key/permissions/groups/?start=0&limit=20000" | jq -r --arg project_key "$project_key" '.values[] | [.group.name,.permission] | @csv' >>"${project_key}_raw_groups_file.csv"
+}
+
+
+# Sorting the groups file to handle @ and spaces in group name
+project_groups_sort(){
+    echo "Sorting the group names to handle @ and spaces in group name"
+    awk 'BEGIN {FS=OFS=","}
+    {
+        if ($2 ~ /[@ ]/) {
+           gsub(/@/, "%40", $2);
+           gsub(/@/, "%20", $2);
+}
+
+        print $0;
+    }' "${project_key}_raw_groups_file.csv" > "${project_key}_groups_file.csv"
+
+}
+# Fetching the users from each group from project
+fetch_project_groups_users(){
+    echo "Collecting the users from each group from project"
+    for group in $(cat "${project_key}_sorted_groups.csv" | cut -d ',' -f6 | sort -n | cut -d '"' -f6 | head -1); do
+        echo "Group Name is $group"
+        permission=$(grep "$group" "${project_key}_sorted_groups.csv" | cut -d ',' -f2)
+        response=$(curl -u "$USERNAME:$PASSWORD" "$BASE_URL/projects/$project_key/groups/more-members?context=${group}&limit=20000&start=0")
+        project_group_user_details=$(echo $response | jq -r --arg project_key "$project_key" --arg group "$group" --arg permission "$permission" '.values[] | "\($project_key),\($group),\(.name),\(.displayName),\(.permission)"')
+        echo "$project_group_user_details" | while IFS=, read -r project_key group username displayName permission; do
+            if grep "$username" "$STASH_USERS_FILE"; then
+                # Convert the timestamp to a human-readable date format
+                echo "$username is licensed" >> licensed_project_group_users.txt
+                echo "$project_key,$group,$username,$displayName,$permission" >>${project_key}_Sorted_Groups_users.csv
+            else
+                echo "User $username is unlicensed" >>unlicensed_project_group_users.txt
+            fi
+        done
+    done
+}
+
+# Sorting Group users in final sheet
+project_groups_users_sort(){
+    echo "Sorting the group names to handle @ and spaces in group name"
+    awk 'BEGIN {FS=OFS=","}
+    {
+        if ($2 ~ /[%40%20 ]/) {
+           gsub(/%40/, "@", $2);
+           gsub(/%20/, " ", $2);
+}
+
+        print $0;
+    }' "${project_key}_raw_groups_file.csv" > "${project_key}_groups_file.csv"
+
+}
+
+# Fetch users in the stash users group
+fetch_stash_users
+
+# Fetch projects
+fetch_projects
+
+# Iterate through each project
+for project_key in $(cat project_keys.txt); do
+    # Fetch project admins
+    fetch_project_admins $project_key
+    # 2. Fetch Project Users
+echo "project user details"
+project_users_file="BB_${project_key}_Project_Users.csv"
+echo "Project Key, User Name, Display Name, Permission" > $project_users_file
+fetch_project_users $project_key
+
+# 3. Fetch Project Groups
+echo "project groups method calling"
+fetch_project_groups $project_key
+
+# 4. Sorting project groups
+project_groups_sort
+
+# 5. Fetch Project Group users
+fetch_project_groups_users $project_key
+
+# 6. Sorting Group users in final sheet
+project_groups_users_file="BB_${project_key}_Project_Groups_Users.csv"
+echo "Project Key, Group Name, Permission, UserName, DisplayName" > $project_groups_users_file
+project_group_users_sort
+
+# 7. Create the csv file for the project
+project_file="${project_key}_Repo_users.csv"
+echo "Project Key, Repository Name, Username, Email, Permission, Last Authentication Date" > $project_file
+
+# 8. Fetch repositories in the project
+repo_slugs=$(fetch_repos $project_key)
+
+# 9. Iterate through each repository
+for repo_slug in $repo_slugs; do
+    # Fetch users with access to the repository
+    repo_user_details=$(fetch_repo_users $project_key $repo_slug)
+    
+    # Fetch repo admins
+    fetch_repo_admins $project_key $repo_slug
+
+    # Process each user detail
+    echo "$repo_user_details" | while IFS=, read -r project_key repo_slug username emailAddress permission; do
+        if grep -q "$username" "$STASH_USERS_FILE"; then
+            # Convert the timestamp to a human-readable date format
+            readable_date=$(grep "$username" "$STASH_USERS_FILE" | cut -d ',' -f3)
+            echo "$project_key,$repo_slug,$username,$emailAddress,$permission,$readable_date" >> $project_file
+        else
+            echo "User $username is unlicensed" >>"$UNLICENSED_LOG"
+        fi
+    done
+
+done
+# Read the project admin list
+repo_admin_emails=$(cat ${project_key}_Repo_Admins.txt | tr '\n' ';' | sed 's/,$/ /')
+echo "${repo_admin_emails}"
+
+# Final output message
+echo "Licensed users with access to repositories have been saved to $project_file"
