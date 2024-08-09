@@ -1,7 +1,231 @@
-When discussing the recovery process with the vendor, here are some valid questions to ensure you fully understand and correctly execute the recovery procedure:General Questions:Process Clarification:Can you provide a detailed explanation of each step in the recovery process, including the purpose and expected outcome?Prerequisites:Are there any prerequisites or specific configurations required before starting the recovery process?Task Scheduling:Should we manually schedule or run any maintenance tasks (e.g., Compact Blob Store) after the recovery? If so, how do we configure this?File and Blob Store Management:File Deletion:How does Nexus handle files marked as deleted? Are they retained until manually cleaned up, or is there a default retention period?Blob Store Types:Does the recovery process differ based on the type of blob store (file-based vs. S3)? What should we be aware of for each type?Recovery Specifics:Deletions Index:What should we do if the deletions.index file is missing or corrupted? Is there a way to recreate or repair it?Metadata Restoration:How does the "restore blob metadata" option work in the reconciliation task? Are there any caveats we should be aware of?Script Usage:Can you provide an example script or detailed instructions for marking files as not deleted? Are there any variations based on repository type?Post-Recovery Steps:Validation:How can we validate that the recovery process was successful? Are there specific checks or tests to ensure data integrity?Monitoring:After completing the recovery, are there any recommended monitoring or verification steps to ensure the repository operates correctly?Documentation:Where can we find official documentation or support resources for troubleshooting any issues that arise during the recovery process?Backup and Restoration:Backups:Is it advisable to create a backup of the current blob store and repository before starting the recovery? How can we do this?Restoration Verification:What steps should we take to verify that all files and metadata have been correctly restored and are fully functional?Support and Escalation:Support Channels:What support options are available if we encounter issues during the recovery process? Are there escalation paths for urgent problems?Updates and Patches:Are there any recent updates or patches that might affect the recovery process? Should we ensure that our Nexus installation is up-to-date before starting?These questions will help you gain a thorough understanding of the recovery process and ensure that you’re prepared for any potential issues or complexities.
+#!/bin/bash
+#####################################
+####### Karishma Farhin Shaik #######
+#####################################
 
+# Description:
+# This script interacts with a Bitbucket Server to:
+# 1. Fetch users in a specific group (`stash-users`) and check their licensing status.
+# 2. Fetch projects, repositories, and permissions for those repositories.
+# 3. Identify licensed and unlicensed users, and categorize them accordingly.
+# 4. Generate CSV files containing the detailed information about users, repositories, and their permissions.
 
+# Bitbucket Server URL and credentials
+BASE_URL="https://bitbucket-server-url"   # Replace with your Bitbucket Server URL
+USERNAME="$USER"                          # Username for authentication (expects it to be set as an environment variable)
+PASSWORD="$PASS"                          # Password for authentication (expects it to be set as an environment variable)
 
+GROUP_NAME="stash-users"                  # The name of the group to fetch users from
+STASH_USERS_FILE="stash_users.csv"        # Output file to store details of stash users
+UNLICENSED_LOG="unlicensed_users.txt"     # Log file to store details of unlicensed users
+OUTPUT_FILE="Repo_licensed_users.csv"     # Output CSV file to store licensed repository user details
 
+# Initialize pagination variables
+limit=1000   # Number of records to fetch per API call (can be adjusted based on server capabilities)
 
-Questions for the Vendor:Alternative Cleanup Mechanisms:If there's no Compact Blob Store task available, what is the recommended way to ensure that deleted files are permanently removed? Is there an alternative method for cleanup?Task Configuration:Can you confirm if the absence of the Compact Blob Store task affects the recovery process? If not, what specific steps should be followed to manage and clean up deleted files?Manual Cleanup:Is there a manual way to clean up the blob store if the Compact Blob Store task isn’t available? What commands or procedures should be used?Reconciliation and Metadata:Without the Compact Blob Store task, will running the "Repair - Reconcile component database from blob store" task effectively restore the repository? Are there additional steps required?Recovery Validation:What steps should we take to validate the success of the recovery process given that the Compact Blob Store task is not present? Are there specific checks or verification methods recommended?Blob Store Management:Does the absence of the Compact Blob Store task impact blob store performance or management in other ways? How should we handle blob store maintenance and monitoring?Documentation and Support:Can you provide official documentation or guidance on blob store maintenance and recovery processes in scenarios where the Compact Blob Store task is not used?Future Task Creation:If needed, how can we create and schedule a Compact Blob Store task for future maintenance? What is the procedure for setting up this task if required later?
+# Create or clear the output files
+echo "Project Key,Repository,Username,Email,Permission,Last Authentication Date" >"$OUTPUT_FILE"
+> "$STASH_USERS_FILE"    # Clear the stash users file if it already exists
+> "$UNLICENSED_LOG"      # Clear the unlicensed users log if it already exists
+
+# Function to fetch users in the stash-users group
+fetch_stash_users() {
+    start=0
+    has_more=true
+    while $has_more; do
+        # Fetch a batch of users from the stash-users group
+        response=$(curl -s -u "$USERNAME:$PASSWORD" "$BASE_URL/admin/groups/more-members?context=$GROUP_NAME&limit=$limit&start=$start")
+        
+        # Process the response to extract username, email, and last authentication timestamp
+        echo "$response" | jq -r '.values[] | select(.lastAuthenticationTimestamp) | [.name, .emailAddress, .lastAuthenticationTimestamp] | @csv' |
+        while IFS=',' read -r username email timestamp; do
+            # Convert the timestamp from milliseconds to a human-readable date
+            human_read=$(date -d @$((timestamp / 1000)) +'%Y-%m-%d')
+            echo "$username,$email,$human_read" >>"$STASH_USERS_FILE"
+        done
+
+        # Check if there are more pages of users to fetch
+        is_last_page=$(echo "$response" | jq '.isLastPage')
+        has_more=$( [ "$is_last_page" == "false" ] && echo true || echo false )
+        start=$((start + limit))
+    done
+}
+
+# Function to fetch all projects
+fetch_projects() {
+    start_value=0
+    limit_value=1000
+
+    # Fetch a list of project keys and store them in a file
+    curl -s -u "$USERNAME:$PASSWORD" -X GET "$BASE_URL/projects?start=${start_value}&limit=${limit_value}" | jq -r '.values[] | .key' >>project_keys.txt
+}
+
+# Function to fetch all repositories in a specific project
+fetch_repos() {
+    local project_key=$1
+    start=0
+    has_more=true
+    while $has_more; do
+        # Fetch a batch of repositories for the specified project
+        response=$(curl -s -u "$USERNAME:$PASSWORD" "$BASE_URL/projects/$project_key/repos?limit=$limit&start=$start")
+        echo "$response" | jq -r '.values[] | "\(.slug)"'
+        
+        # Check if there are more pages of repositories to fetch
+        is_last_page=$(echo "$response" | jq '.isLastPage')
+        has_more=$( [ "$is_last_page" == "false" ] && echo true || echo false )
+        start=$((start + limit))
+    done
+}
+
+# Function to fetch users with access to a specific repository
+fetch_repo_users() {
+    local project_key=$1
+    local repo_slug=$2
+    start=0
+    has_more=true
+    while $has_more; do
+        # Fetch a batch of users who have access to the specified repository
+        response=$(curl -s -u "$USERNAME:$PASSWORD" "$BASE_URL/projects/$project_key/repos/$repo_slug/permissions/users?limit=$limit&start=$start")
+        echo "$response" | jq -r --arg repo_slug "$repo_slug" '.values[] | "\($project_key),\($repo_slug),\(.user.name),\(.user.emailAddress),\(.permission)"'
+        
+        # Check if there are more pages of users to fetch
+        is_last_page=$(echo "$response" | jq '.isLastPage')
+        has_more=$( [ "$is_last_page" == "false" ] && echo true || echo false )
+        start=$((start + limit))
+    done
+}
+
+# Function to fetch repository administrators for a specific repository
+fetch_repo_admins(){
+    local project_key=$1
+    local repo_slug=$2
+    # Fetch and store the email addresses of users with REPO_ADMIN permission
+    curl -u "$USERNAME:$PASSWORD" -X GET "$BASE_URL/projects/$project_key/repos/$repo_slug/permissions/users/?start=0&limit=20000" | jq -r '.values[] | select(.permission == "REPO_ADMIN") | .user.emailAddress' >>"${project_key}_Repo_Admins.txt"
+}
+
+# Function to fetch project administrators for a specific project
+fetch_project_admins(){
+    local project_key=$1
+    # Fetch and store the email addresses of users with PROJECT_ADMIN permission
+    curl -u "$USERNAME:$PASSWORD" -X GET "$BASE_URL/projects/$project_key/permissions/users/?start=0&limit=20000" | jq -r '.values[] | select(.permission == "PROJECT_ADMIN") | .user.emailAddress' >>"${project_key}_Project_Admins.txt"
+    project_admin_emails=$(cat "${project_key}_Project_Admins.txt" | tr '\n' ',' | sed 's/,$//')
+    echo "${project_admin_emails}"
+}
+
+# Function to fetch users with permissions in a specific project
+fetch_project_users(){
+    local project_key=$1
+    echo "Fetching project users for project: $project_key"
+    
+    # Fetch the details of users with permissions in the project
+    response=$(curl -u "$USERNAME:$PASSWORD" "$BASE_URL/projects/$project_key/permissions/users/?start=0&limit=20000")
+    project_user_details=$(echo "$response" | jq -r --arg project_key "$project_key" '.values[] | "\($project_key),\(.user.name),\(.user.displayName),\(.permission)"')
+    
+    # Check each user to see if they are licensed, and log the results
+    echo "$project_user_details" | while IFS=',' read -r project_key username displayName permission; do
+        if grep "$username" "$STASH_USERS_FILE"; then
+            echo "$username is licensed" >> licensed_project_users.txt
+            echo "$project_key,$username,$displayName,$permission" >>"BB_${project_key}_Project_Users.csv"
+        else
+            echo "User $username is unlicensed" >>unlicensed_project_users.txt
+        fi
+    done
+}
+
+# Function to fetch groups with permissions in a specific project
+fetch_project_groups(){
+    local project_key=$1
+    echo "Fetching project groups for project: $project_key"
+    
+    # Fetch and store the details of groups with permissions in the project
+    curl -s -k -u "$USERNAME:$PASSWORD" -X GET "$BASE_URL/projects/$project_key/permissions/groups/?start=0&limit=20000" | jq -r --arg project_key "$project_key" '.values[] | [.group.name,.permission] | @csv' >>"${project_key}_raw_groups_file.csv"
+}
+
+# Function to sort group names and handle special characters
+project_groups_sort(){
+    local project_key=$1
+    echo "Sorting the group names for project: $project_key"
+    
+    # Replace special characters (@ and spaces) with URL-encoded equivalents
+    awk 'BEGIN {FS=OFS=","}
+    {
+        if ($1 ~ /[@ ]/) {
+           gsub(/@/, "%40", $1);
+           gsub(/ /, "%20", $1);
+        }
+        print $0;
+    }' "${project_key}_raw_groups_file.csv" > "${project_key}_groups_file.csv"
+}
+
+# Function to fetch users in each group for a specific project
+# Function to fetch users in each group for a specific project
+fetch_project_groups_users(){
+    local project_key=$1
+    echo "Collecting users from each group for project: $project_key"
+    
+    # Iterate over each group and fetch its members
+    while IFS=',' read -r group_name permission; do
+        group=$(echo "$group_name" | tr -d '"')  # Remove quotes from group name
+        response=$(curl -s -u "$USERNAME:$PASSWORD" "$BASE_URL/admin/groups/more-members?context=${group}&limit=20000&start=0")
+        
+        # Process the response to extract user details and add to CSV file
+        echo "$response" | jq -r --arg project_key "$project_key" --arg group "$group" --arg permission "$permission" \
+        '.values[] | "\($project_key),\($group),\(.name),\(.displayName),\($permission)"' >> "${project_key}_group_users.csv"
+        
+        # Check if the user is licensed and handle accordingly
+        cat "${project_key}_group_users.csv" | while IFS=',' read -r project_key group_name username displayName permission; do
+            if grep -q "$username" "$STASH_USERS_FILE"; then
+                echo "$project_key,$group_name,$username,$displayName,$permission" >> "BB_${project_key}_Group_Users_Licensed.csv"
+            else
+                echo "User $username from group $group_name is unlicensed" >> "$UNLICENSED_LOG"
+            fi
+        done
+        
+    done < "${project_key}_groups_file.csv"
+}
+
+# Main Script Execution
+
+# Step 1: Fetch all users in the 'stash-users' group and save them in a file
+fetch_stash_users
+echo "Step 1: Fetched all users in the '$GROUP_NAME' group."
+
+# Step 2: Fetch all project keys and store them in 'project_keys.txt'
+fetch_projects
+echo "Step 2: Fetched all project keys."
+
+# Step 3: Process each project to fetch repositories, users, and group permissions
+while IFS= read -r project_key; do
+    echo "Processing project: $project_key"
+    
+    # Fetch project admins and log them
+    fetch_project_admins "$project_key"
+    
+    # Fetch and sort groups with permissions
+    fetch_project_groups "$project_key"
+    project_groups_sort "$project_key"
+    
+    # Fetch users with permissions in this project
+    fetch_project_users "$project_key"
+    
+    # Fetch repositories in the project
+    fetch_repos "$project_key" | while IFS= read -r repo_slug; do
+        echo "Processing repository: $repo_slug in project: $project_key"
+        
+        # Fetch repo admins and log them
+        fetch_repo_admins "$project_key" "$repo_slug"
+        
+        # Fetch users with access to this repository and log them
+        fetch_repo_users "$project_key" "$repo_slug" >> "$OUTPUT_FILE"
+    done
+    
+    # Fetch users in each group with project permissions
+    fetch_project_groups_users "$project_key"
+    
+done < project_keys.txt
+
+echo "Script execution completed. Output files generated:"
+echo "  - $OUTPUT_FILE (licensed repository users)"
+echo "  - ${project_key}_Project_Users.csv (licensed project users)"
+echo "  - ${project_key}_Group_Users_Licensed.csv (licensed group users)"
+echo "  - $UNLICENSED_LOG (unlicensed users)"
