@@ -4,3 +4,6 @@ keytool -list -v -keystore $JAVA_HOME/lib/security/cacerts -storepass changeit |
 
 
 keytool -genkeypair -alias tempkey -keyalg RSA -keystore path/to/your/new/cacerts -storepass changeit -keypass changeit -dname "CN=temporary" -validity 1 && keytool -delete -alias tempkey -keystore path/to/your/new/cacerts -storepass changeit
+
+
+keytool -list -v -keystore /path/to/cacerts -storepass changeit -alias your_alias_name | grep -A 1 "SHA256:" | grep "SHA256:" | awk '{print $2}' | tr -d ':' | tr '[:upper:]' '[:lower:]'
