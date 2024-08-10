@@ -1,0 +1,80 @@
+#!/bin/bash
+
+# Check if the correct number of arguments is provided
+if [ "$#" -ne 2 ]; then
+    echo "Usage: $0 <java_versions> <backup_date>"
+    exit 1
+fi
+
+# Parameters
+JAVA_VERSIONS="$1"
+BACKUP_DATE="$2"
+
+# Path to the password file
+PASSWORD_FILE="/path/to/rmpci_pass"
+
+# Check if the password file exists
+if [ ! -f "$PASSWORD_FILE" ]; then
+    echo "Password file $PASSWORD_FILE not found."
+    exit 1
+fi
+
+# Read the password from the file
+PASSWORD=$(cat "$PASSWORD_FILE")
+
+# Set the output CSV file
+OUTPUT_FILE="/path/to/output/cacerts_backup_${BACKUP_DATE}.csv"
+
+# Write the CSV header
+echo "Java Version,Certs Backup Success,Backup Path" > "$OUTPUT_FILE"
+
+# Function to perform the backup for a specific Java version
+perform_backup() {
+    VERSION="$1"
+    # Define possible paths for cacerts file
+    PATH1="/appbin/install/jdk/${VERSION}/lib/security/cacerts"
+    PATH2="/appbin/install/jdk/${VERSION}/jre/lib/security/cacerts"
+
+    # Check if cacerts file exists in the first path
+    if [ -f "$PATH1" ]; then
+        CACERTS_PATH="$PATH1"
+        BACKUP_PATH="${PATH1}_backup_${BACKUP_DATE}.bak"
+    elif [ -f "$PATH2" ]; then
+        CACERTS_PATH="$PATH2"
+        BACKUP_PATH="${PATH2}_backup_${BACKUP_DATE}.bak"
+    else
+        CACERTS_PATH=""
+        BACKUP_PATH=""
+    fi
+
+    # If the cacerts file exists, back it up
+    if [ -n "$CACERTS_PATH" ]; then
+        cp "$CACERTS_PATH" "$BACKUP_PATH"
+
+        # Set permissions to 644
+        chmod 644 "$BACKUP_PATH"
+
+        # Log success in the CSV file
+        echo "${VERSION},Success,${BACKUP_PATH}" >> "$OUTPUT_FILE"
+    else
+        # Log failure in the CSV file
+        echo "${VERSION},Failed - Cacerts not found," >> "$OUTPUT_FILE"
+    fi
+}
+
+# Split the Java versions into an array
+IFS=',' read -r -a VERSIONS <<< "$JAVA_VERSIONS"
+
+# Process each Java version one by one
+for VERSION in "${VERSIONS[@]}"; do
+    # Use the expect script to switch user and perform the backup
+    expect <<EOF
+set timeout -1
+spawn su - rmpci -c "$(declare -f perform_backup); perform_backup ${VERSION}"
+expect "Password:"
+send "$PASSWORD\r"
+expect eof
+EOF
+done
+
+echo "Backup completed. Check $OUTPUT_FILE for details."
