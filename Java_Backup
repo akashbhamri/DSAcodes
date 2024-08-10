@@ -15,7 +15,7 @@ PASSWORD_FILE="/path/to/rmpci_pass"
 
 # Check if the password file exists
 if [ ! -f "$PASSWORD_FILE" ]; then
-    echo "Password file $PASSWORD_FILE not found."
+    echo "Error: Password file $PASSWORD_FILE not found."
     exit 1
 fi
 
@@ -25,12 +25,20 @@ PASSWORD=$(cat "$PASSWORD_FILE")
 # Set the output CSV file
 OUTPUT_FILE="/path/to/output/cacerts_backup_${BACKUP_DATE}.csv"
 
+# Log the start of the backup process
+echo "Starting backup process for Java versions: $JAVA_VERSIONS"
+echo "Backup date: $BACKUP_DATE"
+echo "Output CSV file: $OUTPUT_FILE"
+
 # Write the CSV header
 echo "Java Version,Certs Backup Success,Backup Path" > "$OUTPUT_FILE"
+echo "CSV header written to $OUTPUT_FILE"
 
 # Function to perform the backup for a specific Java version
 perform_backup() {
     VERSION="$1"
+    echo "Processing Java version: $VERSION"
+
     # Define possible paths for cacerts file
     PATH1="/appbin/install/jdk/${VERSION}/lib/security/cacerts"
     PATH2="/appbin/install/jdk/${VERSION}/jre/lib/security/cacerts"
@@ -39,34 +47,44 @@ perform_backup() {
     if [ -f "$PATH1" ]; then
         CACERTS_PATH="$PATH1"
         BACKUP_PATH="${PATH1}_backup_${BACKUP_DATE}.bak"
+        echo "Found cacerts file at $PATH1"
     elif [ -f "$PATH2" ]; then
         CACERTS_PATH="$PATH2"
         BACKUP_PATH="${PATH2}_backup_${BACKUP_DATE}.bak"
+        echo "Found cacerts file at $PATH2"
     else
         CACERTS_PATH=""
         BACKUP_PATH=""
+        echo "Warning: cacerts file not found for Java version $VERSION"
     fi
 
     # If the cacerts file exists, back it up
     if [ -n "$CACERTS_PATH" ]; then
+        echo "Backing up cacerts file from $CACERTS_PATH to $BACKUP_PATH"
         cp "$CACERTS_PATH" "$BACKUP_PATH"
 
         # Set permissions to 644
         chmod 644 "$BACKUP_PATH"
+        echo "Backup file permissions set to 644"
 
         # Log success in the CSV file
         echo "${VERSION},Success,${BACKUP_PATH}" >> "$OUTPUT_FILE"
+        echo "Backup successful for Java version $VERSION, logged in CSV"
     else
         # Log failure in the CSV file
         echo "${VERSION},Failed - Cacerts not found," >> "$OUTPUT_FILE"
+        echo "Backup failed for Java version $VERSION, logged in CSV"
     fi
 }
 
 # Split the Java versions into an array
 IFS=',' read -r -a VERSIONS <<< "$JAVA_VERSIONS"
+echo "Java versions to process: ${VERSIONS[@]}"
 
 # Process each Java version one by one
 for VERSION in "${VERSIONS[@]}"; do
+    echo "Switching to rmpci user to back up cacerts for Java version $VERSION"
+
     # Use the expect script to switch user and perform the backup
     expect <<EOF
 set timeout -1
@@ -75,6 +93,8 @@ expect "Password:"
 send "$PASSWORD\r"
 expect eof
 EOF
+
+    echo "Backup process completed for Java version $VERSION"
 done
 
-echo "Backup completed. Check $OUTPUT_FILE for details."
+echo "All backups completed. Check $OUTPUT_FILE for details."
