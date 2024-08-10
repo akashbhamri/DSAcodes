@@ -1,0 +1,1 @@
+keytool -list -v -keystore $JAVA_HOME/lib/security/cacerts -storepass changeit | awk -F': ' '/Alias name:/ {alias=$2} /Valid from:/ {print alias ": " $4}'
