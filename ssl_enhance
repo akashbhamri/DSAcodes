@@ -11,19 +11,13 @@ log_file="${WORKSPACE}/certificate_import.log"
 # Define the CSV output file
 csv_file="${WORKSPACE}/certificate_import_results.csv"
 
-# Path to expect script
-expect_script=/appbin/awash_sslimport/switch_and_run.exp
-
-# mpc1 password from binding
-mpc1_password="${mpc1_pass}"
-
 # Function to log messages to console and log file
 log() {
     echo "$1" | tee -a "$log_file"
 }
 
 # Initialize the CSV file with headers
-echo "Source,Destination,Alias Name,Import Status,Fingerprint Match" > "$csv_file"
+echo "Source,Destination,Alias Name,Import Status,OpenSSL Fingerprint,Keytool Fingerprint,Fingerprint Match" > "$csv_file"
 
 # Check if the source file exists
 if [ ! -f "$source_file" ]; then
@@ -37,9 +31,9 @@ if [ ! -f "$destination_file" ]; then
     exit 1
 fi
 
-# Function to get the fingerprint of a certificate
+# Function to get the fingerprint of a certificate and normalize it
 get_fingerprint() {
-    openssl x509 -in "$1" -noout -fingerprint -sha256 | awk -F'=' '{print $2}'
+    openssl x509 -in "$1" -noout -fingerprint -sha256 | awk -F'=' '{print $2}' | tr -d ':' | tr '[:upper:]' '[:lower:]'
 }
 
 # Display details of the source certificate
@@ -53,8 +47,8 @@ display_certificate_details() {
 # Display details of the source certificate
 display_certificate_details "$source_file"
 
-# Get the source certificate fingerprint
-source_fingerprint=$(get_fingerprint "$source_file")
+# Get the source certificate fingerprint using OpenSSL
+openssl_fingerprint=$(get_fingerprint "$source_file")
 
 # Read the destination file line by line
 while IFS=$'\n' read -r dest; do
@@ -63,7 +57,7 @@ while IFS=$'\n' read -r dest; do
     # Simulate checking if the keystore file exists
     if [ ! -f "$dest" ]; then
         echo "Dest file $dest not available. So certs are not imported in $dest."
-        echo "$source_file,$dest,$alias_name,Failed: Destination not available,N/A" >> "$csv_file"
+        echo "$source_file,$dest,$alias_name,Failed: Destination not available,$openssl_fingerprint,N/A,N/A" >> "$csv_file"
     else
         # Simulate importing the certificate into the keystore
         echo "Importing $source_file into $dest with alias $alias_name."
@@ -73,21 +67,21 @@ while IFS=$'\n' read -r dest; do
         
         if [ $? -ne 0 ]; then
             echo "Import not successful in $dest."
-            echo "$source_file,$dest,$alias_name,Failed: Import not successful,N/A" >> "$csv_file"
+            echo "$source_file,$dest,$alias_name,Failed: Import not successful,$openssl_fingerprint,N/A,N/A" >> "$csv_file"
         else
             echo "Import successful in $dest."
 
-            # Get the fingerprint of the certificate in the keystore
-            dest_fingerprint=$(keytool -list -v -keystore "$dest" -storepass changeit | grep -A 1 "$alias_name" | grep "SHA256:" | awk '{print $2}')
+            # Get the fingerprint of the certificate in the keystore and normalize it
+            keytool_fingerprint=$(keytool -list -v -keystore "$dest" -storepass changeit | grep -A 1 "$alias_name" | grep "SHA256:" | awk '{print $2}' | tr -d ':' | tr '[:upper:]' '[:lower:]')
 
             # Compare fingerprints
-            if [ "$source_fingerprint" == "$dest_fingerprint" ]; then
+            if [ "$openssl_fingerprint" == "$keytool_fingerprint" ]; then
                 fingerprint_match="Match"
             else
                 fingerprint_match="Mismatch"
             fi
 
-            echo "$source_file,$dest,$alias_name,Success,$fingerprint_match" >> "$csv_file"
+            echo "$source_file,$dest,$alias_name,Success,$openssl_fingerprint,$keytool_fingerprint,$fingerprint_match" >> "$csv_file"
         fi
     fi
 done < "$destination_file"
