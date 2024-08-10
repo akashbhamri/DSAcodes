@@ -1,0 +1,93 @@
+#!/bin/bash
+
+# Jenkins parameters passed to the script
+source_file=${source_file_param}  # Path to the SSL certificate
+destination_file=${destination_file_param}  # Path to the file containing keystore paths
+alias_name=${alias_name_param}  # Alias name for the certificate
+
+# Define the log file path in the Jenkins workspace
+log_file="${WORKSPACE}/certificate_import.log"
+
+# Define the CSV output file
+csv_file="${WORKSPACE}/certificate_import_results.csv"
+
+# Path to expect script
+expect_script=/appbin/awash_sslimport/switch_and_run.exp
+
+# mpc1 password from binding
+mpc1_password="${mpc1_pass}"
+
+# Function to log messages to console and log file
+log() {
+    echo "$1" | tee -a "$log_file"
+}
+
+# Initialize the CSV file with headers
+echo "Source,Destination,Alias Name,Import Status,Fingerprint Match" > "$csv_file"
+
+# Check if the source file exists
+if [ ! -f "$source_file" ]; then
+    log "Source file $source_file is not available."
+    exit 1
+fi
+
+# Check if the destination file exists
+if [ ! -f "$destination_file" ]; then
+    log "Destination file $destination_file is not available."
+    exit 1
+fi
+
+# Function to get the fingerprint of a certificate
+get_fingerprint() {
+    openssl x509 -in "$1" -noout -fingerprint -sha256 | awk -F'=' '{print $2}'
+}
+
+# Display details of the source certificate
+display_certificate_details() {
+    local cert_file=$1
+    log "Certificate details for $cert_file:"
+    # Display certificate details using openssl
+    openssl x509 -in "$cert_file" -noout -text | grep -E 'Subject:|Issuer:|Not Before:|Not After:|Serial Number:|Signature Algorithm:'
+}
+
+# Display details of the source certificate
+display_certificate_details "$source_file"
+
+# Get the source certificate fingerprint
+source_fingerprint=$(get_fingerprint "$source_file")
+
+# Read the destination file line by line
+while IFS=$'\n' read -r dest; do
+    echo "Processing destination: $dest"
+    
+    # Simulate checking if the keystore file exists
+    if [ ! -f "$dest" ]; then
+        echo "Dest file $dest not available. So certs are not imported in $dest."
+        echo "$source_file,$dest,$alias_name,Failed: Destination not available,N/A" >> "$csv_file"
+    else
+        # Simulate importing the certificate into the keystore
+        echo "Importing $source_file into $dest with alias $alias_name."
+        
+        # Perform the actual import (this is a simulation, adjust for your real scenario)
+        keytool -import -trustcacerts -alias "$alias_name" -file "$source_file" -keystore "$dest" -storepass changeit < /dev/tty
+        
+        if [ $? -ne 0 ]; then
+            echo "Import not successful in $dest."
+            echo "$source_file,$dest,$alias_name,Failed: Import not successful,N/A" >> "$csv_file"
+        else
+            echo "Import successful in $dest."
+
+            # Get the fingerprint of the certificate in the keystore
+            dest_fingerprint=$(keytool -list -v -keystore "$dest" -storepass changeit | grep -A 1 "$alias_name" | grep "SHA256:" | awk '{print $2}')
+
+            # Compare fingerprints
+            if [ "$source_fingerprint" == "$dest_fingerprint" ]; then
+                fingerprint_match="Match"
+            else
+                fingerprint_match="Mismatch"
+            fi
+
+            echo "$source_file,$dest,$alias_name,Success,$fingerprint_match" >> "$csv_file"
+        fi
+    fi
+done < "$destination_file"
