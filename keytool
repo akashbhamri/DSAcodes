@@ -7,3 +7,7 @@ keytool -genkeypair -alias tempkey -keyalg RSA -keystore path/to/your/new/cacert
 
 
 keytool -list -v -keystore /path/to/cacerts -storepass changeit -alias your_alias_name | grep -A 1 "SHA256:" | grep "SHA256:" | awk '{print $2}' | tr -d ':' | tr '[:upper:]' '[:lower:]'
+
+
+
+openssl x509 -in "$cert_file" -noout -text | awk '/Not Before:/,0;/Not After:/,0' | grep -E 'Subject:|Issuer:|Not Before:|Not After:|Serial Number:|Signature Algorithm:'
