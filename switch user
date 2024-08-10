@@ -1,0 +1,14 @@
+#!/usr/bin/expect
+
+# Parameters
+set timeout -1
+set password [lindex $argv 0]
+set command [lindex $argv 1]
+
+# Switch to rmpci user and run the command
+spawn su - rmpci -c "$command"
+expect "Password:"
+send "$password\r"
+
+# Wait for the command to complete
+expect eof
