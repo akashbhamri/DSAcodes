@@ -14,7 +14,7 @@ PASSWORD="$3"
 # Set the output CSV file
 OUTPUT_FILE="/path/to/output/cacerts_backup_${BACKUP_DATE}.csv"
 
-# Function to perform the backup
+# Function to perform the backup and checksum verification
 perform_backup() {
     VERSION=$1
     BACKUP_DATE=$2
@@ -30,12 +30,15 @@ perform_backup() {
     if [ -f "$PATH1" ]; then
         CACERTS_PATH="$PATH1"
         BACKUP_PATH="${PATH1}_backup_${BACKUP_DATE}.bak"
+        BACKUP_STATUS="Success"
     elif [ -f "$PATH2" ]; then
         CACERTS_PATH="$PATH2"
         BACKUP_PATH="${PATH2}_backup_${BACKUP_DATE}.bak"
+        BACKUP_STATUS="Success"
     else
         CACERTS_PATH=""
         BACKUP_PATH=""
+        BACKUP_STATUS="Failed - Cacerts not found"
     fi
 
     # If the cacerts file exists, back it up
@@ -46,18 +49,27 @@ perform_backup() {
         # Set permissions to 644
         chmod 644 "$BACKUP_PATH"
 
-        # Log success in the CSV file
-        echo "${VERSION},Success,${BACKUP_PATH}" >> "$OUTPUT_FILE"
+        # Verify if the source and backup files are identical
+        ORIGINAL_CHECKSUM=$(md5sum "$CACERTS_PATH" | awk '{print $1}')
+        BACKUP_CHECKSUM=$(md5sum "$BACKUP_PATH" | awk '{print $1}')
+
+        if [ "$ORIGINAL_CHECKSUM" == "$BACKUP_CHECKSUM" ]; then
+            CHECKSUM_STATUS="Identical"
+        else
+            CHECKSUM_STATUS="Different"
+        fi
     else
-        # Log failure in the CSV file
-        echo "${VERSION},Failed - Cacerts not found," >> "$OUTPUT_FILE"
+        CHECKSUM_STATUS=""
     fi
+
+    # Log details in the CSV file
+    echo "${VERSION},${CACERTS_PATH},${BACKUP_PATH},${BACKUP_STATUS},${CHECKSUM_STATUS}" >> "$OUTPUT_FILE"
 }
 
 # Write the CSV header
 echo "Backup date: ${BACKUP_DATE}" > "$OUTPUT_FILE"
 echo "Java versions to process: ${JAVA_VERSIONS}" >> "$OUTPUT_FILE"
-echo "Version,Status,Backup Path" >> "$OUTPUT_FILE"
+echo "Version,Source Path,Backup Path,Status,Checksum Status" >> "$OUTPUT_FILE"
 
 # Split the Java versions into an array
 IFS=',' read -ra VERSIONS <<< "$JAVA_VERSIONS"
