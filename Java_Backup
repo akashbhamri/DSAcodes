@@ -35,19 +35,19 @@ BACKUP_DATE="$BACKUP_DATE"
 OUTPUT_FILE="$OUTPUT_FILE"
 
 # Define possible paths for cacerts file
-PATH1="/appbin/install/jdk/\$VERSION/lib/security/cacerts"
-PATH2="/appbin/install/jdk/\$VERSION/jre/lib/security/cacerts"
+PATH1="/appbin/install/jdk/${VERSION}/lib/security/cacerts"
+PATH2="/appbin/install/jdk/${VERSION}/jre/lib/security/cacerts"
 
-echo "Checking paths for Java version \$VERSION..."
+echo "Checking paths for Java version ${VERSION}..."
 
 # Check if cacerts file exists in the first path
-if [ -f "\$PATH1" ]; then
-    CACERTS_PATH="\$PATH1"
-    BACKUP_PATH="\$PATH1_backup_\$BACKUP_DATE.bak"
+if [ -f "${PATH1}" ]; then
+    CACERTS_PATH="${PATH1}"
+    BACKUP_PATH="${PATH1}_backup_${BACKUP_DATE}.bak"
     BACKUP_STATUS="Success"
-elif [ -f "\$PATH2" ]; then
-    CACERTS_PATH="\$PATH2"
-    BACKUP_PATH="\$PATH2_backup_\$BACKUP_DATE.bak"
+elif [ -f "${PATH2}" ]; then
+    CACERTS_PATH="${PATH2}"
+    BACKUP_PATH="${PATH2}_backup_${BACKUP_DATE}.bak"
     BACKUP_STATUS="Success"
 else
     CACERTS_PATH=""
@@ -56,18 +56,18 @@ else
 fi
 
 # If the cacerts file exists, back it up
-if [ -n "\$CACERTS_PATH" ]; then
-    echo "Backing up cacerts file for Java version \$VERSION..."
-    cp "\$CACERTS_PATH" "\$BACKUP_PATH"
+if [ -n "${CACERTS_PATH}" ]; then
+    echo "Backing up cacerts file for Java version ${VERSION}..."
+    cp "${CACERTS_PATH}" "${BACKUP_PATH}"
 
     # Set permissions to 644
-    chmod 644 "\$BACKUP_PATH"
+    chmod 644 "${BACKUP_PATH}"
 
     # Verify if the source and backup files are identical
-    ORIGINAL_CHECKSUM=\$(md5sum "\$CACERTS_PATH" | awk '{print \$1}')
-    BACKUP_CHECKSUM=\$(md5sum "\$BACKUP_PATH" | awk '{print \$1}')
+    ORIGINAL_CHECKSUM=\$(md5sum "${CACERTS_PATH}" | awk '{print \$1}')
+    BACKUP_CHECKSUM=\$(md5sum "${BACKUP_PATH}" | awk '{print \$1}')
 
-    if [ "\$ORIGINAL_CHECKSUM" == "\$BACKUP_CHECKSUM" ]; then
+    if [ "${ORIGINAL_CHECKSUM}" == "${BACKUP_CHECKSUM}" ]; then
         CHECKSUM_STATUS="Identical"
     else
         CHECKSUM_STATUS="Different"
@@ -77,7 +77,7 @@ else
 fi
 
 # Log details in the CSV file
-echo "\$VERSION,\$CACERTS_PATH,\$BACKUP_PATH,\$BACKUP_STATUS,\$CHECKSUM_STATUS" >> "\$OUTPUT_FILE"
+echo "${VERSION},${CACERTS_PATH},${BACKUP_PATH},${BACKUP_STATUS},${CHECKSUM_STATUS}" >> "${OUTPUT_FILE}"
 
 EOF
 
