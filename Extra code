@@ -1,44 +1,30 @@
-if [ ! -f "$CSV_FILE" ]; then
-        echo "Backup date: ${BACKUP_DATE}" > "$CSV_FILE"
-        echo "Java versions to process: ${JAVA_VERSIONS}" >> "$CSV_FILE"
-        echo "Version,Source Path,Backup Path,Status,Checksum Status" >> "$CSV_FILE"
-    fi
+while IFS=$'\n' read -r dest; do
+  echo "Processing destination: $dest"
 
+  if [ ! -f "$dest" ]; then
+    echo "Dest file $dest not available. So certs are not imported in $dest."
+  else
+    echo "Checking if alias $alias_name exists in $dest."
 
-
-for VERSION in "${VERSIONS[@]}"; do
-    echo "Checking file ownership and paths for Java version $VERSION..."
-
-    # Check the ownership for both possible paths
-    if [ -f "/appbin/install/jdk/${VERSION}/lib/security/cacerts" ]; then
-        FILE_OWNER=$(ls -l "/appbin/install/jdk/${VERSION}/lib/security/cacerts" | awk '{print $3}')
-    elif [ -f "/appbin/install/jdk/${VERSION}/jre/lib/security/cacerts" ]; then
-        FILE_OWNER=$(ls -l "/appbin/install/jdk/${VERSION}/jre/lib/security/cacerts" | awk '{print $3}')
+    # Check if the alias already exists in the keystore
+    if keytool -list -keystore "$dest" -storepass changeit -alias "$alias_name" >/dev/null 2>&1; then
+      echo "Alias $alias_name already exists in $dest. Certificate not imported."
+      import_status="Alias already exists"
     else
-        echo "Cacerts file not found for Java version $VERSION."
-        continue
+      echo "Importing $source_file into $dest with alias $alias_name."
+
+      # Attempt to import the certificate
+      keytool -import -trustcacerts -alias "$alias_name" -file "$source_file" -keystore "$dest" -storepass changeit -noprompt
+
+      # Check if the import was successful
+      if [ $? -eq 0 ]; then
+        echo "Import successful in $dest."
+        import_status="Success"
+      else
+        echo "Import not successful in $dest."
+        import_status="Failed"
+      fi
     fi
-
-    echo "Switching to $FILE_OWNER to back up cacerts for Java version $VERSION..."
-
-    # Execute the perform_backup function as the appropriate user
-    if [ "$FILE_OWNER" == "rmpci" ]; then
-        su - rmpci <<EOF
-$PASSWORD
-$(declare -f perform_backup)
-perform_backup "$VERSION" "$BACKUP_DATE"
-EOF
-    elif [ "$FILE_OWNER" == "jkslave" ]; then
-        su - jkslave <<EOF
-$PASSWORD
-$(declare -f perform_backup)
-perform_backup "$VERSION" "$BACKUP_DATE"
-EOF
-    else
-        echo "File owner is not recognized or not accessible."
-    fi
-
-    echo "Backup process completed for Java version $VERSION"
-done
-
-echo "All backups completed. Check the CSV file for details."
+  fi
+  # (Optional) Log the status to a CSV or another log file
+done < "$destination_file"
