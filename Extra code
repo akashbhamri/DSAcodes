@@ -3,3 +3,42 @@ if [ ! -f "$CSV_FILE" ]; then
         echo "Java versions to process: ${JAVA_VERSIONS}" >> "$CSV_FILE"
         echo "Version,Source Path,Backup Path,Status,Checksum Status" >> "$CSV_FILE"
     fi
+
+
+
+for VERSION in "${VERSIONS[@]}"; do
+    echo "Checking file ownership and paths for Java version $VERSION..."
+
+    # Check the ownership for both possible paths
+    if [ -f "/appbin/install/jdk/${VERSION}/lib/security/cacerts" ]; then
+        FILE_OWNER=$(ls -l "/appbin/install/jdk/${VERSION}/lib/security/cacerts" | awk '{print $3}')
+    elif [ -f "/appbin/install/jdk/${VERSION}/jre/lib/security/cacerts" ]; then
+        FILE_OWNER=$(ls -l "/appbin/install/jdk/${VERSION}/jre/lib/security/cacerts" | awk '{print $3}')
+    else
+        echo "Cacerts file not found for Java version $VERSION."
+        continue
+    fi
+
+    echo "Switching to $FILE_OWNER to back up cacerts for Java version $VERSION..."
+
+    # Execute the perform_backup function as the appropriate user
+    if [ "$FILE_OWNER" == "rmpci" ]; then
+        su - rmpci <<EOF
+$PASSWORD
+$(declare -f perform_backup)
+perform_backup "$VERSION" "$BACKUP_DATE"
+EOF
+    elif [ "$FILE_OWNER" == "jkslave" ]; then
+        su - jkslave <<EOF
+$PASSWORD
+$(declare -f perform_backup)
+perform_backup "$VERSION" "$BACKUP_DATE"
+EOF
+    else
+        echo "File owner is not recognized or not accessible."
+    fi
+
+    echo "Backup process completed for Java version $VERSION"
+done
+
+echo "All backups completed. Check the CSV file for details."
