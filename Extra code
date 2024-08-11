@@ -1,0 +1,5 @@
+if [ ! -f "$CSV_FILE" ]; then
+        echo "Backup date: ${BACKUP_DATE}" > "$CSV_FILE"
+        echo "Java versions to process: ${JAVA_VERSIONS}" >> "$CSV_FILE"
+        echo "Version,Source Path,Backup Path,Status,Checksum Status" >> "$CSV_FILE"
+    fi
