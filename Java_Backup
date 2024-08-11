@@ -14,58 +14,6 @@ PASSWORD="$3"
 # Set the output CSV file
 OUTPUT_FILE="/path/to/output/cacerts_backup_${BACKUP_DATE}.csv"
 
-# Function to perform the backup and checksum verification
-perform_backup() {
-    VERSION=$1
-    BACKUP_DATE=$2
-    OUTPUT_FILE=$3
-
-    # Define possible paths for cacerts file
-    PATH1="/appbin/install/jdk/${VERSION}/lib/security/cacerts"
-    PATH2="/appbin/install/jdk/${VERSION}/jre/lib/security/cacerts"
-
-    echo "Checking paths for Java version $VERSION..."
-
-    # Check if cacerts file exists in the first path
-    if [ -f "$PATH1" ]; then
-        CACERTS_PATH="$PATH1"
-        BACKUP_PATH="${PATH1}_backup_${BACKUP_DATE}.bak"
-        BACKUP_STATUS="Success"
-    elif [ -f "$PATH2" ]; then
-        CACERTS_PATH="$PATH2"
-        BACKUP_PATH="${PATH2}_backup_${BACKUP_DATE}.bak"
-        BACKUP_STATUS="Success"
-    else
-        CACERTS_PATH=""
-        BACKUP_PATH=""
-        BACKUP_STATUS="Failed - Cacerts not found"
-    fi
-
-    # If the cacerts file exists, back it up
-    if [ -n "$CACERTS_PATH" ]; then
-        echo "Backing up cacerts file for Java version $VERSION..."
-        cp "$CACERTS_PATH" "$BACKUP_PATH"
-
-        # Set permissions to 644
-        chmod 644 "$BACKUP_PATH"
-
-        # Verify if the source and backup files are identical
-        ORIGINAL_CHECKSUM=$(md5sum "$CACERTS_PATH" | awk '{print $1}')
-        BACKUP_CHECKSUM=$(md5sum "$BACKUP_PATH" | awk '{print $1}')
-
-        if [ "$ORIGINAL_CHECKSUM" == "$BACKUP_CHECKSUM" ]; then
-            CHECKSUM_STATUS="Identical"
-        else
-            CHECKSUM_STATUS="Different"
-        fi
-    else
-        CHECKSUM_STATUS=""
-    fi
-
-    # Log details in the CSV file
-    echo "${VERSION},${CACERTS_PATH},${BACKUP_PATH},${BACKUP_STATUS},${CHECKSUM_STATUS}" >> "$OUTPUT_FILE"
-}
-
 # Write the CSV header
 echo "Backup date: ${BACKUP_DATE}" > "$OUTPUT_FILE"
 echo "Java versions to process: ${JAVA_VERSIONS}" >> "$OUTPUT_FILE"
@@ -78,10 +26,59 @@ IFS=',' read -ra VERSIONS <<< "$JAVA_VERSIONS"
 for VERSION in "${VERSIONS[@]}"; do
     echo "Switching to rmpci user to back up cacerts for Java version $VERSION..."
 
+    # Execute the backup process directly as the rmpci user
     su - rmpci <<EOF
 $PASSWORD
-$(declare -f perform_backup)
-perform_backup "$VERSION" "$BACKUP_DATE" "$OUTPUT_FILE"
+
+VERSION="$VERSION"
+BACKUP_DATE="$BACKUP_DATE"
+OUTPUT_FILE="$OUTPUT_FILE"
+
+# Define possible paths for cacerts file
+PATH1="/appbin/install/jdk/\$VERSION/lib/security/cacerts"
+PATH2="/appbin/install/jdk/\$VERSION/jre/lib/security/cacerts"
+
+echo "Checking paths for Java version \$VERSION..."
+
+# Check if cacerts file exists in the first path
+if [ -f "\$PATH1" ]; then
+    CACERTS_PATH="\$PATH1"
+    BACKUP_PATH="\$PATH1_backup_\$BACKUP_DATE.bak"
+    BACKUP_STATUS="Success"
+elif [ -f "\$PATH2" ]; then
+    CACERTS_PATH="\$PATH2"
+    BACKUP_PATH="\$PATH2_backup_\$BACKUP_DATE.bak"
+    BACKUP_STATUS="Success"
+else
+    CACERTS_PATH=""
+    BACKUP_PATH=""
+    BACKUP_STATUS="Failed - Cacerts not found"
+fi
+
+# If the cacerts file exists, back it up
+if [ -n "\$CACERTS_PATH" ]; then
+    echo "Backing up cacerts file for Java version \$VERSION..."
+    cp "\$CACERTS_PATH" "\$BACKUP_PATH"
+
+    # Set permissions to 644
+    chmod 644 "\$BACKUP_PATH"
+
+    # Verify if the source and backup files are identical
+    ORIGINAL_CHECKSUM=\$(md5sum "\$CACERTS_PATH" | awk '{print \$1}')
+    BACKUP_CHECKSUM=\$(md5sum "\$BACKUP_PATH" | awk '{print \$1}')
+
+    if [ "\$ORIGINAL_CHECKSUM" == "\$BACKUP_CHECKSUM" ]; then
+        CHECKSUM_STATUS="Identical"
+    else
+        CHECKSUM_STATUS="Different"
+    fi
+else
+    CHECKSUM_STATUS=""
+fi
+
+# Log details in the CSV file
+echo "\$VERSION,\$CACERTS_PATH,\$BACKUP_PATH,\$BACKUP_STATUS,\$CHECKSUM_STATUS" >> "\$OUTPUT_FILE"
+
 EOF
 
     echo "Backup process completed for Java version $VERSION"
