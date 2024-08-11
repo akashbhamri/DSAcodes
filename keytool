@@ -11,3 +11,7 @@ keytool -list -v -keystore /path/to/cacerts -storepass changeit -alias your_alia
 
 
 openssl x509 -in "$cert_file" -noout -text | awk '/Not Before:/,0;/Not After:/,0' | grep -E 'Subject:|Issuer:|Not Before:|Not After:|Serial Number:|Signature Algorithm:'
+
+
+
+spawn su - rmpci -c "bash -c '$(declare -f perform_backup); perform_backup ${VERSION}'"
