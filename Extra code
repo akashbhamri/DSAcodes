@@ -1,13 +1,16 @@
-“Jenkins Job for Backing Up cacerts Files”
+# Define Jenkins API URL
+JENKINS_URL="https://your-jenkins-url"
+API_ENDPOINT="/api/json"
+USERNAME="your-username"
+API_TOKEN="your-api-token"
 
-This Jenkins job will back up the cacerts file from Java. You need to provide the following parameters:
+# Make the API call and save the response
+RESPONSE=$(curl -s -u $USERNAME:$API_TOKEN $JENKINS_URL$API_ENDPOINT)
 
-	•	Java Versions: A comma-separated list of Java versions you want to back up.
-	•	Backup Date: The date for the backup.
-
-Additionally, the job will generate a CSV file containing:
-
-	•	Source: The original location of the cacerts file.
-	•	Destination: The backup location of the cacerts file.
-	•	Checksum Match: Verification of checksum matches between the original and backup cacerts.
-	•	Alias Count Matching: Comparison of alias counts between the original and backup cacerts.
+# Check if the response contains expected data (e.g., 'jobs' field)
+if echo "$RESPONSE" | grep -q '"jobs"'; then
+  echo "API call successful. Jenkins jobs data retrieved."
+else
+  echo "API call failed or did not return expected data."
+  exit 1  # Exit with a non-zero status to mark the build as failed
+fi
