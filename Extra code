@@ -1,16 +1,27 @@
-# Define Jenkins API URL
-JENKINS_URL="https://your-jenkins-url"
-API_ENDPOINT="/api/json"
-USERNAME="your-username"
-API_TOKEN="your-api-token"
+#!/bin/bash
 
-# Make the API call and capture the HTTP status and SSL details
-RESPONSE=$(curl -s -w "%{http_code}" -o /dev/null -u $USERNAME:$API_TOKEN $JENKINS_URL$API_ENDPOINT)
+# URLs for the services
+BITBUCKET_URL="https://bitbucket.example.com"
+UDEPLOY_URL="https://udeploy.example.com"
+NEXUS_URL="https://nexus.example.com"
+CLOUDBEES_URL="https://cloudbees.example.com"
 
-# Check if the HTTP status code is 200 (OK) and if SSL was used
-if [ "$RESPONSE" -eq 200 ]; then
-  echo "SSL connection successful and API call returned HTTP 200."
-else
-  echo "SSL connection failed or API call did not return HTTP 200."
-  exit 1  # Exit with a non-zero status to mark the build as failed
-fi
+# Function to check connectivity
+check_connectivity() {
+    local url=$1
+    echo "Checking connectivity to $url..."
+    if curl --head "$url" 2>/dev/null | head -n 1 | grep "HTTP/1.[01] [23].." >/dev/null; then
+        echo "Connectivity to $url is OK."
+    else
+        echo "ERROR: Connectivity to $url failed."
+        exit 1
+    fi
+}
+
+# Perform connectivity checks
+check_connectivity "$BITBUCKET_URL"
+check_connectivity "$UDEPLOY_URL"
+check_connectivity "$NEXUS_URL"
+check_connectivity "$CLOUDBEES_URL"
+
+echo "All connectivity checks passed."
