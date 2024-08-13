@@ -1,30 +1,79 @@
-while IFS=$'\n' read -r dest; do
-  echo "Processing destination: $dest"
+Here are the detailed steps for each part of the process:
 
-  if [ ! -f "$dest" ]; then
-    echo "Dest file $dest not available. So certs are not imported in $dest."
-  else
-    echo "Checking if alias $alias_name exists in $dest."
+1. **Copy SSL Certificate:**
+   - Use the `openssl` command to copy the new SSL certificate from Jenkins to the designated source path:
+     ```bash
+     openssl x509 -in /jenkins/path/to/new_cert.crt -out /source/path/new_cert.crt
+     ```
+   - **Explanation:** This command extracts the certificate from Jenkins and saves it to the specified source directory on your server.
 
-    # Check if the alias already exists in the keystore
-    if keytool -list -keystore "$dest" -storepass changeit -alias "$alias_name" >/dev/null 2>&1; then
-      echo "Alias $alias_name already exists in $dest. Certificate not imported."
-      import_status="Alias already exists"
-    else
-      echo "Importing $source_file into $dest with alias $alias_name."
+2. **Verify Java Installations:**
+   - **Log In to Server:**
+     ```bash
+     ssh username@server_address
+     ```
+   - **Check Java Versions:**
+     ```bash
+     java -version
+     ```
+   - **Inspect `path.xml` File:**
+     ```bash
+     cat /path/to/path.xml | grep -i java
+     ```
+   - **Explanation:** Ensure Java is installed and correctly referenced in the `path.xml` file.
 
-      # Attempt to import the certificate
-      keytool -import -trustcacerts -alias "$alias_name" -file "$source_file" -keystore "$dest" -storepass changeit -noprompt
+3. **Configure Jenkins Pipeline:**
+   - **Set Pipeline Parameters:**
+     - Configure Jenkins to accept parameters for the source file path, destination path, and alias name. These can be defined in the pipeline job configuration:
+       ```groovy
+       parameters {
+           string(name: 'SOURCE_FILE', defaultValue: '/source/path/new_cert.crt', description: 'Path to the new SSL certificate')
+           string(name: 'DESTINATION_PATH', defaultValue: '/path/to/destination/', description: 'Destination path for the certificate import')
+           string(name: 'ALIAS_NAME', defaultValue: 'myAlias', description: 'Alias name for the certificate')
+       }
+       ```
+   - **Pipeline Stages:**
+     - **Restrict Build to Worker Nodes:**
+       ```groovy
+       agent { label 'worker_node_label' }
+       ```
+     - **Switch to Master Node:**
+       ```groovy
+       agent { label 'master' }
+       ```
+     - **Copy SSL Certificate:**
+       ```groovy
+       stage('Copy SSL Certificate') {
+           steps {
+               sh '''
+               openssl x509 -in ${SOURCE_FILE} -out ${DESTINATION_PATH}/keystore.crt
+               '''
+           }
+       }
+       ```
+     - **Import Certificate and Generate CSV:**
+       ```groovy
+       stage('Import and Verify') {
+           steps {
+               script {
+                   // Import certificate into cacerts and compare fingerprints
+                   // Generate CSV file with results
+               }
+           }
+       }
+       ```
+   - **Explanation:** Configure Jenkins to restrict the job to worker nodes initially and switch to the master node for specific tasks. Set parameters for source file, destination, and alias.
 
-      # Check if the import was successful
-      if [ $? -eq 0 ]; then
-        echo "Import successful in $dest."
-        import_status="Success"
-      else
-        echo "Import not successful in $dest."
-        import_status="Failed"
-      fi
-    fi
-  fi
-  # (Optional) Log the status to a CSV or another log file
-done < "$destination_file"
+4. **Run and Verify Jenkins Job:**
+   - **Provide Parameters:**
+     - When triggering the build, input the source file path, destination path, and alias name.
+   - **Trigger the Build:**
+     - Start the Jenkins job with the configured parameters.
+   - **Check Generated CSV:**
+     - After the build completes, download and review the CSV file for accuracy:
+       ```bash
+       cat /path/to/output.csv
+       ```
+   - **Explanation:** Ensure the CSV file contains correct details about the source file, destination, alias, and whether the fingerprint matches.
+
+This step-by-step guide ensures that you properly configure Jenkins, handle SSL certificates, and verify the process with the generated CSV file.
