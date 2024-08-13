@@ -4,13 +4,13 @@ API_ENDPOINT="/api/json"
 USERNAME="your-username"
 API_TOKEN="your-api-token"
 
-# Make the API call and save the response
-RESPONSE=$(curl -s -u $USERNAME:$API_TOKEN $JENKINS_URL$API_ENDPOINT)
+# Make the API call and capture the HTTP status and SSL details
+RESPONSE=$(curl -s -w "%{http_code}" -o /dev/null -u $USERNAME:$API_TOKEN $JENKINS_URL$API_ENDPOINT)
 
-# Check if the response contains expected data (e.g., 'jobs' field)
-if echo "$RESPONSE" | grep -q '"jobs"'; then
-  echo "API call successful. Jenkins jobs data retrieved."
+# Check if the HTTP status code is 200 (OK) and if SSL was used
+if [ "$RESPONSE" -eq 200 ]; then
+  echo "SSL connection successful and API call returned HTTP 200."
 else
-  echo "API call failed or did not return expected data."
+  echo "SSL connection failed or API call did not return HTTP 200."
   exit 1  # Exit with a non-zero status to mark the build as failed
 fi
