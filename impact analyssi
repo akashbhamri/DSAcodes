@@ -1,3 +1,11 @@
+Worker Node Connectivity
+
+	•	Potential Impact: After the SSL certificate renewal, Jenkins worker nodes (agents) might face connectivity issues with the Jenkins master if they do not recognize the updated certificate. This could lead to nodes being offline, resulting in job execution failures or delays.
+	•	Mitigation: After the SSL certificate renewal, immediately test the connectivity of all worker nodes to ensure they are online and able to communicate with the Jenkins master. This can be done through the Jenkins UI, Jenkins CLI, or by running a simple test job on each node. If any nodes are found to be offline, troubleshoot the issue by verifying the certificate configuration on the node and ensuring that it matches the Jenkins master.
+
+
+
+
 ere’s the updated impact analysis considering the update of cacerts in the JDK:
 
 1. Service Downtime
