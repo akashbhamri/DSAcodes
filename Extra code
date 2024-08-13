@@ -1,79 +1,13 @@
-Here are the detailed steps for each part of the process:
+“Jenkins Job for Backing Up cacerts Files”
 
-1. **Copy SSL Certificate:**
-   - Use the `openssl` command to copy the new SSL certificate from Jenkins to the designated source path:
-     ```bash
-     openssl x509 -in /jenkins/path/to/new_cert.crt -out /source/path/new_cert.crt
-     ```
-   - **Explanation:** This command extracts the certificate from Jenkins and saves it to the specified source directory on your server.
+This Jenkins job will back up the cacerts file from Java. You need to provide the following parameters:
 
-2. **Verify Java Installations:**
-   - **Log In to Server:**
-     ```bash
-     ssh username@server_address
-     ```
-   - **Check Java Versions:**
-     ```bash
-     java -version
-     ```
-   - **Inspect `path.xml` File:**
-     ```bash
-     cat /path/to/path.xml | grep -i java
-     ```
-   - **Explanation:** Ensure Java is installed and correctly referenced in the `path.xml` file.
+	•	Java Versions: A comma-separated list of Java versions you want to back up.
+	•	Backup Date: The date for the backup.
 
-3. **Configure Jenkins Pipeline:**
-   - **Set Pipeline Parameters:**
-     - Configure Jenkins to accept parameters for the source file path, destination path, and alias name. These can be defined in the pipeline job configuration:
-       ```groovy
-       parameters {
-           string(name: 'SOURCE_FILE', defaultValue: '/source/path/new_cert.crt', description: 'Path to the new SSL certificate')
-           string(name: 'DESTINATION_PATH', defaultValue: '/path/to/destination/', description: 'Destination path for the certificate import')
-           string(name: 'ALIAS_NAME', defaultValue: 'myAlias', description: 'Alias name for the certificate')
-       }
-       ```
-   - **Pipeline Stages:**
-     - **Restrict Build to Worker Nodes:**
-       ```groovy
-       agent { label 'worker_node_label' }
-       ```
-     - **Switch to Master Node:**
-       ```groovy
-       agent { label 'master' }
-       ```
-     - **Copy SSL Certificate:**
-       ```groovy
-       stage('Copy SSL Certificate') {
-           steps {
-               sh '''
-               openssl x509 -in ${SOURCE_FILE} -out ${DESTINATION_PATH}/keystore.crt
-               '''
-           }
-       }
-       ```
-     - **Import Certificate and Generate CSV:**
-       ```groovy
-       stage('Import and Verify') {
-           steps {
-               script {
-                   // Import certificate into cacerts and compare fingerprints
-                   // Generate CSV file with results
-               }
-           }
-       }
-       ```
-   - **Explanation:** Configure Jenkins to restrict the job to worker nodes initially and switch to the master node for specific tasks. Set parameters for source file, destination, and alias.
+Additionally, the job will generate a CSV file containing:
 
-4. **Run and Verify Jenkins Job:**
-   - **Provide Parameters:**
-     - When triggering the build, input the source file path, destination path, and alias name.
-   - **Trigger the Build:**
-     - Start the Jenkins job with the configured parameters.
-   - **Check Generated CSV:**
-     - After the build completes, download and review the CSV file for accuracy:
-       ```bash
-       cat /path/to/output.csv
-       ```
-   - **Explanation:** Ensure the CSV file contains correct details about the source file, destination, alias, and whether the fingerprint matches.
-
-This step-by-step guide ensures that you properly configure Jenkins, handle SSL certificates, and verify the process with the generated CSV file.
+	•	Source: The original location of the cacerts file.
+	•	Destination: The backup location of the cacerts file.
+	•	Checksum Match: Verification of checksum matches between the original and backup cacerts.
+	•	Alias Count Matching: Comparison of alias counts between the original and backup cacerts.
