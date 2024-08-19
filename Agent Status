@@ -46,11 +46,16 @@ for server in "${!servers[@]}"; do
         echo "$server,Docker Socket,Not Running," >> $output_file
     fi
 
-    # Check if Udeploy agent is running based on the specific path
+    # Check if Udeploy agent path exists
     if ssh "$server" [ -f "$udeploy_agent_path" ]; then
-        echo "$server,Udeploy Agent,Running,Path exists: $udeploy_agent_path" >> $output_file
+        # Check if Udeploy agent is running based on the path
+        if ssh "$server" grep -q "RUNNING" "$udeploy_agent_path"; then
+            echo "$server,Udeploy Agent,Running,Path: $udeploy_agent_path" >> $output_file
+        else
+            echo "$server,Udeploy Agent,Not Running,Path exists but agent not running: $udeploy_agent_path" >> $output_file
+        fi
     else
-        echo "$server,Udeploy Agent,Not Running,Path not found: $udeploy_agent_path" >> $output_file
+        echo "$server,Udeploy Agent,Not Installed,Path not found: $udeploy_agent_path" >> $output_file
     fi
 done
 
