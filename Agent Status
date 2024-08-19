@@ -17,6 +17,14 @@ declare -A servers=(
 for server in "${!servers[@]}"; do
     udeploy_agent_path="${servers[$server]}"
 
+    # Check if SSH connection is working
+    if ssh -q -o ConnectTimeout=5 "$server" exit; then
+        echo "$server,SSH Connection,Success," >> $output_file
+    else
+        echo "$server,SSH Connection,Failed,Unable to connect via SSH" >> $output_file
+        continue  # Skip to the next server if SSH connection fails
+    fi
+
     # Check if Docker is installed
     if ssh "$server" command -v docker &> /dev/null; then
         echo "$server,Docker Installed,Yes," >> $output_file
