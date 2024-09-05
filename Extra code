@@ -1,1 +1,23 @@
-We received feedback from the vendor indicating that the intermittent SQL transient issues might be related to the database. Specifically, the vendor suggested that the database issue caused a 401 error, meaning Bitbucket was unable to retrieve authentication credentials from the database due to it being down.In response, we have initiated incidents with both the database and network teams:Database Team: They are investigating the database server for issues that could affect connectivity, including server performance, outages, or configuration problems.Network Team: They are examining potential network issues between the application server and the database server, including reviewing network logs and checking for connectivity problems.The issue has been observed frequently from August 20th to August 21st, and this timeframe has been noted in our incident reports. Our documentation has been updated to reflect these actions and the vendor’s feedb
+#!/bin/bash
+
+# Define variables
+TARGET_SERVER_IP=$1  # Take the IP address of the target server as an argument
+USERNAME="your_username"  # Replace with your SSH username
+PASSWORD="your_password"  # Replace with your SSH password
+
+# Check if sshpass is installed
+if ! command -v sshpass &> /dev/null; then
+    echo "sshpass is not installed. Please install it first."
+    exit 1
+fi
+
+# Attempt to connect to the target server
+echo "Connecting to $TARGET_SERVER_IP..."
+sshpass -p "$PASSWORD" ssh -o StrictHostKeyChecking=no "$USERNAME@$TARGET_SERVER_IP" "echo 'Successfully connected to $TARGET_SERVER_IP'"
+
+# Check if the SSH connection was successful
+if [ $? -eq 0 ]; then
+    echo "Connection successful!"
+else
+    echo "Failed to connect to $TARGET_SERVER_IP. Please check your credentials and network connectivity."
+fi
