@@ -1,71 +1,15 @@
 #!/bin/bash
 
-# Define the output CSV file
-output_file="system_status.csv"
+# Variables
+USER="your_username"
+HOST="production_server"
 
-# Initialize CSV with headers
-echo "Server IP,Check,Status,Details" > $output_file
+# Test SSH connection
+ssh -i ~/.ssh/id_rsa $USER@$HOST "echo 'SSH key-based authentication successful!'"
 
-# List of server IP addresses and their corresponding Udeploy agent paths
-declare -A servers=(
-    ["192.168.1.10"]="/appbin/udeploy/agent1/agent.status"  # Replace with actual IP and path
-    ["192.168.1.11"]="/appbin/udeploy/agent2/agent.status"
-    ["192.168.1.12"]="/appbin/udeploy/agent3/agent.status"
-)
-
-# Loop through each server
-for server in "${!servers[@]}"; do
-    udeploy_agent_path="${servers[$server]}"
-
-    # Check if SSH connection is working
-    if ssh -q -o ConnectTimeout=5 "$server" exit; then
-        echo "$server,SSH Connection,Success," >> $output_file
-    else
-        echo "$server,SSH Connection,Failed,Unable to connect via SSH" >> $output_file
-        continue  # Skip to the next server if SSH connection fails
-    fi
-
-    # Check if Docker is installed
-    if ssh "$server" command -v docker &> /dev/null; then
-        echo "$server,Docker Installed,Yes," >> $output_file
-    else
-        echo "$server,Docker Installed,No," >> $output_file
-    fi
-
-    # Check Docker version
-    if docker_version=$(ssh "$server" docker --version 2>/dev/null); then
-        docker_version=$(echo "$docker_version" | awk '{print $3}')
-        echo "$server,Docker Version,Yes,$docker_version" >> $output_file
-    else
-        echo "$server,Docker Version,No," >> $output_file
-    fi
-
-    # Check if Docker service is running
-    if ssh "$server" systemctl status docker &> /dev/null; then
-        echo "$server,Docker Service,Running," >> $output_file
-    else
-        echo "$server,Docker Service,Not Running," >> $output_file
-    fi
-
-    # Check if Docker socket is running
-    if ssh "$server" systemctl status docker.socket &> /dev/null; then
-        echo "$server,Docker Socket,Running," >> $output_file
-    else
-        echo "$server,Docker Socket,Not Running," >> $output_file
-    fi
-
-    # Check if Udeploy agent path exists
-    if ssh "$server" [ -f "$udeploy_agent_path" ]; then
-        # Check if Udeploy agent is running based on the path
-        if ssh "$server" grep -q "RUNNING" "$udeploy_agent_path"; then
-            echo "$server,Udeploy Agent,Running,Path: $udeploy_agent_path" >> $output_file
-        else
-            echo "$server,Udeploy Agent,Not Running,Path exists but agent not running: $udeploy_agent_path" >> $output_file
-        fi
-    else
-        echo "$server,Udeploy Agent,Not Installed,Path not found: $udeploy_agent_path" >> $output_file
-    fi
-done
-
-# Print output CSV file location
-echo "System status has been saved to $output_file."
+# Check if the command was successful
+if [ $? -eq 0 ]; then
+    echo "Connection successful"
+else
+    echo "Connection failed"
+fi
