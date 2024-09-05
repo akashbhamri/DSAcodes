@@ -1,15 +1,69 @@
 #!/bin/bash
 
-# Variables
-USER="your_username"
-HOST="production_server"
+# Accept parameters from Jenkins
+SERVER_IP="$1"  # Server IP address from Jenkins
+USERNAME="$2"   # Username from Jenkins
 
-# Test SSH connection
-ssh -i ~/.ssh/id_rsa $USER@$HOST "echo 'SSH key-based authentication successful!'"
+# Output CSV file
+OUTPUT_FILE="server_data.csv"
 
-# Check if the command was successful
-if [ $? -eq 0 ]; then
-    echo "Connection successful"
-else
-    echo "Connection failed"
-fi
+# Function to fetch server data
+fetch_data() {
+    local SERVER_IP=$1
+    
+    echo "Fetching data from $SERVER_IP..."
+
+    # Using SSH key-based authentication to execute commands on the remote server
+    SERVER_INFO=$(ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no "$USERNAME@$SERVER_IP" bash -s << 'ENDSSH'
+        HOSTNAME=$(hostname)
+        OS_NAME=$(uname -s)
+        OS_VERSION=$(uname -r)
+        CPU_CORES=$(nproc)
+        MEMORY_TOTAL=$(free -m | awk '/^Mem:/{print $2}')
+        MEMORY_USED=$(free -m | awk '/^Mem:/{print $3}')
+        MEMORY_FREE=$(free -m | awk '/^Mem:/{print $4}')
+        SWAP_TOTAL=$(free -m | awk '/^Swap:/{print $2}')
+        SWAP_USED=$(free -m | awk '/^Swap:/{print $3}')
+        SWAP_FREE=$(free -m | awk '/^Swap:/{print $4}')
+
+        # Function to get disk usage
+        get_disk_usage() {
+            local PATH=$1
+            if df -h "$PATH" &>/dev/null; then
+                df -h "$PATH" | awk 'NR==2 {print $2 "," $3 "," $4}'
+            else
+                echo "Not Available,Not Available,Not Available"
+            fi
+        }
+
+        # Function to get mount point
+        get_mount_point() {
+            local PATH=$1
+            df -h "$PATH" | awk 'NR==2 {print $1}'
+        }
+
+        APPDATA_MOUNT=$(get_mount_point /appdata)
+        APPBIN_MOUNT=$(get_mount_point /appbin)
+
+        APPDATA=$(get_disk_usage /appdata)
+        APPBIN=$(get_disk_usage /appbin)
+        TMP=$(get_disk_usage /tmp)
+        ROOT=$(get_disk_usage /)
+        NAS_APPBIN=$(get_disk_usage /nas/appbin)
+        NAS_APPDATA=$(get_disk_usage /nas/appdata)
+
+        echo "$HOSTNAME,$OS_NAME,$OS_VERSION,$CPU_CORES,$MEMORY_TOTAL,$MEMORY_USED,$MEMORY_FREE,$SWAP_TOTAL,$SWAP_USED,$SWAP_FREE,$APPDATA_MOUNT,$APPDATA,$APPBIN_MOUNT,$APPBIN,$TMP,$ROOT,$NAS_APPBIN,$NAS_APPDATA"
+ENDSSH
+)
+
+    # Append data to CSV file
+    echo "$SERVER_IP,$SERVER_INFO" >> "$OUTPUT_FILE"
+}
+
+# Initialize CSV file with headers
+echo "Server IP,Hostname,OS Name,OS Version,CPU Cores,Memory Total (MB),Memory Used (MB),Memory Free (MB),Swap Total (MB),Swap Used (MB),Swap Free (MB),AppData Mount,AppData Total,AppData Used,AppData Free,AppBin Mount,AppBin Total,AppBin Used,AppBin Free,Tmp Total,Tmp Used,Tmp Free,Root Total,Root Used,Root Free,NAS AppBin Total,NAS AppBin Used,NAS AppBin Free,NAS AppData Total,NAS AppData Used,NAS AppData Free" > "$OUTPUT_FILE"
+
+# Fetch data from the specified server
+fetch_data "$SERVER_IP"
+
+echo "Data collection complete. Output saved to $OUTPUT_FILE."
