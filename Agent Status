@@ -26,7 +26,7 @@ fetch_data() {
         SWAP_USED=$(free -m | awk '/^Swap:/{print $3}')
         SWAP_FREE=$(free -m | awk '/^Swap:/{print $4}')
 
-        # Function to get disk usage
+        # Function to get disk usage in human-readable format
         get_disk_usage() {
             local PATH=$1
             if df -h "$PATH" &>/dev/null; then
