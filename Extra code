@@ -1,1 +1,21 @@
-During the alert period, we observed a significant increase in memory usage on the 03 server, with three Java processes consuming considerable resources. Multiple alerts were triggered, including one indicating a node down event. Could you please investigate if this node experienced any issues or disconnections at that time? Additionally, I would appreciate it if you could provide insights into the activities of these Java processes and clarify what might have triggered them during this period."
+#!/bin/bash
+
+# UDeploy server URL
+BASE_URL="https://your-udeploy-server-url.com"
+
+# API endpoint to validate credentials (this example uses the /applications endpoint)
+ENDPOINT="/cli/application"
+
+# Your UDeploy username and password
+USERNAME="your-username"
+PASSWORD="your-password"
+
+# Perform the API call
+response=$(curl -u "$USERNAME:$PASSWORD" -s -o /dev/null -w "%{http_code}" "$BASE_URL$ENDPOINT")
+
+# Check the response code
+if [ "$response" -eq 200 ]; then
+  echo "Credentials are valid."
+else
+  echo "Invalid credentials or unable to reach the server. HTTP status code: $response"
+fi
