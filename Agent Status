@@ -1,1 +1,19 @@
-="['" & TEXTJOIN("', '", TRUE, A1:A10) & "']"
+Here’s the updated version including the additional points:
+
+---
+
+Hi team,
+
+Please remember to follow the process for muting alerts whenever any planned activity is scheduled on the tools. Here are the key points:
+
+- **Alert Mute Window**: Ensure you specify the exact time frame for muting the alerts, including both the start and end times.
+
+- **Activity Confirmation**: Make sure to confirm the planned activity in the RITM (Request Item) and include a request to unmute the alerts once the activity is completed.
+
+- **RITM Closure**: Include a note in the RITM not to close it until we provide confirmation that the alerts have been unmuted.
+
+- **Monitoring Team Coordination**: When raising the RITM, please include the monitoring team so we are aware of which alerts are being muted.
+
+---
+
+This version covers all the necessary points while ensuring clear communication.
