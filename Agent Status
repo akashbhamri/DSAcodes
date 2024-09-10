@@ -9,21 +9,26 @@ check_server() {
   local SERVER=$1
   local LOGIN_SUCCESS=0
   
-  # Attempt to login to the server
-  ssh -o BatchMode=yes -o ConnectTimeout=5 user@$SERVER "exit" >/dev/null 2>&1
+  # Attempt to login to the server and capture error message
+  ERROR_MESSAGE=$(ssh -o BatchMode=yes -o ConnectTimeout=5 user@$SERVER "exit" 2>&1)
   
   # Check if login was successful
   if [ $? -ne 0 ]; then
-    HOSTNAME=$(hostname)
-    SUBJECT="Alert: Unable to Login to $SERVER"
-    MESSAGE="Failed to login to $SERVER from $HOSTNAME. Please take necessary action."
-    
-    # Send an email notification
-    for EMAIL in "${EMAILS[@]}"; do
-      echo $MESSAGE | mail -s "$SUBJECT" $EMAIL
-    done
-    echo "Login to $SERVER failed. Notifications sent."
-    LOGIN_SUCCESS=1
+    # Determine if the error is due to port 22 being closed or timeout
+    if echo "$ERROR_MESSAGE" | grep -q "Connection refused" || echo "$ERROR_MESSAGE" | grep -q "Connection timed out"; then
+      echo "Port 22 may be closed or timeout occurred for $SERVER. No alert triggered."
+    else
+      HOSTNAME=$(hostname)
+      SUBJECT="Alert: Unable to Login to $SERVER"
+      MESSAGE="Failed to login to $SERVER from $HOSTNAME. Error: $ERROR_MESSAGE. Please take necessary action."
+      
+      # Send an email notification
+      for EMAIL in "${EMAILS[@]}"; do
+        echo $MESSAGE | mail -s "$SUBJECT" $EMAIL
+      done
+      echo "Login to $SERVER failed. Notifications sent."
+      LOGIN_SUCCESS=1
+    fi
   fi
 
   return $LOGIN_SUCCESS
