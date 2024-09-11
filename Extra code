@@ -1,1 +1,53 @@
-docker images -f "dangling=true" --format "{{.Repository}}:{{.Tag}} {{.ID}} {{.CreatedAt}}"
+#!/bin/bash
+
+# UDeploy server URL
+BASE_URL="https://udeploy.app.syfbank.com:8443"
+
+# API endpoint to fetch components and versions
+COMPONENT_ENDPOINT="/cli/component"
+VERSION_ENDPOINT="/cli/component/version"
+
+# Your UDeploy username and password
+CREDENTIALS="${USER}:${PASS}"
+USERNAME="USER"
+PASSWORD="PASS"
+
+# CSV output file
+OUTPUT_FILE="udeploy_component_details.csv"
+
+# Header for the CSV file
+echo "Component Name, Version, Creation Date, Total Versions Deployed, Team Label, Last Triggered Time, Triggered By" > $OUTPUT_FILE
+
+# Fetch the list of components
+components=$(curl -u $CREDENTIALS -s "$BASE_URL$COMPONENT_ENDPOINT")
+
+# Loop through each component
+for component in $(echo "$components" | jq -r '.[] | @base64'); do
+    _jq() {
+        echo ${component} | base64 --decode | jq -r ${1}
+    }
+
+    COMPONENT_NAME=$(_jq '.name')
+    TEAM_LABEL=$(_jq '.teamLabel')
+
+    # Fetch versions for the component
+    versions=$(curl -u $CREDENTIALS -s "$BASE_URL$VERSION_ENDPOINT?component=$COMPONENT_NAME")
+
+    # Loop through each version
+    for version in $(echo "$versions" | jq -r '.[] | @base64'); do
+        _jq() {
+            echo ${version} | base64 --decode | jq -r ${1}
+        }
+
+        VERSION_NAME=$(_jq '.name')
+        CREATION_DATE=$(_jq '.created')
+        TOTAL_VERSIONS_DEPLOYED=$(_jq '.totalVersionsDeployed')
+        LAST_TRIGGERED_TIME=$(_jq '.lastTriggered')
+        TRIGGERED_BY=$(_jq '.triggeredBy')
+
+        # Write details to CSV
+        echo "$COMPONENT_NAME, $VERSION_NAME, $CREATION_DATE, $TOTAL_VERSIONS_DEPLOYED, $TEAM_LABEL, $LAST_TRIGGERED_TIME, $TRIGGERED_BY" >> $OUTPUT_FILE
+    done
+done
+
+echo "Component details have been exported to $OUTPUT_FILE."
