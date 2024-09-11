@@ -3,12 +3,11 @@
 # UDeploy server URL
 BASE_URL="https://udeploy.app.syfbank.com:8443"
 
-# API endpoint to fetch components and versions
+# API endpoints
 COMPONENT_ENDPOINT="/cli/component"
 VERSION_ENDPOINT="/cli/component/version"
 
-# Your UDeploy username and password
-CREDENTIALS="${USER}:${PASS}"
+# Credentials (ideally, use environment variables or a secure vault)
 USERNAME="USER"
 PASSWORD="PASS"
 
@@ -16,37 +15,58 @@ PASSWORD="PASS"
 OUTPUT_FILE="udeploy_component_details.csv"
 
 # Header for the CSV file
-echo "Component Name, Version, Creation Date, Total Versions Deployed, Team Label, Last Triggered Time, Triggered By" > $OUTPUT_FILE
+echo "Component Name, Version, Creation Date, Last Triggered Date, Last Triggered Time, Total Component Size, Team Label, Triggered By" > "$OUTPUT_FILE"
+
+# Function to decode base64 and parse JSON
+_jq() {
+    echo "${1}" | base64 --decode | jq -r "${2}"
+}
+
+# Function to convert bytes to a human-readable format
+convert_size() {
+    local size=$1
+    if [[ $size -lt 1024 ]]; then
+        echo "${size} B"
+    elif [[ $size -lt 1048576 ]]; then
+        echo "$(awk "BEGIN {printf \"%.2f\", ${size}/1024}") KB"
+    elif [[ $size -lt 1073741824 ]]; then
+        echo "$(awk "BEGIN {printf \"%.2f\", ${size}/1048576}") MB"
+    else
+        echo "$(awk "BEGIN {printf \"%.2f\", ${size}/1073741824}") GB"
+    fi
+}
 
 # Fetch the list of components
-components=$(curl -u $CREDENTIALS -s "$BASE_URL$COMPONENT_ENDPOINT")
+components=$(curl -u "${USERNAME}:${PASSWORD}" -s "${BASE_URL}${COMPONENT_ENDPOINT}")
 
 # Loop through each component
 for component in $(echo "$components" | jq -r '.[] | @base64'); do
-    _jq() {
-        echo ${component} | base64 --decode | jq -r ${1}
-    }
-
-    COMPONENT_NAME=$(_jq '.name')
-    TEAM_LABEL=$(_jq '.teamLabel')
+    COMPONENT_NAME=$(_jq "$component" '.name')
+    TEAM_LABEL=$(_jq "$component" '.teamLabel')
 
     # Fetch versions for the component
-    versions=$(curl -u $CREDENTIALS -s "$BASE_URL$VERSION_ENDPOINT?component=$COMPONENT_NAME")
+    versions=$(curl -u "${USERNAME}:${PASSWORD}" -s "${BASE_URL}${VERSION_ENDPOINT}?component=${COMPONENT_NAME}")
 
     # Loop through each version
     for version in $(echo "$versions" | jq -r '.[] | @base64'); do
-        _jq() {
-            echo ${version} | base64 --decode | jq -r ${1}
-        }
+        VERSION_NAME=$(_jq "$version" '.name')
+        CREATION_DATE=$(_jq "$version" '.created')
 
-        VERSION_NAME=$(_jq '.name')
-        CREATION_DATE=$(_jq '.created')
-        TOTAL_VERSIONS_DEPLOYED=$(_jq '.totalVersionsDeployed')
-        LAST_TRIGGERED_TIME=$(_jq '.lastTriggered')
-        TRIGGERED_BY=$(_jq '.triggeredBy')
+        # Extract last triggered time and date
+        LAST_TRIGGERED_DATETIME=$(_jq "$version" '.lastTriggered')
+        LAST_TRIGGERED_DATE=$(echo "$LAST_TRIGGERED_DATETIME" | awk '{print $1}')
+        LAST_TRIGGERED_TIME=$(echo "$LAST_TRIGGERED_DATETIME" | awk '{print $2}')
+
+        # Fetch the total size of the component (assuming the field is available)
+        RAW_COMPONENT_SIZE=$(_jq "$version" '.totalComponentSize')
+
+        # Convert the size to a human-readable format
+        HUMAN_READABLE_SIZE=$(convert_size "$RAW_COMPONENT_SIZE")
+
+        TRIGGERED_BY=$(_jq "$version" '.triggeredBy')
 
         # Write details to CSV
-        echo "$COMPONENT_NAME, $VERSION_NAME, $CREATION_DATE, $TOTAL_VERSIONS_DEPLOYED, $TEAM_LABEL, $LAST_TRIGGERED_TIME, $TRIGGERED_BY" >> $OUTPUT_FILE
+        echo "$COMPONENT_NAME, $VERSION_NAME, $CREATION_DATE, $LAST_TRIGGERED_DATE, $LAST_TRIGGERED_TIME, $HUMAN_READABLE_SIZE, $TEAM_LABEL, $TRIGGERED_BY" >> "$OUTPUT_FILE"
     done
 done
 
