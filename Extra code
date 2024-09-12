@@ -1,73 +1,68 @@
-#!/bin/bash
 
-# UDeploy server URL
-BASE_URL="https://udeploy.app.syfbank.com:8443"
+1. Docker Basics
+- Check Docker Version:
+  docker --version
+- Check Docker Information:
+  docker info
 
-# API endpoints
-COMPONENT_ENDPOINT="/cli/component"
-VERSION_ENDPOINT="/cli/component/version"
+2. Docker Container Management
+- List All Running Containers:
+  docker ps
+- List All Containers (Including Stopped):
+  docker ps -a
+- Start a Container:
+  docker start [container_id]
+- Stop a Container:
+  docker stop [container_id]
+- Restart a Container:
+  docker restart [container_id]
+- Remove a Stopped Container:
+  docker rm [container_id]
+- Run a New Container:
+  docker run -d --name [container_name] [image_name]
+- Attach to a Running Container:
+  docker attach [container_id]
 
-# Credentials (ideally, use environment variables or a secure vault)
-USERNAME="USER"
-PASSWORD="PASS"
+3. Docker Image Management
+- List Docker Images:
+  docker images
+- Pull an Image from Docker Hub:
+  docker pull [image_name]
+- Remove an Image:
+  docker rmi [image_id]
+- Build an Image from a Dockerfile:
+  docker build -t [image_name] [path_to_dockerfile]
 
-# CSV output file
-OUTPUT_FILE="udeploy_component_details.csv"
+4. Docker Logs and Monitoring
+- View Container Logs:
+  docker logs [container_id]
+- Tail Logs of a Container:
+  docker logs -f [container_id]
+- Inspect Container Details:
+  docker inspect [container_id]
+- Monitor Resource Usage:
+  docker stats
 
-# Header for the CSV file
-echo "Component Name, Version, Creation Date, Last Triggered Date, Last Triggered Time, Total Component Size, Team Label, Triggered By" > "$OUTPUT_FILE"
+5. Docker Networking
+- List All Docker Networks:
+  docker network ls
+- Create a New Network:
+  docker network create [network_name]
+- Connect a Container to a Network:
+  docker network connect [network_name] [container_id]
+- Disconnect a Container from a Network:
+  docker network disconnect [network_name] [container_id]
 
-# Function to decode base64 and parse JSON
-_jq() {
-    echo "${1}" | base64 --decode | jq -r "${2}"
-}
+6. Docker Volumes
+- List All Docker Volumes:
+  docker volume ls
+- Create a Docker Volume:
+  docker volume create [volume_name]
+- Remove a Docker Volume:
+  docker volume rm [volume_name]
 
-# Function to convert bytes to a human-readable format
-convert_size() {
-    local size=$1
-    if [[ $size -lt 1024 ]]; then
-        echo "${size} B"
-    elif [[ $size -lt 1048576 ]]; then
-        echo "$(awk "BEGIN {printf \"%.2f\", ${size}/1024}") KB"
-    elif [[ $size -lt 1073741824 ]]; then
-        echo "$(awk "BEGIN {printf \"%.2f\", ${size}/1048576}") MB"
-    else
-        echo "$(awk "BEGIN {printf \"%.2f\", ${size}/1073741824}") GB"
-    fi
-}
-
-# Fetch the list of components
-components=$(curl -u "${USERNAME}:${PASSWORD}" -s "${BASE_URL}${COMPONENT_ENDPOINT}")
-
-# Loop through each component
-for component in $(echo "$components" | jq -r '.[] | @base64'); do
-    COMPONENT_NAME=$(_jq "$component" '.name')
-    TEAM_LABEL=$(_jq "$component" '.teamLabel')
-
-    # Fetch versions for the component
-    versions=$(curl -u "${USERNAME}:${PASSWORD}" -s "${BASE_URL}${VERSION_ENDPOINT}?component=${COMPONENT_NAME}")
-
-    # Loop through each version
-    for version in $(echo "$versions" | jq -r '.[] | @base64'); do
-        VERSION_NAME=$(_jq "$version" '.name')
-        CREATION_DATE=$(_jq "$version" '.created')
-
-        # Extract last triggered time and date
-        LAST_TRIGGERED_DATETIME=$(_jq "$version" '.lastTriggered')
-        LAST_TRIGGERED_DATE=$(echo "$LAST_TRIGGERED_DATETIME" | awk '{print $1}')
-        LAST_TRIGGERED_TIME=$(echo "$LAST_TRIGGERED_DATETIME" | awk '{print $2}')
-
-        # Fetch the total size of the component (assuming the field is available)
-        RAW_COMPONENT_SIZE=$(_jq "$version" '.totalComponentSize')
-
-        # Convert the size to a human-readable format
-        HUMAN_READABLE_SIZE=$(convert_size "$RAW_COMPONENT_SIZE")
-
-        TRIGGERED_BY=$(_jq "$version" '.triggeredBy')
-
-        # Write details to CSV
-        echo "$COMPONENT_NAME, $VERSION_NAME, $CREATION_DATE, $LAST_TRIGGERED_DATE, $LAST_TRIGGERED_TIME, $HUMAN_READABLE_SIZE, $TEAM_LABEL, $TRIGGERED_BY" >> "$OUTPUT_FILE"
-    done
-done
-
-echo "Component details have been exported to $OUTPUT_FILE."
+7. Docker Compose
+- Start Services in Docker Compose:
+  docker-compose up -d
+- Stop Services in Docker Compose:
+  docker-compose down
