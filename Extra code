@@ -1,68 +1,34 @@
+#!/bin/bash
 
-1. Docker Basics
-- Check Docker Version:
-  docker --version
-- Check Docker Information:
-  docker info
+# Get server IPs from the first argument (passed by Jenkins)
+SERVER_IPS=$1
+# Output CSV file
+OUTPUT_CSV="docker_root_dirs.csv"
 
-2. Docker Container Management
-- List All Running Containers:
-  docker ps
-- List All Containers (Including Stopped):
-  docker ps -a
-- Start a Container:
-  docker start [container_id]
-- Stop a Container:
-  docker stop [container_id]
-- Restart a Container:
-  docker restart [container_id]
-- Remove a Stopped Container:
-  docker rm [container_id]
-- Run a New Container:
-  docker run -d --name [container_name] [image_name]
-- Attach to a Running Container:
-  docker attach [container_id]
+# Write the CSV header
+echo "Hostname,Docker Root Dir" > "$OUTPUT_CSV"
 
-3. Docker Image Management
-- List Docker Images:
-  docker images
-- Pull an Image from Docker Hub:
-  docker pull [image_name]
-- Remove an Image:
-  docker rmi [image_id]
-- Build an Image from a Dockerfile:
-  docker build -t [image_name] [path_to_dockerfile]
+# Loop through each server IP (assuming multiple IPs are passed as comma-separated values)
+IFS=',' read -r -a ip_array <<< "$SERVER_IPS"
 
-4. Docker Logs and Monitoring
-- View Container Logs:
-  docker logs [container_id]
-- Tail Logs of a Container:
-  docker logs -f [container_id]
-- Inspect Container Details:
-  docker inspect [container_id]
-- Monitor Resource Usage:
-  docker stats
+for server_ip in "${ip_array[@]}"; do
+    # Get the hostname from the server
+    hostname=$(ssh -o BatchMode=yes -o ConnectTimeout=5 "$server_ip" "hostname" 2>/dev/null)
+    
+    if [ -z "$hostname" ]; then
+        echo "Failed to connect to $server_ip or retrieve hostname"
+        continue
+    fi
+    
+    # Get the Docker root directory
+    docker_root_dir=$(ssh -o BatchMode=yes -o ConnectTimeout=5 "$server_ip" "docker info --format '{{.DockerRootDir}}'" 2>/dev/null)
+    
+    if [ -z "$docker_root_dir" ]; then
+        docker_root_dir="N/A"
+    fi
+    
+    # Append the result to the CSV file
+    echo "$hostname,$docker_root_dir" >> "$OUTPUT_CSV"
+done
 
-5. Docker Networking
-- List All Docker Networks:
-  docker network ls
-- Create a New Network:
-  docker network create [network_name]
-- Connect a Container to a Network:
-  docker network connect [network_name] [container_id]
-- Disconnect a Container from a Network:
-  docker network disconnect [network_name] [container_id]
-
-6. Docker Volumes
-- List All Docker Volumes:
-  docker volume ls
-- Create a Docker Volume:
-  docker volume create [volume_name]
-- Remove a Docker Volume:
-  docker volume rm [volume_name]
-
-7. Docker Compose
-- Start Services in Docker Compose:
-  docker-compose up -d
-- Stop Services in Docker Compose:
-  docker-compose down
+echo "Results saved to $OUTPUT_CSV"
