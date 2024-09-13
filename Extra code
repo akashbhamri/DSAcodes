@@ -1,1 +1,48 @@
-Discussion Points:Cloudbees CI:Set up AppData workspace directories on production servers.Configure a strict docker prune setup to regularly clean unused Docker objects (volumes, containers, images) on production.Increase the cleanup frequency of the /tmp directory to twice daily.Delete old Tomcat logs from Jenkins to free up space.Perform a cleanup of AppData workspace directories for both production and development environments using an Ansible script.Nexus:Execute proxy repository cleanup in the Nexus production environment.Validate the Nexus repository recovery steps and clean up inactive repositories in the development environment.UDeploy:Review the current cleanup process in the UDeploy development environment.Sonar:Create a script to delete unnecessary lines of code to maintain clean code quality.
+Here’s a refined version of the Meeting Minutes (MOM) without the need for owners and deadlines:
+
+---
+
+### **Meeting Minutes: System Cleanup and Maintenance Tasks**
+
+**Date:** [Insert Date]  
+**Attendees:** [List of Participants]  
+**Host:** [Host Name]
+
+---
+
+#### **Agenda:**
+- Discuss system cleanup and maintenance tasks for Cloudbees CI, Nexus, UDeploy, and Sonar.
+
+---
+
+### **Discussion Points:**
+
+1. **Cloudbees CI:**
+   - Set up AppData workspace directories on production servers.
+   - Configure a strict `docker prune` setup to regularly clean unused Docker objects (volumes, containers, images) on production.
+   - Increase the cleanup frequency of the `/tmp` directory to twice daily.
+   - Delete old Tomcat logs from Jenkins to free up space.
+   - Perform a cleanup of AppData workspace directories for both production and development environments using an Ansible script.
+
+2. **Nexus:**
+   - Execute proxy repository cleanup in the Nexus production environment.
+   - Validate the Nexus repository recovery steps and clean up inactive repositories in the development environment.
+
+3. **UDeploy:**
+   - Review the current cleanup process in the UDeploy development environment.
+
+4. **Sonar:**
+   - Create a script to delete unnecessary lines of code to maintain clean code quality.
+
+---
+
+### **Next Steps:**
+- The above tasks will be implemented as discussed, with follow-up actions to monitor the progress and effectiveness of the cleanup processes.
+
+**Meeting Adjourned:** [Time]
+
+**Minutes Prepared by:** [Name]
+
+---
+
+This version removes the need for owners and deadlines while maintaining a structured format for easy reference.
