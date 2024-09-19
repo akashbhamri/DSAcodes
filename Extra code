@@ -1,48 +1,42 @@
-Here’s a refined version of the Meeting Minutes (MOM) without the need for owners and deadlines:
+Got it. Here’s how you can phrase the request to the vendor:
+
 
 ---
 
-### **Meeting Minutes: System Cleanup and Maintenance Tasks**
+Subject: Request for Guidance on Increasing Swap Space on Nexus Production Server
 
-**Date:** [Insert Date]  
-**Attendees:** [List of Participants]  
-**Host:** [Host Name]
+Description:
 
----
+We are observing high swap usage on our Nexus production server, with the current configuration as follows:
 
-#### **Agenda:**
-- Discuss system cleanup and maintenance tasks for Cloudbees CI, Nexus, UDeploy, and Sonar.
+Total Swap Space: 7.9 GB
 
----
+Used Swap Space: 7.5 GB
 
-### **Discussion Points:**
+Free Swap Space: 408 MB
 
-1. **Cloudbees CI:**
-   - Set up AppData workspace directories on production servers.
-   - Configure a strict `docker prune` setup to regularly clean unused Docker objects (volumes, containers, images) on production.
-   - Increase the cleanup frequency of the `/tmp` directory to twice daily.
-   - Delete old Tomcat logs from Jenkins to free up space.
-   - Perform a cleanup of AppData workspace directories for both production and development environments using an Ansible script.
 
-2. **Nexus:**
-   - Execute proxy repository cleanup in the Nexus production environment.
-   - Validate the Nexus repository recovery steps and clean up inactive repositories in the development environment.
+The swap space is being rapidly consumed, and we are concerned about the potential impact on system performance and stability. We are considering increasing the swap space by an additional 4 GB to address this issue.
 
-3. **UDeploy:**
-   - Review the current cleanup process in the UDeploy development environment.
+Support Bundle: Attached is the support bundle for your review.
 
-4. **Sonar:**
-   - Create a script to delete unnecessary lines of code to maintain clean code quality.
+Request:
 
----
+Could you please advise on the following:
 
-### **Next Steps:**
-- The above tasks will be implemented as discussed, with follow-up actions to monitor the progress and effectiveness of the cleanup processes.
+1. Is it advisable to increase the swap space by 4 GB in this situation?
 
-**Meeting Adjourned:** [Time]
 
-**Minutes Prepared by:** [Name]
+2. Are there any other recommendations or best practices to manage swap usage effectively?
+
+
+
+Your guidance will help us ensure that the server remains stable and performs optimally.
+
+Thank you for your assistance.
+
 
 ---
 
-This version removes the need for owners and deadlines while maintaining a structured format for easy reference.
+Feel free to adjust any details or add any specific context if needed!
+
