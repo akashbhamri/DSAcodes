@@ -1,42 +1,5 @@
-Got it. Here’s how you can phrase the request to the vendor:
+You could describe the migration as follows:
 
+"We are transitioning from SAN to NAS to streamline data synchronization between our production and disaster recovery (DR) environments. This change will enable easier, more efficient replication of data across both environments. Additionally, we are planning to implement a high-availability (HA) setup for our Nexus production environment in the near future to ensure greater system resilience and uptime."
 
----
-
-Subject: Request for Guidance on Increasing Swap Space on Nexus Production Server
-
-Description:
-
-We are observing high swap usage on our Nexus production server, with the current configuration as follows:
-
-Total Swap Space: 7.9 GB
-
-Used Swap Space: 7.5 GB
-
-Free Swap Space: 408 MB
-
-
-The swap space is being rapidly consumed, and we are concerned about the potential impact on system performance and stability. We are considering increasing the swap space by an additional 4 GB to address this issue.
-
-Support Bundle: Attached is the support bundle for your review.
-
-Request:
-
-Could you please advise on the following:
-
-1. Is it advisable to increase the swap space by 4 GB in this situation?
-
-
-2. Are there any other recommendations or best practices to manage swap usage effectively?
-
-
-
-Your guidance will help us ensure that the server remains stable and performs optimally.
-
-Thank you for your assistance.
-
-
----
-
-Feel free to adjust any details or add any specific context if needed!
-
+This phrasing highlights the key goals of the migration (data sync and future HA setup) in a clear and concise way.
