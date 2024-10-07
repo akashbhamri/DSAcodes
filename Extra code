@@ -1,39 +1,22 @@
-Here's a simpler and clearer version:
+Here's an updated version of the message incorporating the detail about the long leave:
+
 
 ---
 
-**Team Roles and Responsibilities:**
+Subject: Request for Additional Resources for Monitoring and Weekend Patching Support
 
-1. **Alert Monitoring and Issue Resolution**  
-   - Respond to and resolve alerts from New Relic, Splunk, and internal monitoring scripts, focusing on issues like high CPU, memory, and swap usage.
+Dear Niraj,
 
-2. **Setting Up and Improving Alerts**  
-   - Create and improve alerts in New Relic and Splunk to make sure we catch potential issues early and respond quickly.
+I hope you're doing well. At the moment, we have only 4 resources available for monitoring, and managing 24/7 coverage has become increasingly difficult. Two of our team members are on extended leave, which has further impacted our capacity.
 
-3. **Onboarding Server Logs in Splunk**  
-   - Add new server logs into Splunk, ensuring all logs are tracked and monitored for any issues.
+To ensure smooth operations, especially with ongoing monitoring and the upcoming weekend patching activities, I kindly request you allocate two resources from the run team to assist us until our team members return.
 
-4. **Root Directory Cleanup Coordination**  
-   - Work with the UNIX team to monitor and clean up the root directory when disk usage exceeds 85% or 90%, raising incidents when needed.
+Your support during this time would be greatly appreciated.
 
-5. **AppData Cleanup**  
-   - Monitor and clean up the workspace directory in appdata when usage goes above 85% or 90%. Currently, we are not cleaning up any other appdata directories.
+Best regards,
+[Your Name]
 
-6. **Incident Management for Server Issues**  
-   - Create incidents for the UNIX team when servers become inaccessible or there are login issues.
-
-7. **Capacity Planning for Servers**  
-   - Track and plan the capacity of all DevOps servers (prod, dev, DR) and work with the client to increase capacity when needed.
-
-8. **Supporting Server Patching**  
-   - Assist with patching all servers across different environments, ensuring they stay secure and up-to-date.
-
-9. **Health Checks on DevOps Tools**  
-   - Regularly check the health of DevOps tools to ensure everything is running smoothly.
-
-10. **Communicating Critical Alerts**  
-   - Quickly inform the team of any critical alerts or tool outages using internal chat, ensuring fast response.
 
 ---
 
-This version is more straightforward and easy to understand while maintaining professionalism.
+This version emphasizes the extended leave and keeps the request clear and professional.
