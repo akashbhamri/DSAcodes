@@ -1,1 +1,29 @@
-It slipped my mind, but in our previous conversation, I had retrieved the blob data and started the cleanup process. With Pranneth’s confirmation, I deleted blobs older than two years. I paused the cleanup when the usage dropped to 78% and asked for further confirmation. Since then, I haven’t touched it.
+You could raise the vendor ticket with the following message:
+
+
+---
+
+Subject: Issue with HEC URL: Data Not Sending from Controller to Splunk
+
+Description:
+
+We are encountering an issue where data is not being sent from our controller to Splunk, despite providing the correct HEC URL in our configuration.
+
+Here are the details:
+
+The HEC URL has been verified and is correct.
+
+However, no data is being transmitted from the controller to Splunk.
+
+We need assistance in identifying the current source configuration path to help connect CloudBees CI to Splunk and ensure the data is sent correctly.
+
+
+Please investigate this issue and help us resolve the connectivity between the controller and Splunk.
+
+Thank you.
+
+
+---
+
+This message clearly outlines the problem and the assistance you need from the vendor.
+
