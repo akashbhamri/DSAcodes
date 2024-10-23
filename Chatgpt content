@@ -1,1 +1,6 @@
 
+The DB team is rolling out a new security upgrade for our SQL Server to enhance security and ensure optimal support for any critical database issues. They successfully implemented this upgrade in the development servers on 19th October 2024.
+
+Now, they are requesting approval to proceed with the upgrade in the production and DR servers. We've provided a maintenance window for this activity on 2nd November 2024.
+
+Please let me know if you need any additional information.
