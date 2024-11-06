@@ -1,29 +1,12 @@
-You could raise the vendor ticket with the following message:
+1. Initial Investigation
+We received a New Relic alert indicating high CPU and memory utilization. This prompted an immediate investigation to determine the root cause of the resource spike.
 
+2. Server Investigation
+Upon logging into the server, we identified that the Java process was consuming unusually high CPU and memory resources. We began to drill down further to understand the source of the issue.
 
----
+3. New Relic Investigation
+Using New Relic metrics, we monitored the CPU and memory utilization of the Java process in real-time. This allowed us to confirm the resource consumption levels and track the current stage of the process.
 
-Subject: Issue with HEC URL: Data Not Sending from Controller to Splunk
-
-Description:
-
-We are encountering an issue where data is not being sent from our controller to Splunk, despite providing the correct HEC URL in our configuration.
-
-Here are the details:
-
-The HEC URL has been verified and is correct.
-
-However, no data is being transmitted from the controller to Splunk.
-
-We need assistance in identifying the current source configuration path to help connect CloudBees CI to Splunk and ensure the data is sent correctly.
-
-
-Please investigate this issue and help us resolve the connectivity between the controller and Splunk.
-
-Thank you.
-
-
----
-
-This message clearly outlines the problem and the assistance you need from the vendor.
+4. Corrective Action
+Through further investigation, we traced the high resource utilization to a Jenkins pipeline that was running on the server. We took immediate action to optimize the pipeline and reduce the load. Simultaneously, we continued monitoring New Relic metrics to ensure the issue was resolved and that resource consumption returned to normal levels.
 
