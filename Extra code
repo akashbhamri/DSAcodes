@@ -1,12 +1,11 @@
 1. Initial Investigation
-We received a New Relic alert indicating high CPU and memory utilization. This prompted an immediate investigation to determine the root cause of the resource spike.
+We logged into the CI system and discovered that the worker node was in an offline state, which likely contributed to the issue.
 
-2. Server Investigation
-Upon logging into the server, we identified that the Java process was consuming unusually high CPU and memory resources. We began to drill down further to understand the source of the issue.
+2. New Relic Investigation
+Next, we accessed New Relic to analyze the CPU utilization and other relevant metrics for the affected system. The metrics appeared to be within normal ranges, indicating that resource utilization was not an immediate concern.
 
-3. New Relic Investigation
-Using New Relic metrics, we monitored the CPU and memory utilization of the Java process in real-time. This allowed us to confirm the resource consumption levels and track the current stage of the process.
+3. Access Limitations
+Since we do not have the necessary access to perform a deeper investigation or to resolve the issue at this stage, we have escalated the matter.
 
 4. Corrective Action
-Through further investigation, we traced the high resource utilization to a Jenkins pipeline that was running on the server. We took immediate action to optimize the pipeline and reduce the load. Simultaneously, we continued monitoring New Relic metrics to ensure the issue was resolved and that resource consumption returned to normal levels.
-
+We have reached out to the Platform team for a more detailed investigation and to take appropriate corrective actions to bring the worker node back online.
