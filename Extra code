@@ -1,8 +1,8 @@
-1. Initial Investigation
-We logged into the server and used the grep command to check for the Bitbucket Java process, and found that it was not running. This indicated that the Bitbucket service might be down or experiencing issues.
+1. Alert Received and Initial Data Collection
+Upon receiving the alert, we first gathered the port details associated with the service to narrow down our investigation.
 
 2. New Relic Investigation
-Next, we checked New Relic for metrics related to the system’s CPU and memory utilization, which appeared to be normal, suggesting that there were no immediate resource constraints causing the issue.
+We then logged into New Relic and used the port details to check the restart count of the service. We also reviewed the CPU and memory utilization metrics. Our findings showed that there was high memory utilization within the pods.
 
-3. Escalation
-Since the Bitbucket Java process is managed by the Platform team, we reached out to them for a deeper investigation and to resolve the issue.
+3. Deeper Investigation and Escalation
+Given the high memory utilization, we identified the need for a more in-depth investigation. We provided the Platform team with the details of the affected pods where high utilization was observed. Since the Platform team has the necessary access to view inner logs and more detailed metrics, we have escalated the issue to them for further analysis and to determine the root cause of the high memory usage.
