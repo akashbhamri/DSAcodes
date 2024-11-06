@@ -1,11 +1,8 @@
 1. Initial Investigation
-We logged into the CI system and discovered that the worker node was in an offline state, which likely contributed to the issue.
+We logged into the server and used the grep command to check for the Bitbucket Java process, and found that it was not running. This indicated that the Bitbucket service might be down or experiencing issues.
 
 2. New Relic Investigation
-Next, we accessed New Relic to analyze the CPU utilization and other relevant metrics for the affected system. The metrics appeared to be within normal ranges, indicating that resource utilization was not an immediate concern.
+Next, we checked New Relic for metrics related to the system’s CPU and memory utilization, which appeared to be normal, suggesting that there were no immediate resource constraints causing the issue.
 
-3. Access Limitations
-Since we do not have the necessary access to perform a deeper investigation or to resolve the issue at this stage, we have escalated the matter.
-
-4. Corrective Action
-We have reached out to the Platform team for a more detailed investigation and to take appropriate corrective actions to bring the worker node back online.
+3. Escalation
+Since the Bitbucket Java process is managed by the Platform team, we reached out to them for a deeper investigation and to resolve the issue.
