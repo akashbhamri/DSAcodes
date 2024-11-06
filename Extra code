@@ -1,8 +1,3 @@
-1. Alert Received and Initial Data Collection
-Upon receiving the alert, we first gathered the port details associated with the service to narrow down our investigation.
+During my recent discussion with the ecom-ui team, we identified that the high memory and CPU utilization alerts are triggered when merging code into the develop branch. This happens because the system checks the compatibility of all active pull requests (PRs) with the latest version of develop, causing all checks to run simultaneously on the same executor.
 
-2. New Relic Investigation
-We then logged into New Relic and used the port details to check the restart count of the service. We also reviewed the CPU and memory utilization metrics. Our findings showed that there was high memory utilization within the pods.
-
-3. Deeper Investigation and Escalation
-Given the high memory utilization, we identified the need for a more in-depth investigation. We provided the Platform team with the details of the affected pods where high utilization was observed. Since the Platform team has the necessary access to view inner logs and more detailed metrics, we have escalated the issue to them for further analysis and to determine the root cause of the high memory usage.
+To mitigate this issue and avoid overloading a single server, would it be possible to reduce the executor count from 8 to 4? By doing so, the PRs could be distributed across multiple servers, balancing the load and preventing high resource utilization on any single server at once.
