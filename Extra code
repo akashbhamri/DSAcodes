@@ -1,12 +1,29 @@
-Initial Findings:
-We logged into the server and utilized the grep command to check for resource utilization. Upon investigation, we observed that multiple Node processes were running concurrently on the server. After consulting with the application team, it was clarified that this behavior occurs when they merge code into the develop branch. As part of the merge process, the system runs all active pull requests (PRs) in the repository to check for any dependency or conflict issues. This results in a large number of processes running on a single server simultaneously, leading to high resource utilization.
+Action Items and Investigation Steps:
+1. Initial Investigation:
+Logged into the Server:
 
+Logged into the server and used the grep command to check for the fish-eye process. It was observed that Fish Eye was not running post-patching, even though it was expected to be online automatically.
+The specific command used for this check was:
+bash
+Copy code
+ps aux | grep fish-eye
+The absence of the fish-eye process indicates that it did not start as expected after patching.
+Checked the Patch Logs:
 
-New Relic Investigation:
-Further investigation was carried out using New Relic to assess the server's performance during this process. We observed that the resource utilization (CPU, memory) was significantly high during the execution of the processes triggered by the PR checks. Once the process completed, the utilization levels dropped back to normal.
+Reviewed the patching logs to ensure that the patch process completed successfully and there were no errors or issues during the patching process.
+Confirmed that the patches were applied successfully, with no immediate signs of failure in the log files (e.g., /var/log/yum.log, /var/log/apt/history.log).
+Reviewed Auto-Restart Configuration:
 
-Root Cause Analysis (RCA):
-The root cause of the high resource utilization was identified as the simultaneous execution of multiple PRs on a single server, which led to the overutilization of system resources. This bottleneck occurred because all executors were being run on one machine, thereby consuming excessive CPU and memory capacity.
+Verified that the auto-reboot configuration was correctly set up in the patching process.
+Ensured that the server was supposed to automatically restart after patching, but it did not come up as expected.
+2. New Relic Findings:
+Monitored System Utilization:
 
-Suggested Solution:
-We recommended reducing the number of executors from 8 to 4 to help distribute the workload more evenly across multiple virtual machines (VMs). This change would help balance the resource usage, preventing overutilization on a single server, and ensuring that the process is completed efficiently without affecting the performance of the host server.
+Checked New Relic for any signs of high resource utilization (CPU, memory, disk, etc.) that could have caused the server to fail during the restart process.
+Found that the system's resource utilization was within normal limits, and there were no spikes or performance issues reported in New Relic, indicating that high resource usage was not the cause of the server failure.
+Confirmed System Health:
+
+Verified that the server is healthy in terms of system performance. All monitored metrics in New Relic (e.g., CPU, memory, network traffic) appear to be functioning as expected, confirming that the system was not overwhelmed after the patch.
+3. Immediate Actions Taken:
+Platform Team Notification:
+Informed the Platform Team regarding the issue with Fish Eye not restarting after patching. They are now investigating whether there is an issue with the service startup or a patch-related conflict that prevented the service from coming back online.
