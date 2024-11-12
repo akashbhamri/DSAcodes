@@ -1,1 +1,11 @@
-Hi, can you help us understand how this server went into auto-patch mode without a stop and start script or a request to auto-patch? On Saturday, we faced an issue where the server showed as auto-patched, but our team hadn’t brought the service back up, thinking it would restart automatically. We’d like to determine how this happened and why the service didn’t resume on its own."
+
+Initial Findings:
+Logged into the server to verify Docker status using systemctl status docker.socket.
+Confirmed that the Docker socket is up and running without issues.
+New Relic Investigation:
+Checked server utilization in New Relic, which appeared to be within normal limits.
+Noticed that New Relic was not correctly monitoring the Docker process on this server.
+Upon investigation, found that the YAML path configured in New Relic for monitoring the Docker process was incorrect.
+Root Cause Analysis (RCA):
+The monitoring issue in New Relic was due to an incorrect YAML path set on their end, which prevented accurate tracking of the Docker process on the server.
+We have reached out to New Relic to request a correction of the YAML path to ensure proper monitoring.
