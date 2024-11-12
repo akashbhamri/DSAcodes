@@ -1,11 +1,15 @@
 
-Initial Findings:
-Logged into the server to verify Docker status using systemctl status docker.socket.
-Confirmed that the Docker socket is up and running without issues.
-New Relic Investigation:
-Checked server utilization in New Relic, which appeared to be within normal limits.
-Noticed that New Relic was not correctly monitoring the Docker process on this server.
-Upon investigation, found that the YAML path configured in New Relic for monitoring the Docker process was incorrect.
-Root Cause Analysis (RCA):
-The monitoring issue in New Relic was due to an incorrect YAML path set on their end, which prevented accurate tracking of the Docker process on the server.
-We have reached out to New Relic to request a correction of the YAML path to ensure proper monitoring.
+Initial Finding
+Logged into the server and observed that the Udeploy process was not running.
+
+New Relic Investigation
+Checked New Relic monitoring; all server metrics appeared normal, with no utilization issues detected.
+
+Agent Log Review
+Examined the /agent.out log file and found TCP connection issues logged by the Udeploy agent since server startup.
+
+Root Cause Analysis (RCA)
+Identified the TCP connection issue as the likely cause of the Udeploy agent failure.
+
+Notification to Platform Team
+Informed the platform team of the findings, shared the error log details, and requested them to investigate further and restart the service.
