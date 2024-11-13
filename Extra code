@@ -1,1 +1,11 @@
-On November 8, 2024, the team performed a Java remediation activity in the Bitbucket development environment, upgrading the Java version from 11.0.24 to 11.0.25. However, the Java version update was missed in the UDeploy agent files, including the installed.directory, agent executable, and agent configuration file. This prevented the agent from recognizing the updated Java version, causing it to fail to start. Once the Java version was updated in the agent files, the agent came back online, and the issue was resolved.
+Initial Finding
+We accessed the server and used df -Th to check disk utilization. The appdata directory was found to be consuming a high amount of space, which is triggering utilization alerts.
+
+Cause
+Within the appdata directory, the workspace folder was identified as the primary source of high utilization. The data stored here appears to be accumulating without recent cleanup, leading to increased storage us
+
+Root Cause Analysis (RCA)
+The high utilization in the appdata directory is due to the accumulation of files in the workspace subdirectory. Since appdata cleanup automation is not yet in place, temporary manual intervention is required to prevent further utilization alerts.
+
+Permission
+As we are currently in a freeze period, we have requested permission from the client to manually clean up the appdata directory in production server. With approval, we will proceed by running the necessary cleanup commands manually to manage the high utilization until an automation script is available. 
