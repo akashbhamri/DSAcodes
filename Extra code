@@ -1,1 +1,8 @@
-We've identified around 480 locations where the release branch needs cleanup, and doing this manually has proven to be quite time-consuming. To streamline the process, I’ve developed a script that automates this cleanup efficiently. After a review with you and Asharaf, we’ll proceed with the execution. The script is optimized to complete the cleanup in approximately 20 minutes
+Root Cause Analysis (RCA)
+
+The high utilization alert was triggered by a pipeline consuming significant resources. Upon investigation, we checked the pipeline and confirmed with the application team that there were no issues with it. However, further analysis revealed that the VM is configured with only 8 cores, which is insufficient to handle the workload efficiently.
+
+Resolution Plan
+
+In other CloudBees CI instances, we use 12 or 16-core VMs to manage workloads better. Since this is a development server, we plan to increase the CPU cores on Saturday to address the utilization issue and prevent future alerts.
+
