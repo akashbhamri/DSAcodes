@@ -1,8 +1,32 @@
+You're correct; it isn't a resolution. Let me revise it accordingly:
+
+
+---
+
 Root Cause Analysis (RCA)
 
-The high utilization alert was triggered by a pipeline consuming significant resources. Upon investigation, we checked the pipeline and confirmed with the application team that there were no issues with it. However, further analysis revealed that the VM is configured with only 8 cores, which is insufficient to handle the workload efficiently.
+Issue: High CPU utilization observed on the VM due to the execution of a multibranch pipeline and its associated downstream job.
 
-Resolution Plan
+Root Cause:
 
-In other CloudBees CI instances, we use 12 or 16-core VMs to manage workloads better. Since this is a development server, we plan to increase the CPU cores on Saturday to address the utilization issue and prevent future alerts.
+The multibranch pipeline was triggered, and during the PR build, it ran for approximately 2 hours.
+
+The downstream job for Sonar validation was also triggered on the same VM, further increasing CPU utilization.
+
+The application team confirmed there were no issues from their end, and the time taken was within expected norms.
+
+
+Observation:
+
+Once the process was completed, CPU utilization returned to normal.
+
+There was no observed impact on the VM during the high utilization period.
+
+
+Next Steps:
+
+Monitor resource utilization during builds.
+
+Consider optimizing job scheduling or balancing workloads across multiple VMs to avoid spikes in CPU usage.
+
 
