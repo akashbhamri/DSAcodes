@@ -1,40 +1,11 @@
-The process to revert Java 17 across all modules took nearly 2 hours, leading to significant server utilization and extended processing time. While we understand the complexity of the task, it is crucial to optimize this workflow to enhance efficiency and minimize resource consumption. Could you please review the script to identify potential improvements or explore alternative approaches to streamline the process?
-
-
-
-
-
-
-
-a resolution. Let me revise it accordingly:
-
-
----
-
 Root Cause Analysis (RCA)
 
-Issue: High CPU utilization observed on the VM due to the execution of a multibranch pipeline and its associated downstream job.
+Issue Description:
+A Java process running under the root user was identified as consuming high system resources. Due to insufficient permissions, further investigation into the process details was not possible.
 
-Root Cause:
+Steps Taken:
 
-The multibranch pipeline was triggered, and during the PR build, it ran for approximately 2 hours.
-
-The downstream job for Sonar validation was also triggered on the same VM, further increasing CPU utilization.
-
-The application team confirmed there were no issues from their end, and the time taken was within expected norms.
+1. Collected the process details using the ps -eaf | grep java command and saved the output to a text file.
 
 
-Observation:
-
-Once the process was completed, CPU utilization returned to normal.
-
-There was no observed impact on the VM during the high utilization period.
-
-
-Next Steps:
-
-Monitor resource utilization during builds.
-
-Consider optimizing job scheduling or balancing workloads across multiple VMs to avoid spikes in CPU usage.
-
-
+2. Raised an incident with the Unix team for further analysis and resolution.
