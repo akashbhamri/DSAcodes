@@ -1,11 +1,8 @@
-Root Cause Analysis (RCA)
+Hi Praneeth,
 
-Issue Description:
-A Java process running under the root user was identified as consuming high system resources. Due to insufficient permissions, further investigation into the process details was not possible.
+Kindly retain the NP account access for the resource mentioned below. We have a patching activity scheduled for this coming Saturday. Currently, the resource does not have access to Stonebranch, and a proper KT session for Stonebranch has not been scheduled yet.
 
-Steps Taken:
+Additionally, is it possible to provide at least my access to this account later? I need to log in to the server in case of any alert triggers for investigation and related activities.
 
-1. Collected the process details using the ps -eaf | grep java command and saved the output to a text file.
+This serves as a justification for maintaining the NP account access for now.
 
-
-2. Raised an incident with the Unix team for further analysis and resolution.
