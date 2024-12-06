@@ -1,5 +1,5 @@
-Here’s the revised version aligning with the intent:
+Here’s a revised way to phrase it more professionally:
 
-"The patching window for the slave Python server vdlrlctapda18 is still scheduled for Friday, whereas all other servers have already been aligned to the weekend schedule. A request to update the patching window for this server (vdlrlctapda18) to match the weekend schedule was raised on 04/11/24 but is still pending approval. I will follow up with the Unix team to expedite the process.
-Proposed Change for Asset Name: vdlrlctapda18 - CHG0741444"
+"Hi Praneeth,
+The team has requested SVP approval to exclude this server from the upcoming patching cycle. Could you please confirm if it would be feasible to perform the upgrade after the patching is completed? Alternatively, we can draft an email to the SVP requesting formal approval for the exclusion. Please advise on the preferred course of action."
 
