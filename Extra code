@@ -1,8 +1,5 @@
-Hi Praneeth,
+Here’s the revised version aligning with the intent:
 
-Kindly retain the NP account access for the resource mentioned below. We have a patching activity scheduled for this coming Saturday. Currently, the resource does not have access to Stonebranch, and a proper KT session for Stonebranch has not been scheduled yet.
-
-Additionally, is it possible to provide at least my access to this account later? I need to log in to the server in case of any alert triggers for investigation and related activities.
-
-This serves as a justification for maintaining the NP account access for now.
+"The patching window for the slave Python server vdlrlctapda18 is still scheduled for Friday, whereas all other servers have already been aligned to the weekend schedule. A request to update the patching window for this server (vdlrlctapda18) to match the weekend schedule was raised on 04/11/24 but is still pending approval. I will follow up with the Unix team to expedite the process.
+Proposed Change for Asset Name: vdlrlctapda18 - CHG0741444"
 
