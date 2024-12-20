@@ -1,27 +1,12 @@
-nvestigation and Preventive Measures for High Utilization on Servers VPLRLCTAPDA15 and 16
+Subject: Follow-up on High Utilization Issue Caused by KCOV Process
 
-Dear [Recipient Name/Team],
+Hi Vinod,
 
-On December 18th, our servers VPLRLCTAPDA15 and VPLRLCTAPDA16 went offline due to excessive memory and CPU utilization, ultimately causing a crash. After analysis with the UNIX and Red Hat teams, it was identified that the kcov process, triggered by a CloudBees CI pipeline, was the root cause of the issue.
+As discussed during our call, we observed that the KCOV process took unusually high utilization in the pipeline. It appears this process is running as root because it is executed within a Docker container. This issue caused significant resource consumption, ultimately resulting in both VMs crashing.
 
-We request your assistance in addressing the following concerns:
+Could you please investigate and provide an update on how we can avoid this issue in the future? Additionally, we would appreciate any recommendations or best practices to ensure such processes do not impact system stability.
 
-Pipeline-Specific Cause:
-
-Confirmation on whether this issue was caused exclusively by the pipeline.
-Details on why the kcov process initiated by the pipeline caused such resource-intensive behavior, leading to the VM crash and servers going offline.
-Controller Adjustments:
-
-Assessment of whether any configuration adjustments or optimizations are needed in the attached controller to avoid similar scenarios in the future.
-Pipeline Alerting:
-
-Review of any pipeline alerts that might have been missed or misinterpreted.
-Recommendations for refining alerts to ensure proactive detection and mitigation of such issues.
-Your insights and recommendations will be crucial in understanding the root cause and implementing preventive measures to safeguard against future occurrences. If further logs or specific details are needed to facilitate the investigation, please let us know.
-
-Looking forward to your guidance on this matter.
+Looking forward to your feedback.
 
 Best regards,
-[Your Full Name]
-[Your Job Title]
-[Your Contact Information]
+[Your Name]
