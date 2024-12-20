@@ -1,1 +1,27 @@
-We raised an incident with the New Relic (NR) team regarding an issue where the database (DB) was triggering an "inaccessible" alert. Upon investigation, the NR team identified that a command was missing in the NR agent running on the DB server. This missing command was preventing NR from correctly retrieving accessible data from the database. The team corrected the configuration by adding the missing statement, and they have confirmed that the data is now being fetched accurately.
+nvestigation and Preventive Measures for High Utilization on Servers VPLRLCTAPDA15 and 16
+
+Dear [Recipient Name/Team],
+
+On December 18th, our servers VPLRLCTAPDA15 and VPLRLCTAPDA16 went offline due to excessive memory and CPU utilization, ultimately causing a crash. After analysis with the UNIX and Red Hat teams, it was identified that the kcov process, triggered by a CloudBees CI pipeline, was the root cause of the issue.
+
+We request your assistance in addressing the following concerns:
+
+Pipeline-Specific Cause:
+
+Confirmation on whether this issue was caused exclusively by the pipeline.
+Details on why the kcov process initiated by the pipeline caused such resource-intensive behavior, leading to the VM crash and servers going offline.
+Controller Adjustments:
+
+Assessment of whether any configuration adjustments or optimizations are needed in the attached controller to avoid similar scenarios in the future.
+Pipeline Alerting:
+
+Review of any pipeline alerts that might have been missed or misinterpreted.
+Recommendations for refining alerts to ensure proactive detection and mitigation of such issues.
+Your insights and recommendations will be crucial in understanding the root cause and implementing preventive measures to safeguard against future occurrences. If further logs or specific details are needed to facilitate the investigation, please let us know.
+
+Looking forward to your guidance on this matter.
+
+Best regards,
+[Your Full Name]
+[Your Job Title]
+[Your Contact Information]
