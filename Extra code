@@ -1,4 +1,1 @@
-
-Here’s a refined version of your statement with a professional tone and clearer phrasing:
-
-Between 1:19 PM and 1:23 PM IST, a utilization alert was triggered due to a sudden spike in CPU usage caused by multiple Oracle processes initiated by the grid user. Once these processes completed, the CPU utilization returned to normal levels. We will coordinate with the Oracle team to investigate this issue further, focusing on ways to prevent such parallel triggers of multiple processes in the future. If necessary, we will evaluate whether to increase server resources to handle such scenarios more efficiently.
+We raised an incident with the New Relic (NR) team regarding an issue where the database (DB) was triggering an "inaccessible" alert. Upon investigation, the NR team identified that a command was missing in the NR agent running on the DB server. This missing command was preventing NR from correctly retrieving accessible data from the database. The team corrected the configuration by adding the missing statement, and they have confirmed that the data is now being fetched accurately.
