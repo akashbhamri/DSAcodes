@@ -1,12 +1,16 @@
-Subject: Follow-up on High Utilization Issue Caused by KCOV Process
+Certainly! Here's a more detailed and refined version of your message:
 
-Hi Vinod,
 
-As discussed during our call, we observed that the KCOV process took unusually high utilization in the pipeline. It appears this process is running as root because it is executed within a Docker container. This issue caused significant resource consumption, ultimately resulting in both VMs crashing.
+---
 
-Could you please investigate and provide an update on how we can avoid this issue in the future? Additionally, we would appreciate any recommendations or best practices to ensure such processes do not impact system stability.
+Below is the timeframe when we received the alert, which occurred in the production environment. While this error did not cause any visible issues in the Bitbucket UI, we have observed it multiple times in the logs.
 
-Looking forward to your feedback.
+We would like your help to understand the root cause of this issue. Specifically, why it keeps appearing in the logs and if it could lead to any potential problems in the future. Additionally, we seek guidance on how to prevent this from happening again.
 
-Best regards,
-[Your Name]
+It’s important to note that since we are currently in a freeze period, no activities or deployments were scheduled in the production environment during this time. We would appreciate a detailed analysis of the logs and any steps we should take to address this.
+
+
+---
+
+This version is more comprehensive and provides clear context for the issue. Let me know if you’d like to include specific log entries or timestamps for better clarity.
+
