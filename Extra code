@@ -1,12 +1,70 @@
-Here’s a rephrased version of your statement with improved clarity and flow:
+Here's the updated version with clear distinction between the two tasks:
 
 
 ---
 
-"On Friday, we encountered a situation where the Hikari connection pool was exhausted. Upon investigation, we observed an unusually high number of API calls, approximately 11,000, originating from your account. This was significantly higher compared to normal traffic on other days, such as Thursday and Monday. Could you please help us understand the reason behind such a high volume of API calls on Friday?"
+Task 1: Create a New Policy for Bitbucket Server
+
+1. Policy Name:
+
+Name the new policy as Bitbucket_Dev_Server_Process_Monitoring.
+
+
+
+2. Monitor Scope:
+
+Ensure this policy monitors only the cbflow-dev process.
+
+Verify all other monitors being tracked in the existing policy:
+
+If additional monitors are found, let us know the details before creating separate policies for them.
+
+
+
+
+3. Add DL:
+
+Include the provided DL only in this policy.
+
+
+
+4. Update Existing Policy:
+
+Remove the condition "development_Node is down" from the existing policy.
+
+
+
 
 
 ---
 
-Let me know if you'd like further refinements or an alternate phrasing.
+Task 2: Review and Adjust Monitors for Bitbucket Server
+
+1. Verify Current Monitoring:
+
+Identify all monitors being tracked for the Bitbucket server.
+
+
+
+2. Policy Adjustment:
+
+If other monitors exist apart from cbflow-dev, create separate policies for each monitor.
+
+Share the details of additional monitors before proceeding with policy creation.
+
+
+
+3. Finalize Policies:
+
+Ensure only relevant monitors are included in their respective policies.
+
+Add the provided DL only to the newly created Bitbucket_Dev_Server_Process_Monitoring policy.
+
+
+
+
+
+---
+
+Let me know if this covers your requirements precisely!
 
