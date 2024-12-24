@@ -1,64 +1,137 @@
-Here's the updated version with clear distinction between the two tasks:
+Here are some possible questions you can ask the vendor for further clarification and resolution:
 
 
 ---
 
-Task 1: Create a New Policy for Bitbucket Server
+1. Understanding the Root Cause
 
-1. Policy Name:
+Can you confirm the exact source of the 300k Ref Advertisement requests? Were these triggered by specific automation or a CI/CD pipeline?
 
-Name the new policy as Bitbucket_Dev_Server_Process_Monitoring.
+Could there be misconfigured automation jobs causing this unusually high number of API calls?
 
-
-
-2. Monitor Scope:
-
-Ensure this policy monitors only the cbflow-dev process.
-
-Verify all other monitors being tracked in the existing policy:
-
-If additional monitors are found, let us know the details before creating separate policies for them.
-
-
-
-
-3. Add DL:
-
-Include the provided DL only in this policy.
-
-
-
-4. Update Existing Policy:
-
-Remove the condition "development_Node is down" from the existing policy.
-
-
+Are there any specific patterns or timestamps that indicate when these requests spiked?
 
 
 
 ---
 
-Task 2: Review and Adjust Monitors for Bitbucket Server
+2. Optimizing Configuration
 
-1. Verify Current Monitoring:
+Can the connection pool limit (currently 160) be safely increased without impacting performance? If yes, what is the recommended value?
 
-Identify all monitors being tracked for the Bitbucket server.
+Is it possible to optimize the Ref Advertisement process (e.g., by caching responses or reducing database access)?
 
-
-
-2. Policy Adjustment:
-
-If other monitors exist apart from cbflow-dev, create separate policies for each monitor.
-
-Share the details of additional monitors before proceeding with policy creation.
+What are your recommendations for aligning CPU concurrency (64 requests) and connection pool limits to prevent bottlenecks?
 
 
 
-3. Finalize Policies:
+---
 
-Ensure only relevant monitors are included in their respective policies.
+3. Improving Monitoring and Alerts
 
-Add the provided DL only to the newly created Bitbucket_Dev_Server_Process_Monitoring policy.
+Can you provide guidance on how to monitor connection pool usage effectively to catch such issues before they cause failures?
+
+Is there a way to set up alerts or logs for unusually high API calls (e.g., if the requests exceed a certain threshold)?
+
+
+
+---
+
+4. Suggestions for Automation/CI-CD
+
+Are there recommendations for optimizing our CI/CD pipelines to reduce the number of API calls?
+
+Would switching from scheduled builds to event-based builds (webhooks) significantly reduce the load?
+
+
+
+---
+
+5. Vendor-Specific Queries
+
+Do you see any misconfigurations in our Bitbucket setup that could contribute to such issues?
+
+Are there known bugs or limitations in the current Bitbucket version related to connection pool management?
+
+
+
+---
+
+6. Scaling Recommendations
+
+If the API usage is expected to grow, what are the recommended steps to scale the system (e.g., increasing CPUs, upgrading the database)?
+
+Should we consider sharding or load-balancing for better handling of high concurrency?
+
+
+
+---
+
+7. Temporary Measures
+
+What are the short-term fixes you suggest to avoid connection pool exhaustion while we work on a long-term solution?
+
+
+
+---
+
+By asking these questions, you can identify both immediate fixes and long-term improvements for your system's configuration and automation setup.
+Here’s how you can ask about the potential impact on Bitbucket:
+
+
+---
+
+Impact-Related Questions:
+
+1. System Stability:
+
+Could this high volume of Ref Advertisement requests cause any long-term performance degradation or instability in Bitbucket?
+
+Are there risks of service interruptions if the connection pool continues to get exhausted frequently?
+
+
+
+2. Data Integrity:
+
+Is there a possibility of data corruption or loss in Bitbucket repositories due to connection pool exhaustion?
+
+
+
+3. Feature Availability:
+
+Would connection pool exhaustion impact the availability of core Bitbucket functionalities, such as pull requests, cloning, or CI/CD integrations?
+
+
+
+4. Database and Performance:
+
+Will the exhausted connection pool affect the performance of the database operations (e.g., increased latency or failed queries)?
+
+Could it slow down or disrupt other Bitbucket operations that rely on database access?
+
+
+
+5. Scalability:
+
+If this happens frequently, would it impact Bitbucket’s ability to handle scaling for additional users or repositories?
+
+
+
+6. CI/CD Pipelines:
+
+Could this issue cause disruptions in CI/CD pipelines linked with Bitbucket, such as delays or failures in automated builds?
+
+
+
+7. Future Impact:
+
+If this continues, will it have an impact on our license or infrastructure requirements for Bitbucket?
+
+
+
+8. Recommendations:
+
+Are there any specific proactive measures you suggest to avoid Bitbucket being impacted in the future?
 
 
 
@@ -66,5 +139,6 @@ Add the provided DL only to the newly created Bitbucket_Dev_Server_Process_Monit
 
 ---
 
-Let me know if this covers your requirements precisely!
+You can also specifically ask for any logs, metrics, or analysis from the vendor to identify signs of potential impact on Bitbucket operations.
+
 
