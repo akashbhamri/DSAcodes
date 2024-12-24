@@ -1,2 +1,12 @@
-The DB team requested details about the database pool size configuration for our database. We've shared the required information with them and are now awaiting their response.
+Here’s a rephrased version of your statement with improved clarity and flow:
+
+
+---
+
+"On Friday, we encountered a situation where the Hikari connection pool was exhausted. Upon investigation, we observed an unusually high number of API calls, approximately 11,000, originating from your account. This was significantly higher compared to normal traffic on other days, such as Thursday and Monday. Could you please help us understand the reason behind such a high volume of API calls on Friday?"
+
+
+---
+
+Let me know if you'd like further refinements or an alternate phrasing.
 
