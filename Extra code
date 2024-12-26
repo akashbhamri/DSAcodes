@@ -1,144 +1,19 @@
-Here are some possible questions you can ask the vendor for further clarification and resolution:
+Sure, here’s a refined version including your statement:
 
 
 ---
 
-1. Understanding the Root Cause
+As of now, we haven't received any noticeable impact, but below are the possible impacts of HikariCP pool exhaustion, and we have already reached out to the vendor regarding this:
 
-Can you confirm the exact source of the 300k Ref Advertisement requests? Were these triggered by specific automation or a CI/CD pipeline?
+1. Failed Operations: Requests from the application to Bitbucket (e.g., pushing code, fetching repositories) may fail due to database connection unavailability.
 
-Could there be misconfigured automation jobs causing this unusually high number of API calls?
 
-Are there any specific patterns or timestamps that indicate when these requests spiked?
+2. Timeouts: Operations might experience delays or timeouts as connections remain blocked, affecting the overall functionality.
 
 
+3. Performance Degradation: The application interacting with Bitbucket could experience slow performance or become unresponsive due to blocked database connections.
 
----
 
-2. Optimizing Configuration
 
-Can the connection pool limit (currently 160) be safely increased without impacting performance? If yes, what is the recommended value?
-
-Is it possible to optimize the Ref Advertisement process (e.g., by caching responses or reducing database access)?
-
-What are your recommendations for aligning CPU concurrency (64 requests) and connection pool limits to prevent bottlenecks?
-
-
-
----
-
-3. Improving Monitoring and Alerts
-
-Can you provide guidance on how to monitor connection pool usage effectively to catch such issues before they cause failures?
-
-Is there a way to set up alerts or logs for unusually high API calls (e.g., if the requests exceed a certain threshold)?
-
-
-
----
-
-4. Suggestions for Automation/CI-CD
-
-Are there recommendations for optimizing our CI/CD pipelines to reduce the number of API calls?
-
-Would switching from scheduled builds to event-based builds (webhooks) significantly reduce the load?
-
-
-
----
-
-5. Vendor-Specific Queries
-
-Do you see any misconfigurations in our Bitbucket setup that could contribute to such issues?
-
-Are there known bugs or limitations in the current Bitbucket version related to connection pool management?
-
-
-
----
-
-6. Scaling Recommendations
-
-If the API usage is expected to grow, what are the recommended steps to scale the system (e.g., increasing CPUs, upgrading the database)?
-
-Should we consider sharding or load-balancing for better handling of high concurrency?
-
-
-
----
-
-7. Temporary Measures
-
-What are the short-term fixes you suggest to avoid connection pool exhaustion while we work on a long-term solution?
-
-
-
----
-
-By asking these questions, you can identify both immediate fixes and long-term improvements for your system's configuration and automation setup.
-Here’s how you can ask about the potential impact on Bitbucket:
-
-
----
-
-Impact-Related Questions:
-
-1. System Stability:
-
-Could this high volume of Ref Advertisement requests cause any long-term performance degradation or instability in Bitbucket?
-
-Are there risks of service interruptions if the connection pool continues to get exhausted frequently?
-
-
-
-2. Data Integrity:
-
-Is there a possibility of data corruption or loss in Bitbucket repositories due to connection pool exhaustion?
-
-
-
-3. Feature Availability:
-
-Would connection pool exhaustion impact the availability of core Bitbucket functionalities, such as pull requests, cloning, or CI/CD integrations?
-
-
-
-4. Database and Performance:
-
-Will the exhausted connection pool affect the performance of the database operations (e.g., increased latency or failed queries)?
-
-Could it slow down or disrupt other Bitbucket operations that rely on database access?
-
-
-
-5. Scalability:
-
-If this happens frequently, would it impact Bitbucket’s ability to handle scaling for additional users or repositories?
-
-
-
-6. CI/CD Pipelines:
-
-Could this issue cause disruptions in CI/CD pipelines linked with Bitbucket, such as delays or failures in automated builds?
-
-
-
-7. Future Impact:
-
-If this continues, will it have an impact on our license or infrastructure requirements for Bitbucket?
-
-
-
-8. Recommendations:
-
-Are there any specific proactive measures you suggest to avoid Bitbucket being impacted in the future?
-
-
-
-
-
----
-
-You can also specifically ask for any logs, metrics, or analysis from the vendor to identify signs of potential impact on Bitbucket operations.
-
+We are actively monitoring the situation and awaiting further guidance from the vendor.
 
