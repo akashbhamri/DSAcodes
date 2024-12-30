@@ -1,19 +1,1 @@
-Sure, here’s a refined version including your statement:
-
-
----
-
-As of now, we haven't received any noticeable impact, but below are the possible impacts of HikariCP pool exhaustion, and we have already reached out to the vendor regarding this:
-
-1. Failed Operations: Requests from the application to Bitbucket (e.g., pushing code, fetching repositories) may fail due to database connection unavailability.
-
-
-2. Timeouts: Operations might experience delays or timeouts as connections remain blocked, affecting the overall functionality.
-
-
-3. Performance Degradation: The application interacting with Bitbucket could experience slow performance or become unresponsive due to blocked database connections.
-
-
-
-We are actively monitoring the situation and awaiting further guidance from the vendor.
 
