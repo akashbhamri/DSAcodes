@@ -1,8 +1,18 @@
-Here’s a refined version:
+Here are the 5 most important questions to ask the vendor regarding SSH export traffic:
 
-The vendor has recommended implementing rate limiting at a global level, but we’re concerned it might cause issues for certain projects with high API usage. Instead of applying it globally, can we explore the option of setting up project-specific rate limiting?
+1. How can we track which repositories, users, or CI/CD jobs are generating high SSH Export traffic?
 
-Also, can you help us with a list of projects making higher API calls compared to others? Based on that data, we can define rate limits tailored to those projects, ensuring a balanced approach without affecting performance.
 
-Let me know your thoughts on this.
+2. Is there a way to get detailed logs or reports on SSH Export activity, including timestamps and IP addresses?
+
+
+3. Can we differentiate between scheduled builds and manual SSH Exports in Bitbucket?
+
+
+4. Would switching to webhooks reduce SSH traffic, and how can we implement it effectively?
+
+
+5. Are there any tools or plugins in Bitbucket to monitor and control SSH Export usage?
+
+
 
