@@ -1,5 +1,8 @@
-"Jira has been created to track the testing of rate limiting enablement in the dev environment. If everything works fine, we will proceed to enable it in prod.
+Here’s a refined version:
 
-Rate Limiting is a technique used to control the number of API requests a client can make within a specific time frame. It helps prevent abuse, ensures fair usage, and maintains system stability by protecting the backend from being overwhelmed by too many requests."
+The vendor has recommended implementing rate limiting at a global level, but we’re concerned it might cause issues for certain projects with high API usage. Instead of applying it globally, can we explore the option of setting up project-specific rate limiting?
 
+Also, can you help us with a list of projects making higher API calls compared to others? Based on that data, we can define rate limits tailored to those projects, ensuring a balanced approach without affecting performance.
+
+Let me know your thoughts on this.
 
