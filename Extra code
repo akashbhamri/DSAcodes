@@ -1,1 +1,5 @@
+"Jira has been created to track the testing of rate limiting enablement in the dev environment. If everything works fine, we will proceed to enable it in prod.
+
+Rate Limiting is a technique used to control the number of API requests a client can make within a specific time frame. It helps prevent abuse, ensures fair usage, and maintains system stability by protecting the backend from being overwhelmed by too many requests."
+
 
