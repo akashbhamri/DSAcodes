@@ -1,18 +1,185 @@
-Here are the 5 most important questions to ask the vendor regarding SSH export traffic:
-
-1. How can we track which repositories, users, or CI/CD jobs are generating high SSH Export traffic?
+Detailed Explanation of the Issue and Recommended Fix
 
 
-2. Is there a way to get detailed logs or reports on SSH Export activity, including timestamps and IP addresses?
+---
+
+Issue Summary
+
+When users connect to Bitbucket via SSH, the system performs a check to verify if the user's account is still active in the external authentication system (e.g., LDAP or Crowd). This check is known as the isUserActive check.
+
+What Happens Under High Load?
+
+1. When there are many simultaneous SSH connections (e.g., during peak hours or CI/CD jobs), the isUserActive check creates a bottleneck because:
+
+Bitbucket needs to query the external system for each SSH connection.
+
+These queries are slow and block new SSH connections from being processed.
 
 
-3. Can we differentiate between scheduled builds and manual SSH Exports in Bitbucket?
+
+2. This results in:
+
+Build-up of SSH threads waiting for the isUserActive check to complete.
+
+In Bitbucket versions prior to 5.10: The server may run out of memory (OutOfMemoryError) and crash due to too many threads.
+
+In Bitbucket 5.10 and newer: New SSH connections are rejected until the backlog clears, disrupting developers and CI pipelines.
 
 
-4. Would switching to webhooks reduce SSH traffic, and how can we implement it effectively?
 
 
-5. Are there any tools or plugins in Bitbucket to monitor and control SSH Export usage?
+
+---
+
+Why This Is a Problem
+
+Performance Issues: Slow or failed SSH connections disrupt development and deployment workflows.
+
+System Stability: In older versions, the server might crash, affecting all users.
+
+Business Impact: Development teams and automated processes (e.g., CI/CD) may face delays, affecting project timelines.
 
 
+
+---
+
+Recommended Fixes
+
+Two Workarounds to Resolve the Issue:
+
+
+---
+
+1. Disable the isUserActive Check (Workaround 1)
+
+What Does This Do?
+
+Completely bypasses the isUserActive check, so Bitbucket won’t query the external system (LDAP/Crowd) to confirm if a user is active.
+
+This eliminates the bottleneck caused by high SSH traffic.
+
+
+How to Implement It:
+
+1. Edit the bitbucket.properties file:
+
+Open the file located in:
+
+/var/atlassian/application-data/bitbucket/shared/bitbucket.properties
+
+
+
+2. Add the following line:
+
+auth.remote.enabled=false
+
+
+3. Restart Bitbucket for the changes to take effect:
+
+sudo service bitbucket restart
+
+
+
+Pros:
+
+Immediate performance improvement.
+
+No more SSH connection delays or rejections.
+
+
+Cons:
+
+Security Risk:
+
+Users disabled in LDAP/Crowd may still retain SSH access until their account is manually removed from Bitbucket.
+
+In systems relying on delegated authentication, disabled users could have access indefinitely.
+
+
+
+When to Use This Fix:
+
+Use this workaround if performance is a critical priority and security risks are manageable.
+
+
+
+---
+
+2. Optimize the Cache for isUserActive Checks (Workaround 2)
+
+What Does This Do?
+
+Instead of disabling the isUserActive check, it reduces the load by caching the results of these checks.
+
+Bitbucket will store the user’s status in memory for a certain period (cache time), so it doesn’t have to query LDAP/Crowd for every SSH connection.
+
+
+Steps to Implement:
+
+1. Edit the bitbucket.properties file:
+
+Open the file located in:
+
+/var/atlassian/application-data/bitbucket/shared/bitbucket.properties
+
+
+
+2. Add or modify the following settings:
+
+a. Increase the cache size:
+
+auth.remote.cache.cacheSize=5000
+
+This sets the maximum number of users whose statuses can be cached. Increase it if your organization has more than 5000 users.
+
+
+b. Extend the cache time (TTL):
+
+auth.remote.cache.ttl=600
+
+This sets the cache duration to 10 minutes (600 seconds). Bitbucket will reuse the cached user status for 10 minutes instead of querying LDAP/Crowd for every connection.
+
+
+
+3. Restart Bitbucket for the changes to take effect:
+
+sudo service bitbucket restart
+
+
+
+Pros:
+
+Reduces the frequency of external checks, improving performance.
+
+Maintains some level of user status validation, balancing security and efficiency.
+
+
+Cons:
+
+Users disabled in LDAP/Crowd may still have SSH access for up to 10 minutes (or whatever the cache TTL is set to).
+
+Slightly more complex configuration compared to disabling checks.
+
+
+When to Use This Fix:
+
+Use this workaround if you need a balance between performance and security.
+
+
+
+---
+
+Comparison of the Two Fixes
+
+
+---
+
+Conclusion: Recommended Fix
+
+For Immediate Performance Gains: Disable the isUserActive check if security risks are acceptable.
+
+For Long-Term Stability and Balance: Optimize the cache by increasing the cache size and TTL. This approach provides improved performance while maintaining some level of user status validation.
+
+
+Both fixes aim to reduce the load caused by isUserActive checks, ensuring stable and fast SSH connections for users and CI/CD pipelines.
 
