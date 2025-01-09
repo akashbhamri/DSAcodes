@@ -1,5 +1,50 @@
-index=syf_apps source="/appbin/atlassian/application-data/bitbucket/log/*" "SSH"
-| rex field=_raw "git-upload-pack '?(?<repo>[^']+)'?"
-| bucket _time span=1h
-| stats count by _time, repo
-| xyseries _time repo count
+Here’s a suggestion for your Splunk Dashboard title and description:
+
+
+---
+
+Dashboard Title:
+
+Bitbucket SSH Activity Analysis
+
+Dashboard Description:
+
+This dashboard provides an hourly analysis of SSH activity in Bitbucket. It displays the number of times each repository was accessed via the git-upload-pack command, helping track repository usage trends, identify high-usage repositories, and monitor access patterns.
+
+
+---
+
+Panel Titles and Descriptions:
+
+1️⃣ Panel Title:
+
+Repository Access Count by Hour
+
+Description:
+Displays the number of times each repository was accessed via SSH using the git-upload-pack command, bucketed by hour.
+
+
+---
+
+2️⃣ Panel Title:
+
+Top Accessed Repositories
+
+Description:
+Shows a bar chart of the most accessed repositories based on SSH activity over the selected time range.
+
+
+---
+
+3️⃣ Panel Title:
+
+SSH Access Trends Over Time
+
+Description:
+Visualizes the time-based trend of repository access using the git-upload-pack command, with each repository represented as a separate line.
+
+
+---
+
+Would you like more panels or a step-by-step guide on creating this dashboard?
+
