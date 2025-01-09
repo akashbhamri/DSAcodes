@@ -1,7 +1,5 @@
 index=syf_apps source="/appbin/atlassian/application-data/bitbucket/log/*" "SSH"
-| rex field=_raw "git-upload-pack '?(?<repo>[^']+)'?"
+| rex field=_raw "git-upload-pack '(?<repo>[^']+)'"
 | bucket _time span=1h
-| stats count by _time, repo
-| sort _time
-| top limit=10 repo
-| xyseries _time repo count
+| stats values(repo) as repos by _time
+| xyseries _time repos count
