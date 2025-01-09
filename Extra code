@@ -1,2 +1,5 @@
-TTL Increment refers to increasing the amount of time cached data (such as user authentication status) is considered valid before it needs to be refreshed by querying the external system (e.g., LDAP or Crowd). This helps reduce system load and improve performance by minimizing the frequency of external checks.
-
+index=syf_apps source="/appbin/atlassian/application-data/bitbucket/log/*" "SSH"
+| rex field=_raw "git-upload-pack '?(?<repo>[^']+)'?"
+| bucket _time span=1h
+| stats count by _time, repo
+| sort _time
