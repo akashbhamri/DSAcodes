@@ -1,4 +1,29 @@
-Here's an alternative way to phrase the request:
+Here are some questions to consider before enabling SSH authentication in your Okta-integrated Bitbucket setup:
 
-"We're unable to pinpoint the source of the Java process that's triggering daily CPU alerts, as we don't have the necessary access to investigate further. Could you please raise a vendor request to assist with identifying the origin of this issue? We're currently unable to address the root cause."
+1. LDAP Dependency:
+
+Will SSH authentication in Bitbucket still query LDAP for user status (e.g., isUserActive) even after integration with Okta?
+
+How does Okta influence or bypass the LDAP checks, if at all?
+
+
+
+2. Authentication Flow:
+
+If LDAP is bypassed, what is the exact system or mechanism handling user authentication for SSH connections?
+
+Is there any fallback to LDAP in case of Okta-related issues?
+
+
+
+3. Caching Mechanism:
+
+If user status is still validated via LDAP, does Bitbucket cache the authentication results?
+
+Where is this cache stored, and how long is its Time-to-Live (TTL)?
+
+What happens when the cache expires? Will it automatically refresh by querying LDAP or Okta?
+
+
+
 
