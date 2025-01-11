@@ -1,44 +1,6 @@
-Here are some questions to consider before enabling SSH authentication in your Okta-integrated Bitbucket setup:
+Hi Praneeth,
 
-1. LDAP Dependency:
+We did not receive any notification from the database team during the weekdays regarding the Sonar and CloudBees patching. Despite this, they seem to be proceeding with the patching without prior approval. They mentioned that they have tagged the server and are carrying out the patching.
 
-Will SSH authentication in Bitbucket still query LDAP for user status (e.g., isUserActive) even after integration with Okta?
-
-How does Okta influence or bypass the LDAP checks, if at all?
-
-
-
-2. Authentication Flow:
-
-If LDAP is bypassed, what is the exact system or mechanism handling user authentication for SSH connections?
-
-Is there any fallback to LDAP in case of Okta-related issues?
-
-
-
-3. Caching Mechanism:
-
-If user status is still validated via LDAP, does Bitbucket cache the authentication results?
-
-Where is this cache stored, and how long is its Time-to-Live (TTL)?
-
-What happens when the cache expires? Will it automatically refresh by querying LDAP or Okta?
-
-
-Another important question to address:
-
-How can we verify whether SSH authentication in Bitbucket is using LDAP or Okta for user status checks and authentication?
-
-This could involve:
-
-Reviewing Bitbucket's SSH authentication logs.
-
-Checking configuration files for LDAP or Okta integration settings.
-
-Monitoring network traffic to see if requests are sent to the LDAP server during SSH authentication.
-
-Using test accounts to trace the authentication flow.
-
-
-
+Let me know if any changes are needed.
 
