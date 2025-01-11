@@ -1,6 +1,6 @@
-Hi Praneeth,
+Hi,
 
-We did not receive any notification from the database team during the weekdays regarding the Sonar and CloudBees patching. Despite this, they seem to be proceeding with the patching without prior approval. They mentioned that they have tagged the server and are carrying out the patching.
+The patching has been completed, and both CloudBees and Sonar are working fine. I’ll drop an email requesting them to include us in weekday patching communications moving forward.
 
-Let me know if any changes are needed.
+Just a quick FYI.
 
