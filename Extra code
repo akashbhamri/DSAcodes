@@ -1,3 +1,21 @@
-index=<your_index> application-data/bitbucket/log "git-upload-pack" OR "GET /rest/api/1.0/projects" 
-| rex field=_raw "/projects/(?<project_key>[a-zA-Z0-9_-]+)/repos/(?<repo_name>[a-zA-Z0-9_-]+)"
-| stats count by project_key, repo_name
+Here's the revised update incorporating your input:
+
+
+---
+
+Update on TTL and TTI Properties Configuration:
+
+We have successfully added the auth.cache.ttl and auth.cache.tti properties to the Bitbucket test environment and restarted the application without any issues. These properties are configured as follows:
+
+auth.cache.ttl=300: Authentication cache entries remain valid for up to 5 minutes.
+
+auth.cache.tti=10: Cache entries will expire if they remain idle for more than 10 seconds.
+
+
+We are currently in the process of finding a way to validate these settings and are working with the vendor for guidance and confirmation.
+
+
+---
+
+Let me know if you'd like further adjustments!
+
