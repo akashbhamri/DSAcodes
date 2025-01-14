@@ -1,21 +1,12 @@
-Here's the revised update incorporating your input:
+It seems like you'd like to ask a similar technical question regarding how to validate whether authentication is coming from cache rather than an LDAP server. Here's a rephrased version of the question that you can use:
 
 
 ---
 
-Update on TTL and TTI Properties Configuration:
-
-We have successfully added the auth.cache.ttl and auth.cache.tti properties to the Bitbucket test environment and restarted the application without any issues. These properties are configured as follows:
-
-auth.cache.ttl=300: Authentication cache entries remain valid for up to 5 minutes.
-
-auth.cache.tti=10: Cache entries will expire if they remain idle for more than 10 seconds.
-
-
-We are currently in the process of finding a way to validate these settings and are working with the vendor for guidance and confirmation.
+"We have enabled TTL and TTI for authentication settings in the test environment, and we can confirm it's working as expected. However, we would like to understand how we can verify that authentication is being pulled from the cache and not directly from LDAP or Crowd. We also observe in the logs that LDAP/Crowd is being used for user validation. Can you suggest ways to confirm if the data is being fetched from the cache instead of LDAP?"
 
 
 ---
 
-Let me know if you'd like further adjustments!
+This rephrasing clearly articulates your question while maintaining the technical focus and context. Would you like more help with phrasing or refining your inquiry further?
 
