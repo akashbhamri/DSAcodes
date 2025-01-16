@@ -1,24 +1,19 @@
-It seems like you'd like to ask a similar technical question regarding how to validate whether authentication is coming from cache rather than an LDAP server. Here's a rephrased version of the question that you can use:
+Here’s a more polished and professional version:
 
 
 ---
 
-"We have enabled TTL and TTI for authentication settings in the test environment, and we can confirm it's working as expected. However, we would like to understand how we can verify that authentication is being pulled from the cache and not directly from LDAP or Crowd. We also observe in the logs that LDAP/Crowd is being used for user validation. Can you suggest ways to confirm if the data is being fetched from the cache instead of LDAP?"
+Hi Srikanath,
+
+I have successfully added the property and restarted the Bitbucket Dev service. Please proceed with further validation from the platform team's side in the Bitbucket Dev environment. Once confirmed, you can replicate the changes in the production environment to ensure the issue is resolved.
+
+Praneeth,
+After thorough research and discussions with the vendor, it was confirmed that there is no mechanism to verify whether the system authenticates using LDAP or retrieves data from the cache following the property addition. We recommend monitoring the application's performance, and if the Hikari pool issue occurs again, we can coordinate further with the vendor.
+
+The TTL and TTI values were referred from the official Atlassian Confluence documentation. Please let us know if any adjustments are required.
 
 
 ---
 
-This rephrasing clearly articulates your question while maintaining the technical focus and context. Would you like more help with phrasing or refining your inquiry further?
-
-It seems like you're trying to express that there haven't been any issues when restarting the service after making changes, but the sentence needs a little clarification. Here's a rephrased version:
-
-
----
-
-"We haven't faced any issues when restarting the service after making the necessary changes."
-
-
----
-
-Does this fit what you meant? If you need additional tweaks, feel free to let me know!
+Let me know your thoughts!
 
