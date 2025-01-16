@@ -1,19 +1,14 @@
-Here’s a more polished and professional version:
+Here’s a refined version:
 
 
 ---
 
-Hi Srikanath,
+The Platform Team is currently validating the functionality in the Dev environment after adding the properties. If everything works as expected in Dev, they will proceed to implement the changes in the production environment.
 
-I have successfully added the property and restarted the Bitbucket Dev service. Please proceed with further validation from the platform team's side in the Bitbucket Dev environment. Once confirmed, you can replicate the changes in the production environment to ensure the issue is resolved.
-
-Praneeth,
-After thorough research and discussions with the vendor, it was confirmed that there is no mechanism to verify whether the system authenticates using LDAP or retrieves data from the cache following the property addition. We recommend monitoring the application's performance, and if the Hikari pool issue occurs again, we can coordinate further with the vendor.
-
-The TTL and TTI values were referred from the official Atlassian Confluence documentation. Please let us know if any adjustments are required.
+Post-deployment, the Monitoring Team will observe whether the SSH high traffic and Hikari pool exhaustion issues are resolved. If these issues persist, we will engage with the vendor again for further resolution.
 
 
 ---
 
-Let me know your thoughts!
+Let me know if you’d like any adjustments!
 
