@@ -1,14 +1,36 @@
-Here’s a refined version:
+Certainly! Here’s a clearer version of your Jira description:
 
 
 ---
 
-The Platform Team is currently validating the functionality in the Dev environment after adding the properties. If everything works as expected in Dev, they will proceed to implement the changes in the production environment.
+Description:
 
-Post-deployment, the Monitoring Team will observe whether the SSH high traffic and Hikari pool exhaustion issues are resolved. If these issues persist, we will engage with the vendor again for further resolution.
+We need to enable the following configurations in the production environment:
+
+TTL (Time to Live): This setting controls how long data or sessions are retained in the system before being automatically expired. Enabling TTL ensures that outdated data does not consume resources.
+
+TTI (Time to Integration): This setting ensures that data is processed and integrated within the system in a timely manner. Enabling TTI will improve data flow and reduce delays in integration.
+
+
+Action Plan:
+
+1. Review the current production configuration to ensure compatibility with TTL and TTI settings.
+
+
+2. Enable TTL and TTI in the production environment as per the guidelines.
+
+
+3. Perform testing in a staging environment to validate the changes before deployment.
+
+
+4. Monitor system performance post-deployment to ensure there are no issues.
+
+
+
+Please prioritize this task and provide updates on the progress.
 
 
 ---
 
-Let me know if you’d like any adjustments!
+This version should be more straightforward and detailed for your Jira ticket.
 
