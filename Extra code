@@ -1,16 +1,41 @@
-It sounds like there might be some confusion or miscommunication, especially if the query ran recently (on 18th Jan), and yet no history is available. In this case, you can rephrase your request to emphasize the importance of understanding the query’s execution timeline, especially since it was clearly executed on the 18th of January. You might ask something like this:
-
-index=syf-index source="/appbin/atlassian/application-data/bitbucket/log" host=vdlrlctapda07 "Authenticated" "SVC-APP-RLCT"
-| timechart span=1w count as Weekly_Count
-| where _time >= relative_time(now(), "-3mon@w")
----
-
-Updated Request to DB Team:
-
-"I understand that the SQL query with ID g234fws98gsc ran on the 18th of January, but I’m concerned that there is no historical data available for its earlier executions. Can you confirm whether there are any records or logs that show when the query first began executing on the server (vplrlctadbda02)? Specifically, I'm asking for the earliest available execution date and the activity pattern, as it seems odd that the history isn’t recorded for such recent activity."
+When asking the vendor to review logs and check SSH traffic, here's how you can phrase your request for clarity and thoroughness:
 
 
 ---
 
-This clarifies that you're aware the query ran recently and emphasizes the need to look for any potential data that could explain its earlier executions. It also puts the onus on the team to check further for any logs or records they might have missed.
+Additional Details for the Vendor
+
+1. Logs Analysis:
+
+We have attached the logs from our Dev environment.
+
+Can you review these logs for any errors or irregularities, particularly those related to authentication, SSH traffic, and LDAP synchronization, after enabling TTI and TTL?
+
+
+
+2. SSH Traffic:
+
+Can you check if there are any issues or anomalies in the SSH traffic, such as failed handshakes, timeouts, or authentication errors?
+
+Are there any specific network configurations we should validate to ensure SSH traffic works seamlessly with the TTI/TTL settings?
+
+
+
+3. Error Observations:
+
+Are there any specific errors or warnings in the logs that could point to a misconfiguration or conflict between the TTI/TTL settings and LDAP authentication?
+
+
+
+4. Recommendations:
+
+Based on the logs and traffic analysis, can you provide any recommendations or steps to resolve this issue?
+
+
+
+
+
+---
+
+Make sure to attach the logs in a structured format and highlight any suspicious entries you may have observed. This ensures the vendor can prioritize their analysis.
 
