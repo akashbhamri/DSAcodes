@@ -1,6 +1,8 @@
 It sounds like there might be some confusion or miscommunication, especially if the query ran recently (on 18th Jan), and yet no history is available. In this case, you can rephrase your request to emphasize the importance of understanding the query’s execution timeline, especially since it was clearly executed on the 18th of January. You might ask something like this:
 
-
+index=syf-index source="/appbin/atlassian/application-data/bitbucket/log" host=vdlrlctapda07 "Authenticated" "SVC-APP-RLCT"
+| timechart span=1w count as Weekly_Count
+| where _time >= relative_time(now(), "-3mon@w")
 ---
 
 Updated Request to DB Team:
