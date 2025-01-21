@@ -1,0 +1,105 @@
+pipeline {
+    agent any
+    parameters {
+        string(name: 'SERVER_IPs', description: 'Comma-separated list of server IPs') // Input server IPs
+        string(name: 'USERNAME', description: 'Username for SSH') // Input username
+    }
+    environment {
+        OUTPUT_FILE = "${WORKSPACE}/Capacity_Planning_Sheet.csv" // Output file path
+    }
+    stages {
+        stage('Initialize CSV File') {
+            steps {
+                script {
+                    // Initialize the CSV file with headers
+                    def headers = "Tool Name,Server IP,Environment,Hostname,OS Name,OS Version,CPU Cores,Memory Total,Memory Used,Memory Free,Swap Total,Swap Used,Swap Free,Appdata Mount,Appdata Size,Appdata Used,Appdata Free,Appbin Mount,Appbin Size,Appbin Used,Appbin Free,Temp Size,Temp Used,Temp Free,Root Size,Root Used,Root Free"
+                    writeFile file: env.OUTPUT_FILE, text: "${headers}\n"
+                }
+            }
+        }
+        stage('Fetch Server Data') {
+            steps {
+                script {
+                    // Split the SERVER_IPs parameter into an array
+                    def serverIPs = params.SERVER_IPs.split(',')
+
+                    // Loop through each server IP and fetch data
+                    serverIPs.each { serverIP ->
+                        try {
+                            echo "Fetching data from ${serverIP}..."
+                            
+                            // Execute SSH command to fetch server information
+                            def result = sh(
+                                script: """
+                                    ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${params.USERNAME}@${serverIP} bash -s << 'EOF'
+                                        HOSTNAME=\$(hostname)
+
+                                        # Determine environment
+                                        if [[ "\$HOSTNAME" =~ ^pp* ]]; then
+                                            ENVIRONMENT="Production"
+                                        elif [[ "\$HOSTNAME" =~ ^dr* ]]; then
+                                            ENVIRONMENT="Disaster Recovery"
+                                        elif [[ "\$HOSTNAME" =~ ^vd* ]]; then
+                                            ENVIRONMENT="Development"
+                                        else
+                                            ENVIRONMENT="Unknown"
+                                        fi
+
+                                        # Get OS name and version
+                                        OS_NAME=\$(lsb_release -i | awk -F: '{print \$2}' | xargs)
+                                        OS_VERSION=\$(lsb_release -r | awk -F: '{print \$2}' | xargs)
+
+                                        # Get hardware information
+                                        CPU_CORES=\$(nproc)
+                                        MEMORY_TOTAL=\$(free -h | awk '/Mem:/ {print \$2}')
+                                        MEMORY_USED=\$(free -h | awk '/Mem:/ {print \$3}')
+                                        MEMORY_FREE=\$(free -h | awk '/Mem:/ {print \$4}')
+                                        SWAP_TOTAL=\$(free -h | awk '/Swap:/ {print \$2}')
+                                        SWAP_USED=\$(free -h | awk '/Swap:/ {print \$3}')
+                                        SWAP_FREE=\$(free -h | awk '/Swap:/ {print \$4}')
+
+                                        # Function to get disk usage
+                                        get_disk_usage() {
+                                            local PATH=\$1
+                                            if [ -d "\$PATH" ]; then
+                                                df -h "\$PATH" | awk 'NR==2 {print \$2 "," \$3 "," \$4}'
+                                            else
+                                                echo "Not Available,Not Available,Not Available"
+                                            fi
+                                        }
+
+                                        # Function to get mount point
+                                        get_mount_point() {
+                                            local PATH=\$1
+                                            df -h "\$PATH" | awk 'NR==2 {print \$1}'
+                                        }
+
+                                        APPDATA_MOUNT=\$(get_mount_point /appdata)
+                                        APPBIN_MOUNT=\$(get_mount_point /appbin)
+                                        APPDATA=\$(get_disk_usage /appdata)
+                                        APPBIN=\$(get_disk_usage /appbin)
+                                        TMP=\$(get_disk_usage /tmp)
+                                        ROOT=\$(get_disk_usage /)
+
+                                        echo "\$ENVIRONMENT,\$HOSTNAME,\$OS_NAME,\$OS_VERSION,\$CPU_CORES,\$MEMORY_TOTAL,\$MEMORY_USED,\$MEMORY_FREE,\$SWAP_TOTAL,\$SWAP_USED,\$SWAP_FREE,\$APPDATA_MOUNT,\$APPDATA,\$APPBIN_MOUNT,\$APPBIN,\$TMP,\$ROOT"
+                                    EOF
+                                """,
+                                returnStdout: true
+                            ).trim()
+
+                            // Append the result to the CSV file
+                            writeFile file: env.OUTPUT_FILE, text: "${serverIP},${result}\n", append: true
+                        } catch (Exception e) {
+                            echo "Failed to fetch data from ${serverIP}: ${e.message}"
+                        }
+                    }
+                }
+            }
+        }
+        stage('Complete') {
+            steps {
+                echo "Data collection complete. Output saved to ${env.OUTPUT_FILE}."
+            }
+        }
+    }
+}
