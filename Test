@@ -1,0 +1,26 @@
+Here’s a revised explanation of the issue and the requirement:
+
+
+---
+
+Scenario:
+During weekends or off-hours, there are instances where the Jenkins controller and its connected agents (slaves) face issues, and no one with the necessary permissions is available to resolve them. This results in delays and interruptions in critical pipeline activities.
+
+Request:
+To avoid such situations, limited access should be provided to the relevant team members. Specifically:
+
+1. Controller-Level Access: To restart the Jenkins controller if needed.
+
+
+2. Agent-Level Access: To restart Jenkins agents (slaves) in case they become unresponsive or fail to communicate with the controller.
+
+
+
+This will ensure the team can handle basic troubleshooting during critical times without dependency on specific individuals.
+
+
+---
+
+Let me know if you'd like further refinements!
+
+
