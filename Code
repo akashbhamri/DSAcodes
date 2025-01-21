@@ -85,12 +85,7 @@ echo "</table>" >> "$EMAIL_BODY"
 echo "<p>Regards,<br>DevOps Team</p>" >> "$EMAIL_BODY"
 echo "</body></html>" >> "$EMAIL_BODY"
 
-# Send email using Jenkins' email plugin
-emailext(
-  subject: "High Utilization Alert",
-  body: "$(cat $EMAIL_BODY)",
-  mimeType: 'text/html',
-  to: "team@example.com"
-)
+# Send email using the mail command
+mail -a "Content-Type: text/html" -s "High Utilization Alert" "team@example.com" < "$EMAIL_BODY"
 
 echo "Data collection and email alert process completed."
