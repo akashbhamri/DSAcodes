@@ -64,13 +64,18 @@ pipeline {
                             ).trim()
 
                             def (hostname, environment, appbin, appdata, tmp, root) = result.split(',')
-                            echo "Received data: ${hostname}, ${environment}, ${appbin}, ${appdata}, ${tmp}, ${root}"
+                            echo "Parsed Data -> Host: ${hostname}, Env: ${environment}, Appbin: ${appbin}%, Appdata: ${appdata}%, Tmp: ${tmp}%, Root: ${root}%"
 
-                            // Append to email body if utilization is above the threshold
-                            if ([appbin, appdata, tmp, root].any { it.toInteger() >= env.ALERT_THRESHOLD }) {
-                                def rowColor = "background-color: #ffcccc;"
+                            // Convert to integer and check utilization
+                            def appbinInt = appbin?.isInteger() ? appbin.toInteger() : 0
+                            def appdataInt = appdata?.isInteger() ? appdata.toInteger() : 0
+                            def tmpInt = tmp?.isInteger() ? tmp.toInteger() : 0
+                            def rootInt = root?.isInteger() ? root.toInteger() : 0
+
+                            if ([appbinInt, appdataInt, tmpInt, rootInt].any { it >= env.ALERT_THRESHOLD }) {
+                                echo "High utilization detected on ${hostname}"
                                 appendToFile(env.EMAIL_BODY, """
-                                    <tr style='${rowColor}'>
+                                    <tr style='background-color: #ffcccc;'>
                                         <td style='border: 1px solid black; padding: 8px;'>${hostname}</td>
                                         <td style='border: 1px solid black; padding: 8px;'>${environment}</td>
                                         <td style='border: 1px solid black; padding: 8px;'>${appbin}%</td>
