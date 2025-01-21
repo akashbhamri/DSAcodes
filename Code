@@ -1,94 +1,87 @@
 pipeline {
     agent any
     parameters {
-        string(name: 'SERVER_IPs', description: 'Comma-separated list of server IPs') // Input server IPs
-        string(name: 'USERNAME', description: 'Username for SSH') // Input username
+        string(name: 'SERVER_IPs', description: 'Comma-separated list of server IPs')
+        string(name: 'USERNAME', description: 'Username for SSH')
     }
     environment {
-        OUTPUT_FILE = "${WORKSPACE}/Capacity_Planning_Sheet.csv" // Output file path
+        OUTPUT_FILE = "${WORKSPACE}/Capacity_Planning_Sheet.csv"
+        EMAIL_BODY = "${WORKSPACE}/email_body.html"
+        ALERT_THRESHOLD = 75 // Disk utilization threshold
     }
     stages {
-        stage('Initialize CSV File') {
+        stage('Initialize Email Body') {
             steps {
                 script {
-                    // Initialize the CSV file with headers
-                    def headers = "Tool Name,Server IP,Environment,Hostname,OS Name,OS Version,CPU Cores,Memory Total,Memory Used,Memory Free,Swap Total,Swap Used,Swap Free,Appdata Mount,Appdata Size,Appdata Used,Appdata Free,Appbin Mount,Appbin Size,Appbin Used,Appbin Free,Temp Size,Temp Used,Temp Free,Root Size,Root Used,Root Free"
-                    writeFile file: env.OUTPUT_FILE, text: "${headers}\n"
+                    // Initialize the HTML email content
+                    writeFile file: "${env.EMAIL_BODY}", text: """
+                        <html><body>
+                        <p>Hello Team,</p>
+                        <p>Below is the list of servers with utilization above ${env.ALERT_THRESHOLD}%:</p>
+                        <table style='border-collapse: collapse; width: 100%;'>
+                        <tr>
+                            <th style='border: 1px solid black; padding: 8px;'>Server Name</th>
+                            <th style='border: 1px solid black; padding: 8px;'>Environment</th>
+                            <th style='border: 1px solid black; padding: 8px;'>Appbin (%)</th>
+                            <th style='border: 1px solid black; padding: 8px;'>Appdata (%)</th>
+                            <th style='border: 1px solid black; padding: 8px;'>Tmp (%)</th>
+                            <th style='border: 1px solid black; padding: 8px;'>Root (%)</th>
+                        </tr>
+                    """
                 }
             }
         }
         stage('Fetch Server Data') {
             steps {
                 script {
-                    // Split the SERVER_IPs parameter into an array
                     def serverIPs = params.SERVER_IPs.split(',')
-
-                    // Loop through each server IP and fetch data
                     serverIPs.each { serverIP ->
                         try {
                             echo "Fetching data from ${serverIP}..."
-                            
-                            // Execute SSH command to fetch server information
                             def result = sh(
                                 script: """
-                                    ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${params.USERNAME}@${serverIP} bash -s << 'EOF'
-                                        HOSTNAME=\$(hostname)
+                                    ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${params.USERNAME}@${serverIP} << EOF
+                                    HOSTNAME=\$(hostname)
 
-                                        # Determine environment
-                                        if [[ "\$HOSTNAME" =~ ^pp* ]]; then
-                                            ENVIRONMENT="Production"
-                                        elif [[ "\$HOSTNAME" =~ ^dr* ]]; then
-                                            ENVIRONMENT="Disaster Recovery"
-                                        elif [[ "\$HOSTNAME" =~ ^vd* ]]; then
-                                            ENVIRONMENT="Development"
-                                        else
-                                            ENVIRONMENT="Unknown"
-                                        fi
+                                    # Determine environment
+                                    if [[ "\$HOSTNAME" =~ ^pp* ]]; then
+                                        ENVIRONMENT="Production"
+                                    elif [[ "\$HOSTNAME" =~ ^dr* ]]; then
+                                        ENVIRONMENT="Disaster Recovery"
+                                    elif [[ "\$HOSTNAME" =~ ^vd* ]]; then
+                                        ENVIRONMENT="Development"
+                                    else
+                                        ENVIRONMENT="Unknown"
+                                    fi
 
-                                        # Get OS name and version
-                                        OS_NAME=\$(lsb_release -i | awk -F: '{print \$2}' | xargs)
-                                        OS_VERSION=\$(lsb_release -r | awk -F: '{print \$2}' | xargs)
+                                    # Disk usage as percentages
+                                    APPBIN=\$(/bin/df -h /appbin 2>/dev/null | /bin/awk 'NR==2 {gsub("%",""); print \$5}')
+                                    APPDATA=\$(/bin/df -h /appdata 2>/dev/null | /bin/awk 'NR==2 {gsub("%",""); print \$5}')
+                                    TMP=\$(/bin/df -h /tmp 2>/dev/null | /bin/awk 'NR==2 {gsub("%",""); print \$5}')
+                                    ROOT=\$(/bin/df -h / 2>/dev/null | /bin/awk 'NR==2 {gsub("%",""); print \$5}')
 
-                                        # Get hardware information
-                                        CPU_CORES=\$(nproc)
-                                        MEMORY_TOTAL=\$(free -h | awk '/Mem:/ {print \$2}')
-                                        MEMORY_USED=\$(free -h | awk '/Mem:/ {print \$3}')
-                                        MEMORY_FREE=\$(free -h | awk '/Mem:/ {print \$4}')
-                                        SWAP_TOTAL=\$(free -h | awk '/Swap:/ {print \$2}')
-                                        SWAP_USED=\$(free -h | awk '/Swap:/ {print \$3}')
-                                        SWAP_FREE=\$(free -h | awk '/Swap:/ {print \$4}')
-
-                                        # Function to get disk usage
-                                        get_disk_usage() {
-                                            local PATH=\$1
-                                            if [ -d "\$PATH" ]; then
-                                                df -h "\$PATH" | awk 'NR==2 {print \$2 "," \$3 "," \$4}'
-                                            else
-                                                echo "Not Available,Not Available,Not Available"
-                                            fi
-                                        }
-
-                                        # Function to get mount point
-                                        get_mount_point() {
-                                            local PATH=\$1
-                                            df -h "\$PATH" | awk 'NR==2 {print \$1}'
-                                        }
-
-                                        APPDATA_MOUNT=\$(get_mount_point /appdata)
-                                        APPBIN_MOUNT=\$(get_mount_point /appbin)
-                                        APPDATA=\$(get_disk_usage /appdata)
-                                        APPBIN=\$(get_disk_usage /appbin)
-                                        TMP=\$(get_disk_usage /tmp)
-                                        ROOT=\$(get_disk_usage /)
-
-                                        echo "\$ENVIRONMENT,\$HOSTNAME,\$OS_NAME,\$OS_VERSION,\$CPU_CORES,\$MEMORY_TOTAL,\$MEMORY_USED,\$MEMORY_FREE,\$SWAP_TOTAL,\$SWAP_USED,\$SWAP_FREE,\$APPDATA_MOUNT,\$APPDATA,\$APPBIN_MOUNT,\$APPBIN,\$TMP,\$ROOT"
+                                    echo "\$HOSTNAME,\$ENVIRONMENT,\$APPBIN,\$APPDATA,\$TMP,\$ROOT"
                                     EOF
                                 """,
                                 returnStdout: true
                             ).trim()
 
-                            // Append the result to the CSV file
-                            writeFile file: env.OUTPUT_FILE, text: "${serverIP},${result}\n", append: true
+                            def (hostname, environment, appbin, appdata, tmp, root) = result.split(',')
+
+                            // Check utilization and append to email body
+                            if (appbin.toInteger() >= env.ALERT_THRESHOLD || appdata.toInteger() >= env.ALERT_THRESHOLD || tmp.toInteger() >= env.ALERT_THRESHOLD || root.toInteger() >= env.ALERT_THRESHOLD) {
+                                def rowColor = "background-color: #ffcccc;" // Highlight high utilization rows
+                                appendToFile(env.EMAIL_BODY, """
+                                    <tr style='${rowColor}'>
+                                        <td style='border: 1px solid black; padding: 8px;'>${hostname}</td>
+                                        <td style='border: 1px solid black; padding: 8px;'>${environment}</td>
+                                        <td style='border: 1px solid black; padding: 8px;'>${appbin}%</td>
+                                        <td style='border: 1px solid black; padding: 8px;'>${appdata}%</td>
+                                        <td style='border: 1px solid black; padding: 8px;'>${tmp}%</td>
+                                        <td style='border: 1px solid black; padding: 8px;'>${root}%</td>
+                                    </tr>
+                                """)
+                            }
                         } catch (Exception e) {
                             echo "Failed to fetch data from ${serverIP}: ${e.message}"
                         }
@@ -96,10 +89,30 @@ pipeline {
                 }
             }
         }
-        stage('Complete') {
+        stage('Finalize Email Content') {
             steps {
-                echo "Data collection complete. Output saved to ${env.OUTPUT_FILE}."
+                script {
+                    appendToFile(env.EMAIL_BODY, """
+                        </table>
+                        <p>Regards,<br>DevOps Team</p>
+                        </body></html>
+                    """)
+                }
+            }
+        }
+        stage('Send Email') {
+            steps {
+                emailext(
+                    subject: "High Utilization Alert",
+                    body: readFile(env.EMAIL_BODY),
+                    mimeType: 'text/html',
+                    to: 'team@example.com'
+                )
             }
         }
     }
+}
+
+def appendToFile(filePath, content) {
+    writeFile file: filePath, text: readFile(filePath) + content
 }
