@@ -1,91 +1,113 @@
-#!/bin/bash
+pipeline {
+    agent any
+    parameters {
+        string(name: 'SERVER_IPs', description: 'Comma-separated list of server IPs')
+        string(name: 'USERNAME', description: 'Username for SSH')
+    }
+    environment {
+        OUTPUT_FILE = "${WORKSPACE}/Capacity_Planning_Sheet.csv"
+        EMAIL_BODY = "${WORKSPACE}/email_body.html"
+    }
+    stages {
+        stage('Initialize Email Body') {
+            steps {
+                script {
+                    // Initialize the HTML email content
+                    writeFile file: "${env.EMAIL_BODY}", text: """
+                        <html><body>
+                        <p>Hello Team,</p>
+                        <p>Below is the list of servers with utilization above 75%:</p>
+                        <table style='border-collapse: collapse; width: 100%;'>
+                        <tr>
+                            <th style='border: 1px solid black; padding: 8px;'>Server Name</th>
+                            <th style='border: 1px solid black; padding: 8px;'>Environment</th>
+                            <th style='border: 1px solid black; padding: 8px;'>Appbin (%)</th>
+                            <th style='border: 1px solid black; padding: 8px;'>Appdata (%)</th>
+                            <th style='border: 1px solid black; padding: 8px;'>Tmp (%)</th>
+                            <th style='border: 1px solid black; padding: 8px;'>Root (%)</th>
+                        </tr>
+                    """
+                }
+            }
+        }
+        stage('Fetch Server Data') {
+            steps {
+                script {
+                    def serverIPs = params.SERVER_IPs.split(',')
+                    serverIPs.each { serverIP ->
+                        def result = sh(
+                            script: """
+                                ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${params.USERNAME}@${serverIP} << EOF
+                                HOSTNAME=\$(hostname)
 
-# Accept parameters from Jenkins
-SERVER_IPs="$1" # List of server IPs from Jenkins string parameter
-USERNAME="$2"   # Username from Jenkins
+                                # Determine environment
+                                if [[ "\$HOSTNAME" =~ ^pp* ]]; then
+                                    ENVIRONMENT="Production"
+                                elif [[ "\$HOSTNAME" =~ ^dr* ]]; then
+                                    ENVIRONMENT="Disaster Recovery"
+                                elif [[ "\$HOSTNAME" =~ ^vd* ]]; then
+                                    ENVIRONMENT="Development"
+                                else
+                                    ENVIRONMENT="Unknown"
+                                fi
 
-# Output CSV file
-OUTPUT_FILE="$WORKSPACE/Capacity_Planning_Sheet.csv"
+                                # Disk usage as percentages
+                                APPBIN=\$(df -h /appbin 2>/dev/null | awk 'NR==2 {gsub("%",""); print \$5}')
+                                APPDATA=\$(df -h /appdata 2>/dev/null | awk 'NR==2 {gsub("%",""); print \$5}')
+                                TMP=\$(df -h /tmp 2>/dev/null | awk 'NR==2 {gsub("%",""); print \$5}')
+                                ROOT=\$(df -h / 2>/dev/null | awk 'NR==2 {gsub("%",""); print \$5}')
 
-# Email content
-EMAIL_BODY="$WORKSPACE/email_body.html"
+                                echo "\$HOSTNAME,\$ENVIRONMENT,\$APPBIN,\$APPDATA,\$TMP,\$ROOT"
+                                EOF
+                            """,
+                            returnStdout: true
+                        ).trim()
 
-# Initialize email content
-echo "<html><body>" > "$EMAIL_BODY"
-echo "<p>Hello Team,</p>" >> "$EMAIL_BODY"
-echo "<p>Below is the list of servers with utilization above 75%:</p>" >> "$EMAIL_BODY"
-echo "<table style='border-collapse: collapse; width: 100%;'> 
-<tr>
-  <th style='border: 1px solid black; padding: 8px;'>Server Name</th>
-  <th style='border: 1px solid black; padding: 8px;'>Environment</th>
-  <th style='border: 1px solid black; padding: 8px;'>Appbin (%)</th>
-  <th style='border: 1px solid black; padding: 8px;'>Appdata (%)</th>
-  <th style='border: 1px solid black; padding: 8px;'>Tmp (%)</th>
-  <th style='border: 1px solid black; padding: 8px;'>Root (%)</th>
-</tr>" >> "$EMAIL_BODY"
+                        def (hostname, environment, appbin, appdata, tmp, root) = result.split(',')
 
-# Function to fetch server data
-fetch_data() {
-  local SERVER_IP=$1
-  SERVER_INFO=$(ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no "$USERNAME@$SERVER_IP" bash -s << 'ENDSSH'
-    HOSTNAME=$(hostname)
-
-    # Determine environment
-    if [[ "$HOSTNAME" =~ ^pp* ]]; then
-        ENVIRONMENT="Production"
-    elif [[ "$HOSTNAME" =~ ^dr* ]]; then
-        ENVIRONMENT="Disaster Recovery"
-    elif [[ "$HOSTNAME" =~ ^vd* ]]; then
-        ENVIRONMENT="Development"
-    else
-        ENVIRONMENT="Unknown"
-    fi
-
-    # Disk usage as percentages
-    APPBIN=$(df -h /appbin 2>/dev/null | awk 'NR==2 {gsub("%",""); print $5}')
-    APPDATA=$(df -h /appdata 2>/dev/null | awk 'NR==2 {gsub("%",""); print $5}')
-    TMP=$(df -h /tmp 2>/dev/null | awk 'NR==2 {gsub("%",""); print $5}')
-    ROOT=$(df -h / 2>/dev/null | awk 'NR==2 {gsub("%",""); print $5}')
-
-    echo "$HOSTNAME,$ENVIRONMENT,$APPBIN,$APPDATA,$TMP,$ROOT"
-ENDSSH
-)
-
-  # Parse server info
-  HOSTNAME=$(echo "$SERVER_INFO" | cut -d',' -f1)
-  ENVIRONMENT=$(echo "$SERVER_INFO" | cut -d',' -f2)
-  APPBIN=$(echo "$SERVER_INFO" | cut -d',' -f3)
-  APPDATA=$(echo "$SERVER_INFO" | cut -d',' -f4)
-  TMP=$(echo "$SERVER_INFO" | cut -d',' -f5)
-  ROOT=$(echo "$SERVER_INFO" | cut -d',' -f6)
-
-  # Check for high utilization
-  if [ "$APPBIN" -ge 75 ] || [ "$APPDATA" -ge 75 ] || [ "$TMP" -ge 75 ] || [ "$ROOT" -ge 75 ]; then
-    # Highlight rows with red background for high utilization
-    ROW_COLOR="background-color: #ffcccc;"
-    echo "<tr style='$ROW_COLOR'>
-      <td style='border: 1px solid black; padding: 8px;'>$HOSTNAME</td>
-      <td style='border: 1px solid black; padding: 8px;'>$ENVIRONMENT</td>
-      <td style='border: 1px solid black; padding: 8px;'>$APPBIN%</td>
-      <td style='border: 1px solid black; padding: 8px;'>$APPDATA%</td>
-      <td style='border: 1px solid black; padding: 8px;'>$TMP%</td>
-      <td style='border: 1px solid black; padding: 8px;'>$ROOT%</td>
-    </tr>" >> "$EMAIL_BODY"
-  fi
+                        // Check utilization and append to email body
+                        if (appbin.toInteger() >= 75 || appdata.toInteger() >= 75 || tmp.toInteger() >= 75 || root.toInteger() >= 75) {
+                            def rowColor = "background-color: #ffcccc;"
+                            appendToFile(env.EMAIL_BODY, """
+                                <tr style='${rowColor}'>
+                                    <td style='border: 1px solid black; padding: 8px;'>${hostname}</td>
+                                    <td style='border: 1px solid black; padding: 8px;'>${environment}</td>
+                                    <td style='border: 1px solid black; padding: 8px;'>${appbin}%</td>
+                                    <td style='border: 1px solid black; padding: 8px;'>${appdata}%</td>
+                                    <td style='border: 1px solid black; padding: 8px;'>${tmp}%</td>
+                                    <td style='border: 1px solid black; padding: 8px;'>${root}%</td>
+                                </tr>
+                            """)
+                        }
+                    }
+                }
+            }
+        }
+        stage('Finalize Email Content') {
+            steps {
+                script {
+                    appendToFile(env.EMAIL_BODY, """
+                        </table>
+                        <p>Regards,<br>DevOps Team</p>
+                        </body></html>
+                    """)
+                }
+            }
+        }
+        stage('Send Email') {
+            steps {
+                emailext(
+                    subject: "High Utilization Alert",
+                    body: readFile(env.EMAIL_BODY),
+                    mimeType: 'text/html',
+                    to: 'team@example.com'
+                )
+            }
+        }
+    }
 }
 
-# Process each server IP
-IFS=',' read -ra ADDR <<< "$SERVER_IPs"
-for SERVER_IP in "${ADDR[@]}"; do
-  fetch_data "$SERVER_IP"
-done
-
-# Finalize email content
-echo "</table>" >> "$EMAIL_BODY"
-echo "<p>Regards,<br>DevOps Team</p>" >> "$EMAIL_BODY"
-echo "</body></html>" >> "$EMAIL_BODY"
-
-# Send email using the mail command
-mail -a "Content-Type: text/html" -s "High Utilization Alert" "team@example.com" < "$EMAIL_BODY"
-
-echo "Data collection and email alert process completed."
+def appendToFile(filePath, content) {
+    def file = new File(filePath)
+    file.append(content)
+}
