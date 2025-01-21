@@ -13,7 +13,6 @@ pipeline {
         stage('Initialize Email Body') {
             steps {
                 script {
-                    // Initialize the HTML email content
                     writeFile file: "${env.EMAIL_BODY}", text: """
                         <html><body>
                         <p>Hello Team,</p>
@@ -40,10 +39,9 @@ pipeline {
                             echo "Fetching data from ${serverIP}..."
                             def result = sh(
                                 script: """
-                                    ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${params.USERNAME}@${serverIP} << EOF
+                                    ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${params.USERNAME}@${serverIP} bash -s << 'EOF'
                                     HOSTNAME=\$(hostname)
-
-                                    # Determine environment
+                                    
                                     if [[ "\$HOSTNAME" =~ ^pp* ]]; then
                                         ENVIRONMENT="Production"
                                     elif [[ "\$HOSTNAME" =~ ^dr* ]]; then
@@ -53,13 +51,12 @@ pipeline {
                                     else
                                         ENVIRONMENT="Unknown"
                                     fi
-
-                                    # Disk usage as percentages
+                                    
                                     APPBIN=\$(/bin/df -h /appbin 2>/dev/null | /bin/awk 'NR==2 {gsub("%",""); print \$5}')
                                     APPDATA=\$(/bin/df -h /appdata 2>/dev/null | /bin/awk 'NR==2 {gsub("%",""); print \$5}')
                                     TMP=\$(/bin/df -h /tmp 2>/dev/null | /bin/awk 'NR==2 {gsub("%",""); print \$5}')
                                     ROOT=\$(/bin/df -h / 2>/dev/null | /bin/awk 'NR==2 {gsub("%",""); print \$5}')
-
+                                    
                                     echo "\$HOSTNAME,\$ENVIRONMENT,\$APPBIN,\$APPDATA,\$TMP,\$ROOT"
                                     EOF
                                 """,
@@ -67,10 +64,11 @@ pipeline {
                             ).trim()
 
                             def (hostname, environment, appbin, appdata, tmp, root) = result.split(',')
+                            echo "Received data: ${hostname}, ${environment}, ${appbin}, ${appdata}, ${tmp}, ${root}"
 
-                            // Check utilization and append to email body
-                            if (appbin.toInteger() >= env.ALERT_THRESHOLD || appdata.toInteger() >= env.ALERT_THRESHOLD || tmp.toInteger() >= env.ALERT_THRESHOLD || root.toInteger() >= env.ALERT_THRESHOLD) {
-                                def rowColor = "background-color: #ffcccc;" // Highlight high utilization rows
+                            // Append to email body if utilization is above the threshold
+                            if ([appbin, appdata, tmp, root].any { it.toInteger() >= env.ALERT_THRESHOLD }) {
+                                def rowColor = "background-color: #ffcccc;"
                                 appendToFile(env.EMAIL_BODY, """
                                     <tr style='${rowColor}'>
                                         <td style='border: 1px solid black; padding: 8px;'>${hostname}</td>
