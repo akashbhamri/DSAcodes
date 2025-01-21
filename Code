@@ -1,0 +1,96 @@
+#!/bin/bash
+
+# Accept parameters from Jenkins
+SERVER_IPs="$1" # List of server IPs from Jenkins string parameter
+USERNAME="$2"   # Username from Jenkins
+
+# Output CSV file
+OUTPUT_FILE="$WORKSPACE/Capacity_Planning_Sheet.csv"
+
+# Email content
+EMAIL_BODY="$WORKSPACE/email_body.html"
+
+# Initialize email content
+echo "<html><body>" > "$EMAIL_BODY"
+echo "<p>Hello Team,</p>" >> "$EMAIL_BODY"
+echo "<p>Below is the list of servers with utilization above 75%:</p>" >> "$EMAIL_BODY"
+echo "<table style='border-collapse: collapse; width: 100%;'> 
+<tr>
+  <th style='border: 1px solid black; padding: 8px;'>Server Name</th>
+  <th style='border: 1px solid black; padding: 8px;'>Environment</th>
+  <th style='border: 1px solid black; padding: 8px;'>Appbin (%)</th>
+  <th style='border: 1px solid black; padding: 8px;'>Appdata (%)</th>
+  <th style='border: 1px solid black; padding: 8px;'>Tmp (%)</th>
+  <th style='border: 1px solid black; padding: 8px;'>Root (%)</th>
+</tr>" >> "$EMAIL_BODY"
+
+# Function to fetch server data
+fetch_data() {
+  local SERVER_IP=$1
+  SERVER_INFO=$(ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no "$USERNAME@$SERVER_IP" bash -s << 'ENDSSH'
+    HOSTNAME=$(hostname)
+
+    # Determine environment
+    if [[ "$HOSTNAME" =~ ^pp* ]]; then
+        ENVIRONMENT="Production"
+    elif [[ "$HOSTNAME" =~ ^dr* ]]; then
+        ENVIRONMENT="Disaster Recovery"
+    elif [[ "$HOSTNAME" =~ ^vd* ]]; then
+        ENVIRONMENT="Development"
+    else
+        ENVIRONMENT="Unknown"
+    fi
+
+    # Disk usage as percentages
+    APPBIN=$(df -h /appbin 2>/dev/null | awk 'NR==2 {gsub("%",""); print $5}')
+    APPDATA=$(df -h /appdata 2>/dev/null | awk 'NR==2 {gsub("%",""); print $5}')
+    TMP=$(df -h /tmp 2>/dev/null | awk 'NR==2 {gsub("%",""); print $5}')
+    ROOT=$(df -h / 2>/dev/null | awk 'NR==2 {gsub("%",""); print $5}')
+
+    echo "$HOSTNAME,$ENVIRONMENT,$APPBIN,$APPDATA,$TMP,$ROOT"
+ENDSSH
+)
+
+  # Parse server info
+  HOSTNAME=$(echo "$SERVER_INFO" | cut -d',' -f1)
+  ENVIRONMENT=$(echo "$SERVER_INFO" | cut -d',' -f2)
+  APPBIN=$(echo "$SERVER_INFO" | cut -d',' -f3)
+  APPDATA=$(echo "$SERVER_INFO" | cut -d',' -f4)
+  TMP=$(echo "$SERVER_INFO" | cut -d',' -f5)
+  ROOT=$(echo "$SERVER_INFO" | cut -d',' -f6)
+
+  # Check for high utilization
+  if [ "$APPBIN" -ge 75 ] || [ "$APPDATA" -ge 75 ] || [ "$TMP" -ge 75 ] || [ "$ROOT" -ge 75 ]; then
+    # Highlight rows with red background for high utilization
+    ROW_COLOR="background-color: #ffcccc;"
+    echo "<tr style='$ROW_COLOR'>
+      <td style='border: 1px solid black; padding: 8px;'>$HOSTNAME</td>
+      <td style='border: 1px solid black; padding: 8px;'>$ENVIRONMENT</td>
+      <td style='border: 1px solid black; padding: 8px;'>$APPBIN%</td>
+      <td style='border: 1px solid black; padding: 8px;'>$APPDATA%</td>
+      <td style='border: 1px solid black; padding: 8px;'>$TMP%</td>
+      <td style='border: 1px solid black; padding: 8px;'>$ROOT%</td>
+    </tr>" >> "$EMAIL_BODY"
+  fi
+}
+
+# Process each server IP
+IFS=',' read -ra ADDR <<< "$SERVER_IPs"
+for SERVER_IP in "${ADDR[@]}"; do
+  fetch_data "$SERVER_IP"
+done
+
+# Finalize email content
+echo "</table>" >> "$EMAIL_BODY"
+echo "<p>Regards,<br>DevOps Team</p>" >> "$EMAIL_BODY"
+echo "</body></html>" >> "$EMAIL_BODY"
+
+# Send email using Jenkins' email plugin
+emailext(
+  subject: "High Utilization Alert",
+  body: "$(cat $EMAIL_BODY)",
+  mimeType: 'text/html',
+  to: "team@example.com"
+)
+
+echo "Data collection and email alert process completed."
