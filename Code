@@ -1,72 +1,37 @@
-stage('Fetch Server Data') {
-    steps {
-        script {
-            def serverIPs = params.SERVER_IPs.split(',')
-            serverIPs.each { serverIP ->
-                try {
-                    echo "Fetching data from ${serverIP}..."
-                    def result = sh(
-                        script: """
-                            ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${params.USERNAME}@${serverIP} bash -s << 'EOF'
-                            HOSTNAME=\$(hostname)
-                            
-                            # Determine environment
-                            if [[ "\$HOSTNAME" =~ ^pp* ]]; then
-                                ENVIRONMENT="Production"
-                            elif [[ "\$HOSTNAME" =~ ^dr* ]]; then
-                                ENVIRONMENT="Disaster Recovery"
-                            elif [[ "\$HOSTNAME" =~ ^vd* ]]; then
-                                ENVIRONMENT="Development"
-                            else
-                                ENVIRONMENT="Unknown"
-                            fi
-                            
-                            # Disk usage with fallback for missing mount points
-                            APPBIN=\$(df -h /appbin 2>/dev/null | awk 'NR==2 {gsub("%",""); print \$5}' || echo 0)
-                            APPDATA=\$(df -h /appdata 2>/dev/null | awk 'NR==2 {gsub("%",""); print \$5}' || echo 0)
-                            TMP=\$(df -h /tmp 2>/dev/null | awk 'NR==2 {gsub("%",""); print \$5}' || echo 0)
-                            ROOT=\$(df -h / 2>/dev/null | awk 'NR==2 {gsub("%",""); print \$5}' || echo 0)
-                            
-                            echo "\$HOSTNAME,\$ENVIRONMENT,\$APPBIN,\$APPDATA,\$TMP,\$ROOT"
-                            EOF
-                        """,
-                        returnStdout: true
-                    ).trim()
+When requesting the client to open port 22 for the rmpci user, it's important to clearly explain why the access is necessary and how it aligns with the project requirements. Here's how you can phrase your request in different ways:
 
-                    echo "Raw Output from ${serverIP}: ${result}"
-                    
-                    def resultArray = result.split(',').collect { it.trim() }
-                    if (resultArray.size() < 6) {
-                        error "Unexpected output format: ${result}"
-                    }
-                    def (hostname, environment, appbin, appdata, tmp, root) = resultArray
 
-                    // Convert to integers for comparison
-                    def appbinInt = appbin?.isInteger() ? appbin.toInteger() : 0
-                    def appdataInt = appdata?.isInteger() ? appdata.toInteger() : 0
-                    def tmpInt = tmp?.isInteger() ? tmp.toInteger() : 0
-                    def rootInt = root?.isInteger() ? root.toInteger() : 0
+---
 
-                    echo "Parsed values: Hostname=${hostname}, Environment=${environment}, Appbin=${appbinInt}%, Appdata=${appdataInt}%, Tmp=${tmpInt}%, Root=${rootInt}%"
+1. Straightforward Explanation
 
-                    // Check thresholds
-                    if ([appbinInt, appdataInt, tmpInt, rootInt].any { it >= env.ALERT_THRESHOLD }) {
-                        echo "High utilization detected on ${hostname}"
-                        appendToFile(env.EMAIL_BODY, """
-                            <tr style='background-color: #ffcccc;'>
-                                <td style='border: 1px solid black; padding: 8px;'>${hostname}</td>
-                                <td style='border: 1px solid black; padding: 8px;'>${environment}</td>
-                                <td style='border: 1px solid black; padding: 8px;'>${appbinInt}%</td>
-                                <td style='border: 1px solid black; padding: 8px;'>${appdataInt}%</td>
-                                <td style='border: 1px solid black; padding: 8px;'>${tmpInt}%</td>
-                                <td style='border: 1px solid black; padding: 8px;'>${rootInt}%</td>
-                            </tr>
-                        """)
-                    }
-                } catch (Exception e) {
-                    echo "Failed to fetch data from ${serverIP}: ${e.message}"
-                }
-            }
-        }
-    }
-}
+"We are working on a script to automate the collection of thread dumps for troubleshooting and performance analysis. Since the Java process is running under the rmpci user, we require SSH access via port 22 for the rmpci user to collect the thread dumps directly. While jkslave has SSH access, it does not have sufficient permissions to access the process owned by the rmpci user."
+
+
+---
+
+2. Emphasizing Security and Efficiency
+
+"To ensure efficient troubleshooting and diagnostics, we need to collect thread dumps directly from the process owned by the rmpci user. Currently, jkslave has SSH access, but it cannot interact with processes owned by rmpci due to permission restrictions. Opening port 22 for rmpci will allow us to securely and directly access the required resources, minimizing manual intervention and maintaining system integrity."
+
+
+---
+
+3. Highlighting Business Impact
+
+"As part of our efforts to resolve performance issues and improve system reliability, we need the ability to collect thread dumps from the Java process running under the rmpci user. This requires SSH access via port 22 for the rmpci user. Without this access, troubleshooting will involve additional manual steps, which may delay resolution times and increase operational overhead."
+
+
+---
+
+4. Offering Alternatives (If Needed)
+
+"If opening port 22 for the rmpci user is not feasible, an alternative would be to enable secure communication between jkslave and rmpci for specific commands (e.g., through sudo permissions or custom scripts). However, direct SSH access for rmpci would be the most efficient and secure solution for our requirements."
+
+
+---
+
+5. Technical Justification
+
+"The thread dump script requires access to the Java process ID (PID) owned by the rmpci user. As jkslave cannot directly interact with this
+
