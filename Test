@@ -1,26 +1,33 @@
-Here’s a revised explanation of the issue and the requirement:
+To clarify whether authentication is happening via LDAP or Okta, you can frame your question to the vendor as follows:
 
 
 ---
 
-Scenario:
-During weekends or off-hours, there are instances where the Jenkins controller and its connected agents (slaves) face issues, and no one with the necessary permissions is available to resolve them. This results in delays and interruptions in critical pipeline activities.
+Subject: Clarification on Authentication Source for Git and SSH Operations
 
-Request:
-To avoid such situations, limited access should be provided to the relevant team members. Specifically:
+Body:
 
-1. Controller-Level Access: To restart the Jenkins controller if needed.
+Dear [Vendor Name/Support Team],
 
+We need your assistance in determining which authentication method is being used in our current setup. Specifically, we would like to confirm:
 
-2. Agent-Level Access: To restart Jenkins agents (slaves) in case they become unresponsive or fail to communicate with the controller.
-
+1. Are all Git operations and user authentications (both UI and SSH) being processed through LDAP, or has the integration with Okta taken over these operations?
 
 
-This will ensure the team can handle basic troubleshooting during critical times without dependency on specific individuals.
+2. Is there a way to clearly identify whether SSH traffic and authentication requests are being handled by LDAP or Okta?
+
+
+3. Could you guide us on any logs or configurations within Bitbucket that would help us verify this?
+
+
+
+Your guidance on this matter would be greatly appreciated.
+
+Best regards,
+[Your Name]
 
 
 ---
 
-Let me know if you'd like further refinements!
-
+This message ensures you are directly asking for clarification on whether LDAP or Okta is being used without suggesting routing.
 
