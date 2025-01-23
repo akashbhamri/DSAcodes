@@ -5,10 +5,13 @@ USERNAME="${USERNAME}"               # SSH login user (provided in Jenkins)
 SERVER_IP="${SERVER_IP}"             # Server IP or hostname (provided in Jenkins)
 PROCESS_USER="${PROCESS_USER}"       # User owning the Java process (provided in Jenkins)
 JAVA_PID="${JAVA_PID}"               # PID of the Java process (provided in Jenkins)
-THREAD_DUMP_PATH="/tmp/thread_dumps" # Path to store thread dumps
+DATE_SUFFIX=$(date +%Y%m%d_%H%M%S)   # Current date and time for unique naming
+DUMP_PATH="/tmp/dumps_${DATE_SUFFIX}" # Path to store thread and heap dumps
 INTERVAL="${INTERVAL:-10}"           # Interval in seconds between thread dumps (default: 10 seconds)
 DUMP_COUNT="${DUMP_COUNT:-12}"       # Number of thread dumps to collect (default: 12)
 PASSWORD="${SU_PASSWORD}"            # Password for the process user (provided in Jenkins)
+COLLECT_THREAD_DUMP="${COLLECT_THREAD_DUMP:-no}" # Flag to collect thread dump (default: no)
+COLLECT_HEAP_DUMP="${COLLECT_HEAP_DUMP:-no}"     # Flag to collect heap dump (default: no)
 
 # Validate required parameters
 if [[ -z "$SERVER_IP" || -z "$JAVA_PID" || -z "$USERNAME" || -z "$PROCESS_USER" || -z "$PASSWORD" ]]; then
@@ -17,14 +20,16 @@ if [[ -z "$SERVER_IP" || -z "$JAVA_PID" || -z "$USERNAME" || -z "$PROCESS_USER" 
 fi
 
 # Print setup details
-echo "=== THREAD DUMP COLLECTION SETUP ==="
+echo "=== DUMP COLLECTION SETUP ==="
 echo "Server: $SERVER_IP"
 echo "SSH Username: $USERNAME"
 echo "Process User: $PROCESS_USER"
 echo "Java Process ID: $JAVA_PID"
-echo "Output Path: $THREAD_DUMP_PATH"
+echo "Output Path: $DUMP_PATH"
 echo "Interval Between Dumps: $INTERVAL seconds"
 echo "Number of Dumps to Collect: $DUMP_COUNT"
+echo "Collect Thread Dumps: $COLLECT_THREAD_DUMP"
+echo "Collect Heap Dumps: $COLLECT_HEAP_DUMP"
 echo "==================================="
 
 # SSH into the server and execute commands
@@ -38,27 +43,49 @@ ssh -o StrictHostKeyChecking=no $USERNAME@$SERVER_IP bash << EOF
     exit 1
   fi
 
-  echo "Switching to user $PROCESS_USER to collect thread dumps."
+  echo "Switching to user $PROCESS_USER to collect dumps."
 
   su - "$PROCESS_USER" << 'INNER_EOF'
 $PASSWORD
-$(declare -f perform_thread_dump)
-perform_thread_dump() {
-    mkdir -p $THREAD_DUMP_PATH
-    echo "Directory created: $THREAD_DUMP_PATH"
+DUMP_PATH="$DUMP_PATH"
+COLLECT_THREAD_DUMP="$COLLECT_THREAD_DUMP"
+COLLECT_HEAP_DUMP="$COLLECT_HEAP_DUMP"
 
+# Function to collect thread dumps
+collect_thread_dumps() {
+    mkdir -p "$DUMP_PATH"
+    echo "Directory created: $DUMP_PATH"
+
+    # Collect thread dumps
     for i in {1..$DUMP_COUNT}; do
       TIMESTAMP=\$(date +%Y%m%d_%H%M%S)
-      jstack -l $JAVA_PID > $THREAD_DUMP_PATH/thread_dump_\${i}_\${TIMESTAMP}.txt
-      echo "Thread dump \${i} saved to $THREAD_DUMP_PATH/thread_dump_\${i}_\${TIMESTAMP}.txt"
+      jstack -l $JAVA_PID > "$DUMP_PATH/thread_dump_\${i}_\${TIMESTAMP}.txt"
+      echo "Thread dump \${i} saved to $DUMP_PATH/thread_dump_\${i}_\${TIMESTAMP}.txt"
       sleep $INTERVAL
     done
-
-    echo "Thread dump collection complete."
 }
-perform_thread_dump
+
+# Function to collect heap dump
+collect_heap_dump() {
+    HEAP_DUMP_PATH="$DUMP_PATH/heap_dump_\$(date +%Y%m%d_%H%M%S).hprof"
+    jmap -dump:live,format=b,file=\$HEAP_DUMP_PATH $JAVA_PID
+    echo "Heap dump saved to \$HEAP_DUMP_PATH"
+}
+
+# Collect dumps based on flags
+if [ "$COLLECT_THREAD_DUMP" == "yes" ]; then
+    collect_thread_dumps
+fi
+
+if [ "$COLLECT_HEAP_DUMP" == "yes" ]; then
+    collect_heap_dump
+fi
+
+echo "Dump collection complete."
+}
+collect_dumps
 INNER_EOF
 EOF
 
 # Completion message
-echo "Thread dump collection process complete. Please verify the server directory: $THREAD_DUMP_PATH"
+echo "Dump collection process complete. Please verify the server directory: $DUMP_PATH"
