@@ -1,33 +1,24 @@
-To clarify whether authentication is happening via LDAP or Okta, you can frame your question to the vendor as follows:
+Short Description:
+
+"We want to set up an alert for branch permission updates in project repositories."
 
 
 ---
 
-Subject: Clarification on Authentication Source for Git and SSH Operations
+Description:
 
-Body:
+"We are setting up an alert to monitor changes to branch permissions in project repositories. This alert will capture key details of any such event, including:
 
-Dear [Vendor Name/Support Team],
+Author: The person who initiated the change.
 
-We need your assistance in determining which authentication method is being used in our current setup. Specifically, we would like to confirm:
+User: The user whose permissions were updated.
 
-1. Are all Git operations and user authentications (both UI and SSH) being processed through LDAP, or has the integration with Okta taken over these operations?
+Matcher: The branch pattern or restriction applied.
 
-
-2. Is there a way to clearly identify whether SSH traffic and authentication requests are being handled by LDAP or Okta?
-
-
-3. Could you guide us on any logs or configurations within Bitbucket that would help us verify this?
+Project Name: The repository where the change occurred.
 
 
+The alert ensures timely awareness of changes to branch permissions, helping maintain security and compliance standards. Please configure this alert to send email notifications with the above details for every relevant event."
 
-Your guidance on this matter would be greatly appreciated.
-
-Best regards,
-[Your Name]
-
-
----
-
-This message ensures you are directly asking for clarification on whether LDAP or Okta is being used without suggesting routing.
+Let me know if you need help with specific configurations in Splunk!
 
