@@ -1,76 +1,64 @@
-pipeline {
-    agent any
-    parameters {
-        string(name: 'USERNAME', defaultValue: 'user', description: 'Enter the username for SSH login')
-        string(name: 'SERVER_IP', defaultValue: '', description: 'Enter the server IP address or hostname')
-        string(name: 'JAVA_PID', defaultValue: '', description: 'Enter the PID of the Java application')
-        string(name: 'THREAD_DUMP_PATH', defaultValue: '/tmp/thread_dumps', description: 'Enter the path to store thread dumps')
-        string(name: 'INTERVAL', defaultValue: '10', description: 'Interval in seconds between thread dumps')
-        string(name: 'DUMP_COUNT', defaultValue: '12', description: 'Number of thread dumps to collect')
-    }
-    stages {
-        stage('Setup') {
-            steps {
-                script {
-                    // Validate parameters
-                    if (params.SERVER_IP.trim() == '' || params.JAVA_PID.trim() == '') {
-                        error "SERVER_IP and JAVA_PID parameters are required!"
-                    }
-                }
-                echo """
-                === THREAD DUMP COLLECTION SETUP ===
-                - Server: ${params.SERVER_IP}
-                - Username: ${params.USERNAME}
-                - Java Process ID: ${params.JAVA_PID}
-                - Output Path on Server: ${params.THREAD_DUMP_PATH}
-                - Interval Between Dumps: ${params.INTERVAL} seconds
-                - Number of Dumps to Collect: ${params.DUMP_COUNT}
-                ====================================
-                """
-            }
-        }
-        stage('Collect Thread Dumps') {
-            steps {
-                script {
-                    echo "Starting SSH connection to ${params.SERVER_IP} to collect thread dumps."
-                    // SSH and execute commands on the remote server
-                    sh """
-                    ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${params.USERNAME}@${params.SERVER_IP} bash -s << 'EOF'
-                        echo "Connected to server: \$(hostname)"
-                        
-                        # Create directory for thread dumps
-                        echo "Creating directory ${params.THREAD_DUMP_PATH} to store thread dumps..."
-                        mkdir -p ${params.THREAD_DUMP_PATH}
+#!/bin/bash
 
-                        # Collect thread dumps in a loop
-                        echo "Starting thread dump collection process..."
-                        for i in {1..${params.DUMP_COUNT}}; do
-                            TIMESTAMP=\$(date +%Y%m%d_%H%M%S)
-                            jstack -l ${params.JAVA_PID} > ${params.THREAD_DUMP_PATH}/thread_dump_\${i}_\${TIMESTAMP}.txt
-                            echo "Thread dump \${i} collected and stored at ${params.THREAD_DUMP_PATH}/thread_dump_\${i}_\${TIMESTAMP}.txt"
-                            sleep ${params.INTERVAL}
-                        done
+# Input parameters from Jenkins
+USERNAME="${USERNAME}"               # SSH login user (provided in Jenkins)
+SERVER_IP="${SERVER_IP}"             # Server IP or hostname (provided in Jenkins)
+PROCESS_USER="${PROCESS_USER}"       # User owning the Java process (provided in Jenkins)
+JAVA_PID="${JAVA_PID}"               # PID of the Java process (provided in Jenkins)
+THREAD_DUMP_PATH="/tmp/thread_dumps" # Path to store thread dumps
+INTERVAL="${INTERVAL:-10}"           # Interval in seconds between thread dumps (default: 10 seconds)
+DUMP_COUNT="${DUMP_COUNT:-12}"       # Number of thread dumps to collect (default: 12)
+PASSWORD="${SU_PASSWORD}"            # Password for the process user (provided in Jenkins)
 
-                        echo "Thread dump collection process completed on server."
-                    EOF
-                    """
-                }
-            }
-        }
-    }
-    post {
-        success {
-            echo "Thread dump collection completed successfully. Copying files from the server to Jenkins workspace."
-            // Copy thread dumps from remote server to Jenkins workspace
-            sh """
-            echo "Copying thread dumps from ${params.SERVER_IP}:${params.THREAD_DUMP_PATH} to Jenkins workspace..."
-            scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${params.USERNAME}@${params.SERVER_IP}:${params.THREAD_DUMP_PATH}/*.txt .
-            """
-            archiveArtifacts artifacts: '*.txt', fingerprint: true
-            echo "Thread dumps archived in Jenkins successfully."
-        }
-        failure {
-            echo "Thread dump collection process failed. Please check the logs for details."
-        }
-    }
+# Validate required parameters
+if [[ -z "$SERVER_IP" || -z "$JAVA_PID" || -z "$USERNAME" || -z "$PROCESS_USER" || -z "$PASSWORD" ]]; then
+  echo "Error: SERVER_IP, JAVA_PID, USERNAME, PROCESS_USER, and PASSWORD must be set."
+  exit 1
+fi
+
+# Print setup details
+echo "=== THREAD DUMP COLLECTION SETUP ==="
+echo "Server: $SERVER_IP"
+echo "SSH Username: $USERNAME"
+echo "Process User: $PROCESS_USER"
+echo "Java Process ID: $JAVA_PID"
+echo "Output Path: $THREAD_DUMP_PATH"
+echo "Interval Between Dumps: $INTERVAL seconds"
+echo "Number of Dumps to Collect: $DUMP_COUNT"
+echo "==================================="
+
+# SSH into the server and execute commands
+ssh -o StrictHostKeyChecking=no $USERNAME@$SERVER_IP bash << EOF
+  echo "Connected to server: \$(hostname)"
+  
+  # Validate process ownership
+  FILE_OWNER="\$(ls -l /proc/$JAVA_PID | awk '{print \$3}')"
+  if [[ "\$FILE_OWNER" != "$PROCESS_USER" ]]; then
+    echo "Error: Process $JAVA_PID is not owned by user $PROCESS_USER."
+    exit 1
+  fi
+
+  echo "Switching to user $PROCESS_USER to collect thread dumps."
+
+  su - "$PROCESS_USER" << 'INNER_EOF'
+$PASSWORD
+$(declare -f perform_thread_dump)
+perform_thread_dump() {
+    mkdir -p $THREAD_DUMP_PATH
+    echo "Directory created: $THREAD_DUMP_PATH"
+
+    for i in {1..$DUMP_COUNT}; do
+      TIMESTAMP=\$(date +%Y%m%d_%H%M%S)
+      jstack -l $JAVA_PID > $THREAD_DUMP_PATH/thread_dump_\${i}_\${TIMESTAMP}.txt
+      echo "Thread dump \${i} saved to $THREAD_DUMP_PATH/thread_dump_\${i}_\${TIMESTAMP}.txt"
+      sleep $INTERVAL
+    done
+
+    echo "Thread dump collection complete."
 }
+perform_thread_dump
+INNER_EOF
+EOF
+
+# Completion message
+echo "Thread dump collection process complete. Please verify the server directory: $THREAD_DUMP_PATH"
