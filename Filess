@@ -1,0 +1,27 @@
+Got it. Here's how to distinguish the two statements more clearly and professionally:
+
+1. Pipeline Implementation Statement
+"We have developed a pipeline to capture thread and heap dumps of the Java process. This pipeline ensures that comprehensive diagnostic data is available for vendor analysis, enabling detailed troubleshooting and issue resolution."
+
+
+2. Observation on CPU Utilization
+"An analysis of CPU and process metrics from May 2024 to the present indicates a significant increase in CPU utilization on the database server. This spike in resource usage coincides with the uDeploy upgrade, suggesting a potential link between the upgrade and the observed performance trend. Further analysis is recommended to validate this correlation and address any underlying issues."
+
+
+
+These statements separate the technical implementation and the observed impact in a professional tone.
+
+
+
+Here’s the refined statement incorporating the SQL query:
+
+
+---
+
+"After implementing a pipeline to capture thread and heap dumps for Java processes, we analyzed CPU and process metrics from May 2024 to date. The analysis revealed a significant increase in CPU utilization on the database server following the uDeploy upgrade. Further investigation points to an SQL query introduced post-upgrade as a likely contributor to this spike. We recommend a detailed review of the query's execution plan and optimization to mitigate the performance impact."
+
+
+---
+
+Let me know if you'd like any adjustments!
+
