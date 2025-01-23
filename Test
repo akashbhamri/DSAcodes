@@ -1,24 +1,8 @@
-Short Description:
+Given your requirements, here's an enhanced subject line for the alert:
 
-"We want to set up an alert for branch permission updates in project repositories."
+"Alert: Branch Permission Updated by [Author] for Project [Project Name] - User: [User], Matcher: [Matcher]"
 
+This subject includes all the key details (author, user, matcher, and project name) to make the alert clear and informative.
 
----
-
-Description:
-
-"We are setting up an alert to monitor changes to branch permissions in project repositories. This alert will capture key details of any such event, including:
-
-Author: The person who initiated the change.
-
-User: The user whose permissions were updated.
-
-Matcher: The branch pattern or restriction applied.
-
-Project Name: The repository where the change occurred.
-
-
-The alert ensures timely awareness of changes to branch permissions, helping maintain security and compliance standards. Please configure this alert to send email notifications with the above details for every relevant event."
-
-Let me know if you need help with specific configurations in Splunk!
+Let me know if you need help extracting these fields or setting up the alert in Splunk!
 
