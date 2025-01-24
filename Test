@@ -4,3 +4,6 @@ find . -mtime -30 -print0 | rsync -av --files-from=- --from0 ./ /appdata/PCF_OUT
 
 
 find . -type f -o -type d -mtime -30 -print0 | rsync -av --files-from=- --from0 ./ /appdata/PCF_OUTPUTS/
+
+
+find . -type d -mtime -30 -print0 -o -type f -mtime -30 -print0 | rsync -av --files-from=- --from0 ./ /appdata/PCF_OUTPUTS/
