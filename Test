@@ -18,3 +18,7 @@ find . -type f -mtime -30 -print0 | xargs -0 -n1 dirname | sort -u | rsync -av -
 find . -type f -mtime -30 -print0 | xargs -0 -n1 dirname | sort -u | while IFS= read -r dir; do
     rsync -av "$dir/" /appdata/PCF_OUTPUTS/"$dir"
 done
+
+
+
+find . -type f -mtime -30 -print0 | rsync -av --files-from=- --from0 ./ /appdata/PCF_OUTPUTS/
