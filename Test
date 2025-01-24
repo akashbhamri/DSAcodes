@@ -1,2 +1,6 @@
 cd /appbin/PCF_OUTPUTS/
 find . -mtime -30 -print0 | rsync -av --files-from=- --from0 ./ /appdata/PCF_OUTPUTS/
+
+
+
+find . -type f -o -type d -mtime -30 -print0 | rsync -av --files-from=- --from0 ./ /appdata/PCF_OUTPUTS/
