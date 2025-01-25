@@ -42,3 +42,10 @@ find . -type d -mtime -30 -o -type f -mtime -30 -print0 | rsync -av --files-from
 
 
 find . -type f -mtime -30 -o -type d -exec bash -c '[ "$(find "{}" -type f -mtime -30 | wc -l)" -gt 0 ]' \; -print0 | rsync -av --files-from=- --from0 ./ /appdata/PCF_OUTPUTS/
+
+
+
+
+
+
+find . -type d -mtime -30 -or -type f -mtime -30 -print0 | rsync -av --files-from=- --from0 ./ /appdata/PCF_OUTPUTS/
