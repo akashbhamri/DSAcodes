@@ -1,4 +1,4 @@
-Here’s the revised version with the additional details included:
+Here’s the revised version with your additional points included:
 
 
 ---
@@ -7,9 +7,11 @@ Subject: List of Non-Operational Databases on 02/03 Servers and Archiving Logs U
 
 Hi Sown,
 
-As discussed, could you please provide a list of databases running on the 02/03 servers that are currently not operational? For these databases, we can proceed with disabling the archive logs to prevent unnecessary growth in storage size.
+As discussed, could you please provide a list of databases running on the 02/03 servers that are currently not operational and confirm what data is currently being stored in the archive logs for these databases?
 
-For databases where backups are enabled, it’s important to ensure that archive logs remain active and are not disabled, as they are critical for recovery and continuity.
+Once the data has been reviewed, we will evaluate and provide approval to disable the archive logs where applicable.
+
+For operational databases where backups are enabled, please ensure that archive logs remain active, as they are critical for recovery and continuity.
 
 Let me know if you need further clarification or additional details.
 
@@ -19,5 +21,5 @@ Akash
 
 ---
 
-Let me know if this works!
+This version incorporates all your points in a professional and clear tone. Let me know if it works for you!
 
