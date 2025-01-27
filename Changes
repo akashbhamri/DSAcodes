@@ -1,12 +1,23 @@
-Initial Investigation
+Here’s the revised version with the additional details included:
 
-We logged into the server and confirmed that it is functioning properly. There are no active login issues or signs of irregularities.
 
-New Relic Metrics Investigation
+---
 
-We checked the New Relic metrics for the server, and all parameters are within expected ranges. There are no indications of any anomalies or issues from the monitoring data.
+Subject: List of Non-Operational Databases on 02/03 Servers and Archiving Logs Update
 
-Next Steps
+Hi Sown,
 
-We have informed the Platform team to review the alert further and investigate why it was unable to connect in CloudBees CI. Additionally, we will raise an RITM to track this issue and ensure proper resolution.
+As discussed, could you please provide a list of databases running on the 02/03 servers that are currently not operational? For these databases, we can proceed with disabling the archive logs to prevent unnecessary growth in storage size.
+
+For databases where backups are enabled, it’s important to ensure that archive logs remain active and are not disabled, as they are critical for recovery and continuity.
+
+Let me know if you need further clarification or additional details.
+
+Best regards,
+Akash
+
+
+---
+
+Let me know if this works!
 
