@@ -1,0 +1,12 @@
+Initial Investigation
+
+We logged into the server and confirmed that it is functioning properly. There are no active login issues or signs of irregularities.
+
+New Relic Metrics Investigation
+
+We checked the New Relic metrics for the server, and all parameters are within expected ranges. There are no indications of any anomalies or issues from the monitoring data.
+
+Next Steps
+
+We have informed the Platform team to review the alert further and investigate why it was unable to connect in CloudBees CI. Additionally, we will raise an RITM to track this issue and ensure proper resolution.
+
