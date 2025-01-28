@@ -1,3 +1,17 @@
+Here’s a more polished and professional way to communicate your findings:
+
+"We have analyzed the controller and observed a significant increase in memory utilization. Additionally, the graph indicates instances of the controller being restarted. To address this, we have updated the alert action and included it in the daily summary for better monitoring and visibility. Please let us know if further adjustments or actions are required."
+
+
+
+
+
+
+
+
+
+
+
 
 Subject: Request to Disable Archive Logs for 01 Database
 
