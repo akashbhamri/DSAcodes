@@ -1,53 +1,17 @@
-Here’s the revised version with your additional points included:
 
+Subject: Request to Disable Archive Logs for 01 Database
 
----
+Dear [Recipient's Name],
 
-Subject: List of Non-Operational Databases on 02/03 Servers and Archiving Logs Update
+I hope this email finds you well.
 
-Hi Sown,
+I would like to request the disabling of archive logs for the 01 database, as it is currently being used exclusively for testing purposes. Since the database does not store any critical or persistent data, enabling archive logs is not required and may unnecessarily utilize resources.
 
-As discussed, could you please provide a list of databases running on the 02/03 servers that are currently not operational and confirm what data is currently being stored in the archive logs for these databases?
+Please let me know if you need any additional information or have any concerns regarding this request.
 
-Once the data has been reviewed, we will evaluate and provide approval to disable the archive logs where applicable.
-
-For operational databases where backups are enabled, please ensure that archive logs remain active, as they are critical for recovery and continuity.
-
-Let me know if you need further clarification or additional details.
+Thank you for your support.
 
 Best regards,
-Akash
-
-
----
-
-This version incorporates all your points in a professional and clear tone. Let me know if it works for you!
-
-
-
-Here’s the updated message:
-
-
----
-
-"Hi Praneeth,
-
-I noticed that this database is currently non-operational, and our UDeploy setup is not utilizing it. To prevent the archive logs from filling up the storage, can we consider disabling them for now? If you anticipate a need for this database in the future, we would also need to raise a request for a backup before re-enabling the archive logs."
-
-
----
-
-Let me know if this works!
-
-
-
-Here’s a clearer and more professional way to phrase it:
-
-
----
-
-Can we disable archive logs for this database and clean up unused logs? Alternatively, should we raise a request to completely remove the database from the server?
-
-Additionally, regarding the 03 server, the recovery (reco) usage has also increased significantly. For the 01 server, since it is used only for testing purposes, can we consider disabling the archive logs as well?
+[Your Name]
 
 
