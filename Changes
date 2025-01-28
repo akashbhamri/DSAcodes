@@ -23,3 +23,19 @@ Akash
 
 This version incorporates all your points in a professional and clear tone. Let me know if it works for you!
 
+
+
+Here’s the updated message:
+
+
+---
+
+"Hi Praneeth,
+
+I noticed that this database is currently non-operational, and our UDeploy setup is not utilizing it. To prevent the archive logs from filling up the storage, can we consider disabling them for now? If you anticipate a need for this database in the future, we would also need to raise a request for a backup before re-enabling the archive logs."
+
+
+---
+
+Let me know if this works!
+
