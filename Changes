@@ -39,3 +39,15 @@ I noticed that this database is currently non-operational, and our UDeploy setup
 
 Let me know if this works!
 
+
+
+Here’s a clearer and more professional way to phrase it:
+
+
+---
+
+Can we disable archive logs for this database and clean up unused logs? Alternatively, should we raise a request to completely remove the database from the server?
+
+Additionally, regarding the 03 server, the recovery (reco) usage has also increased significantly. For the 01 server, since it is used only for testing purposes, can we consider disabling the archive logs as well?
+
+
