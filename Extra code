@@ -1,73 +1,99 @@
-Root Cause Analysis (RCA)
+Initial Investigation
 
-Incident Summary:
-
-Incident Number: INC3926687
-
-Issue: Bitbucket was inaccessible due to a locked DATABSECHANGELOGLOCK table in the database, which blocked essential operations required for Bitbucket’s functionality.
-
-Duration: The issue was identified and resolved by the SQL DBA team at 02:19 AM IST (03:49 PM EST).
+1. User Reports: Multiple users reported that Bitbucket was inaccessible starting around 7:00 PM IST (8:30 AM EST).
 
 
+2. Immediate Checks:
 
----
+Verified application health through New Relic dashboards.
 
-Root Cause:
+Checked Splunk logs for errors related to database or connection failures.
 
-The root cause of the incident was that the DATABSECHANGELOGLOCK table remained in a locked state (LOCKED=1), which prevented database changes and blocked Bitbucket from functioning. The lock was left unreleased due to an incomplete or failed database process.
+Observed high traffic on Bitbucket during the time frame (7:00 PM – 9:00 PM IST).
 
-Additionally, there was high traffic on Bitbucket between 7:00 PM and 9:00 PM IST (8:30 AM – 10:30 AM EST), which may have contributed to the problem. The platform team is actively working with the vendor (Atlassian) to investigate the impact of this traffic and determine if it played a role in causing the lock.
-
-
----
-
-Resolution:
-
-1. The SQL DBA team manually cleared the lock by running the following SQL query:
-
-UPDATE DATABSECHANGELOGLOCK SET LOCKED = 0, LOCKEDBY = NULL WHERE ID = 1;
-
-
-2. Once the lock was reset, Bitbucket became accessible again.
-
-
-3. The DevOps team verified the application’s functionality, and operations resumed normally.
-
-
-4. Logs were shared with Atlassian (Vendor Case PSSRV-157323) for further investigation.
 
 
 
 
 ---
 
-Impact:
+New Relic Investigation
 
-Affected Service: Bitbucket
+Dashboard Observations:
 
-Business Impact: Deployment teams were unable to push or access code repositories during the incident window.
+1. Increased Response Time:
+
+Spikes in response time between 7:00 PM – 9:00 PM IST (8:30 AM – 10:30 AM EST) indicating potential database lock or connection issues.
+
+
+
+2. Error Rate:
+
+Error rates for database transactions significantly increased during the affected window.
+
+Specific errors related to DATABSECHANGELOGLOCK were observed.
+
+
+
+3. Database Throughput:
+
+Sudden drop in successful database operations, correlating with the time of Bitbucket unavailability.
+
+
 
 
 
 ---
 
-Preventive Actions:
+Splunk Logs Analysis
 
-1. Monitor DATABSECHANGELOGLOCK: Implement alerting for prolonged locks to enable quick detection and response.
+Log Queries:
+
+1. Application Logs (atlassian-bitbucket.log):
+
+index=bitbucket_logs "DATABSECHANGELOGLOCK" OR "Could not acquire change log lock"
+
+Found multiple LiquibaseException and Could not acquire change log lock errors.
+
+First occurrence was at 7:10 PM IST (8:40 AM EST).
 
 
-2. Traffic Analysis: Collaborate with the platform team and vendor to monitor and manage high traffic periods effectively.
+
+2. Database Logs:
+
+index=db_logs "UPDATE DATABSECHANGELOGLOCK" OR "locked"
+
+Detected SQL errors related to row lock conflicts.
+
+Lock was active until it was manually released at 02:19 AM IST (03:49 PM EST).
 
 
-3. Automate Lock Recovery: Develop scripts to detect and release stale locks automatically.
 
 
-4. Database Process Review: Ensure proper handling of locks during failures in all update processes.
+Key Findings from Splunk:
+
+Error Messages: Repeated occurrences of Could not acquire change log lock.
+
+No Successful Unlock: No automatic resolution until the manual update was applied by the SQL DBA team.
+
+
+
+---
+
+Next Steps:
+
+1. Detailed Analysis: Continue working with the platform team and Atlassian to analyze the logs further.
+
+
+2. Monitor Lock Events: Set up Splunk alerts for DATABSECHANGELOGLOCK to catch prolonged locks.
+
+
+3. High Traffic Impact: Investigate if the high traffic caused contention leading to this lock.
 
 
 
 
 ---
 
-Let me know if you need a polished version or in a specific format!
+Let me know if you want the Splunk queries or New Relic dashboards detailed further!
 
