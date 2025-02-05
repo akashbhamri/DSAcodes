@@ -1,35 +1,73 @@
-Here’s a professional and clear way to communicate this:
+Root Cause Analysis (RCA)
 
+Incident Summary:
 
----
+Incident Number: INC3926687
 
-Subject: Request to Check and Release Port Conflict with Nexus Java Process
+Issue: Bitbucket was inaccessible due to a locked DATABSECHANGELOGLOCK table in the database, which blocked essential operations required for Bitbucket’s functionality.
 
-Hi Team,
+Duration: The issue was identified and resolved by the SQL DBA team at 02:19 AM IST (03:49 PM EST).
 
-I’ve identified that port 8089 is currently being used by a Nexus Java process. This port is required for Splunk, and its current usage by Nexus is causing issues with data loading in Splunk.
-
-Could you please investigate and confirm the purpose of this port in the Nexus application? If the port is not essential or can be reconfigured, we request it to be released for Splunk usage.
-
-To assist in troubleshooting, here’s what has been identified so far:
-
-Process ID: 150606
-
-Associated Application: Nexus
-
-Port Details: Listening on 8089
-
-
-If needed, I can provide logs or assist further in identifying the service bound to this port.
-
-Looking forward to your response.
-
-Best regards,
-[Your Name]
-[Your Contact Information]
 
 
 ---
 
-Let me know if you need further assistance or adjustments!
+Root Cause:
+
+The root cause of the incident was that the DATABSECHANGELOGLOCK table remained in a locked state (LOCKED=1), which prevented database changes and blocked Bitbucket from functioning. The lock was left unreleased due to an incomplete or failed database process.
+
+Additionally, there was high traffic on Bitbucket between 7:00 PM and 9:00 PM IST (8:30 AM – 10:30 AM EST), which may have contributed to the problem. The platform team is actively working with the vendor (Atlassian) to investigate the impact of this traffic and determine if it played a role in causing the lock.
+
+
+---
+
+Resolution:
+
+1. The SQL DBA team manually cleared the lock by running the following SQL query:
+
+UPDATE DATABSECHANGELOGLOCK SET LOCKED = 0, LOCKEDBY = NULL WHERE ID = 1;
+
+
+2. Once the lock was reset, Bitbucket became accessible again.
+
+
+3. The DevOps team verified the application’s functionality, and operations resumed normally.
+
+
+4. Logs were shared with Atlassian (Vendor Case PSSRV-157323) for further investigation.
+
+
+
+
+---
+
+Impact:
+
+Affected Service: Bitbucket
+
+Business Impact: Deployment teams were unable to push or access code repositories during the incident window.
+
+
+
+---
+
+Preventive Actions:
+
+1. Monitor DATABSECHANGELOGLOCK: Implement alerting for prolonged locks to enable quick detection and response.
+
+
+2. Traffic Analysis: Collaborate with the platform team and vendor to monitor and manage high traffic periods effectively.
+
+
+3. Automate Lock Recovery: Develop scripts to detect and release stale locks automatically.
+
+
+4. Database Process Review: Ensure proper handling of locks during failures in all update processes.
+
+
+
+
+---
+
+Let me know if you need a polished version or in a specific format!
 
