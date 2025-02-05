@@ -1,43 +1,41 @@
-Initial Investigation
+Action Items
 
-1. User Reports: Multiple users reported that Bitbucket was inaccessible starting around 7:00 PM IST (8:30 AM EST).
+Immediate Actions Taken
 
+1. Alert Acknowledgment
 
-2. Immediate Checks:
+Received an alert in Splunk indicating a java.sql.SQLTransientConnectionException.
 
-Verified application health through New Relic dashboards.
-
-Checked Splunk logs for errors related to database or connection failures.
-
-Observed high traffic on Bitbucket during the time frame (7:00 PM – 9:00 PM IST).
+Acknowledged the alert and started investigation.
 
 
 
+2. Log Analysis in Splunk
 
-
----
-
-New Relic Investigation
-
-Dashboard Observations:
-
-1. Increased Response Time:
-
-Spikes in response time between 7:00 PM – 9:00 PM IST (8:30 AM – 10:30 AM EST) indicating potential database lock or connection issues.
+Verified the error details from Splunk logs, confirming the error message:
+"Connection is not available, request timed out after 1500ms."
 
 
 
-2. Error Rate:
+3. Checked in New Relic APM
 
-Error rates for database transactions significantly increased during the affected window.
+Monitored the application's response time.
 
-Specific errors related to DATABSECHANGELOGLOCK were observed.
+Identified a spike in response times during the issue's occurrence.
 
 
 
-3. Database Throughput:
+4. Informed the Platform Team
 
-Sudden drop in successful database operations, correlating with the time of Bitbucket unavailability.
+Notified the platform team about the issue and shared the findings from Splunk and New Relic.
+
+
+
+5. Escalation to Bitbucket Vendor
+
+The platform team raised a case with the Bitbucket vendor for further investigation.
+
+Awaiting updates from the vendor as the issue is currently ongoing.
 
 
 
@@ -45,55 +43,104 @@ Sudden drop in successful database operations, correlating with the time of Bitb
 
 ---
 
-Splunk Logs Analysis
+Root Cause Analysis (RCA)
 
-Log Queries:
+Problem Summary
 
-1. Application Logs (atlassian-bitbucket.log):
+The application encountered a transient database connection issue, resulting in the error:
+java.sql.SQLTransientConnectionException: Connection is not available, request timed out after 1500ms.
 
-index=bitbucket_logs "DATABSECHANGELOGLOCK" OR "Could not acquire change log lock"
-
-Found multiple LiquibaseException and Could not acquire change log lock errors.
-
-First occurrence was at 7:10 PM IST (8:40 AM EST).
+The issue was specific to Bitbucket services.
 
 
+Possible Root Causes
 
-2. Database Logs:
+1. Connection Pool Exhaustion
 
-index=db_logs "UPDATE DATABSECHANGELOGLOCK" OR "locked"
+All available database connections in the HikariCP pool were in use.
 
-Detected SQL errors related to row lock conflicts.
-
-Lock was active until it was manually released at 02:19 AM IST (03:49 PM EST).
+Potential reasons: high traffic, connection leaks, or long-running queries.
 
 
 
+2. Database Resource Limitation
 
-Key Findings from Splunk:
-
-Error Messages: Repeated occurrences of Could not acquire change log lock.
-
-No Successful Unlock: No automatic resolution until the manual update was applied by the SQL DBA team.
+Database server reached its maximum connection limit or faced high resource utilization (CPU, memory, I/O).
 
 
 
----
+3. Network Issues
 
-Next Steps:
-
-1. Detailed Analysis: Continue working with the platform team and Atlassian to analyze the logs further.
+Temporary network interruptions between the application and the database.
 
 
-2. Monitor Lock Events: Set up Splunk alerts for DATABSECHANGELOGLOCK to catch prolonged locks.
 
+4. Bitbucket Backend Issue
 
-3. High Traffic Impact: Investigate if the high traffic caused contention leading to this lock.
+A known issue or misconfiguration on the Bitbucket side impacting connection handling.
+
 
 
 
 
 ---
 
-Let me know if you want the Splunk queries or New Relic dashboards detailed further!
+Recommendations
+
+1. Connection Pool Optimization
+
+Increase maximumPoolSize in HikariCP temporarily if needed.
+
+Implement monitoring for connection usage and long-running queries.
+
+
+
+2. Database Resource Monitoring
+
+Ensure the database has sufficient capacity to handle peak traffic.
+
+Monitor database health metrics like active connections, CPU, and I/O usage.
+
+
+
+3. Network Reliability Checks
+
+Perform periodic checks on the network connectivity between the application and the database.
+
+
+
+4. Bitbucket Vendor Collaboration
+
+Work closely with the Bitbucket vendor to resolve backend issues and identify improvements.
+
+
+
+
+
+---
+
+Follow-Up Actions
+
+1. Post-Incident Review
+
+Conduct a post-mortem with all stakeholders, including the Bitbucket vendor, to finalize the root cause and preventive measures.
+
+
+
+2. Documentation Update
+
+Update SOPs with steps to analyze and escalate similar database connection issues.
+
+
+
+3. Long-Term Improvements
+
+Implement connection leak detection and timeout settings in the application.
+
+Monitor and scale database resources proactively based on usage trends.
+
+
+
+
+Would you like me to assist in drafting any specific documentation or steps?
 
