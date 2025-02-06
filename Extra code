@@ -1,2 +1,8 @@
-A database indexing rebuild job was scheduled daily at 9 PM EST. However, its duration was significantly longer on February 3rd (30 minutes) and February 4th (1 hour) compared to other days when it completed successfully. Due to this prolonged execution, database connection errors were observed in the logs. The team is actively collaborating with the database team to analyze the root cause and implement measures to prevent this issue in the future.
+ Short Description:
+
+Extended Index Rebuild Causing Database Connection Failures and System Slowness
+
+Description:
+
+The scheduled database indexing rebuild job, which runs daily at 9 PM EST, experienced unusually long execution times on February 3rd (1 hour) and February 4th (3 hours), whereas it typically completes much faster. This prolonged execution led to database connection failures, as observed in the logs, and also caused slowness in Bitbucket URLs and other operations. Given the significant impact on system performance and availability, we request the DB team to investigate the root cause and recommend corrective actions to prevent such occurrences in the future.
 
