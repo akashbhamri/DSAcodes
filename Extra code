@@ -1,2 +1,2 @@
-The response time was significantly high, causing delays in Bitbucket's loading and operations. Users experienced slow performance when accessing repositories or performing tasks, such as pushing or pulling code, resulting in prolonged operation times. This degraded the overall user experience and impacted productivity.
+A database indexing rebuild job was scheduled daily at 9 PM EST. However, its duration was significantly longer on February 3rd (30 minutes) and February 4th (1 hour) compared to other days when it completed successfully. Due to this prolonged execution, database connection errors were observed in the logs. The team is actively collaborating with the database team to analyze the root cause and implement measures to prevent this issue in the future.
 
