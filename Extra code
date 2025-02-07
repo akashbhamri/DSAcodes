@@ -1,8 +1,14 @@
- Short Description:
+ Here’s a rephrased version of your message with a more formal tone:
 
-Extended Index Rebuild Causing Database Connection Failures and System Slowness
 
-Description:
+---
 
-The scheduled database indexing rebuild job, which runs daily at 9 PM EST, experienced unusually long execution times on February 3rd (1 hour) and February 4th (3 hours), whereas it typically completes much faster. This prolonged execution led to database connection failures, as observed in the logs, and also caused slowness in Bitbucket URLs and other operations. Given the significant impact on system performance and availability, we request the DB team to investigate the root cause and recommend corrective actions to prevent such occurrences in the future.
+Hi Praneeth,
+
+We are planning to work on an enhancement where synthetic alerts triggered by New Relic will automatically create incidents in ServiceNow. This will help us save time by eliminating the need for manual incident creation. Could you please let us know if we should proceed with this enhancement?
+
+
+---
+
+Let me know if you want it to sound more casual or technical.
 
