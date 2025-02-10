@@ -1,7 +1,9 @@
-Here’s a refined version:
+Here’s the updated subject line with "Global Permission" included:
 
-"Preventive Action – Request for Alert Setup"
-We requested the DB team to set up an alert system for long-running index rebuild jobs. This alert will notify us if the job exceeds a predefined duration, allowing us to take timely action and prevent application performance issues in the future.
+[External] Splunk Alert: Bitbucket Production – Global Permission [Access Type] Granted | Provided by [First SSO] to [Last SSO]
 
-Let me know if you want this more formal or detailed!
+Example:
+[External] Splunk Alert: Bitbucket Production – Global Permission Admin Access Granted | Provided by 503014831 to 503019365
+
+Let me know if you want to adjust the word order or emphasis further!
 
