@@ -1,3 +1,6 @@
-Application Impact
-Currently, no impact has been reported by the application team regarding this Windows server being down. We will monitor the situation and provide updates as soon as we receive any reports of impact.
+Based on the information shared by the DB team, here’s a sample sentence you can use for your report:
+
+"The index job execution time varies based on the fragmentation level of indexes. Non-fragmented indexes complete quickly (within 5 minutes), while highly fragmented indexes may require more time for rebuilds, potentially causing delays due to concurrent query executions. On February 3rd and 4th, extended durations were observed due to multiple index rebuilds."
+
+Let me know if you want this more formal or concise!
 
