@@ -1,6 +1,7 @@
-Based on the information shared by the DB team, here’s a sample sentence you can use for your report:
+Here’s a refined version:
 
-"The index job execution time varies based on the fragmentation level of indexes. Non-fragmented indexes complete quickly (within 5 minutes), while highly fragmented indexes may require more time for rebuilds, potentially causing delays due to concurrent query executions. On February 3rd and 4th, extended durations were observed due to multiple index rebuilds."
+"Preventive Action – Request for Alert Setup"
+We requested the DB team to set up an alert system for long-running index rebuild jobs. This alert will notify us if the job exceeds a predefined duration, allowing us to take timely action and prevent application performance issues in the future.
 
-Let me know if you want this more formal or concise!
+Let me know if you want this more formal or detailed!
 
