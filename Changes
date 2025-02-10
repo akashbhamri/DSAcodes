@@ -1,45 +1,9 @@
-Here are some questions you might consider asking the person from the DB team regarding the email about the indexing job:
+Initial Investigation
+Upon receiving the alert, we promptly checked the CB CI UI and observed that the system was offline. Since we do not have direct access to the logs or the ability to restart the server, we immediately notified the platform team to conduct a deeper investigation.
 
-1. Clarification on Thresholds and Conditions:
+New Relic Investigation
+In parallel, we utilized New Relic to monitor key performance metrics. We reviewed the running processes along with CPU and memory thresholds to rule out any performance-related issues. The metrics did not indicate any anomalies from a resource perspective.
 
-“What specific fragmentation percentage triggers a rebuild versus a quick completion?”
-
-“Are there different thresholds for different indexes, or is it a uniform standard?”
-
-
-
-2. Performance and Impact:
-
-“Have you observed any performance issues or query delays when the indexing job takes longer due to multiple index rebuilds?”
-
-“How do these extended rebuild times affect our overall database performance?”
-
-
-
-3. Concurrent Activity and Blocking:
-
-“What other queries or processes typically run concurrently with the indexing job that might cause blocking or deadlocks?”
-
-“Is there any plan to reschedule or optimize these concurrent operations to minimize conflicts?”
-
-
-
-4. Historical Context and Trends:
-
-“Do the longer run times on February 3rd and 4th indicate a recurring issue, or were they isolated incidents?”
-
-“Have you seen any trends in fragmentation levels over time that might suggest the need for a process change?”
-
-
-
-5. Future Improvements:
-
-“Are there any planned adjustments to the indexing job (e.g., reorganization versus rebuild strategies) to better manage fragmentation?”
-
-“Could we consider implementing more granular monitoring or alerting for when rebuild times exceed a certain threshold?”
-
-
-
-
-These questions should help clarify the technical details and any potential impact on the system, while also opening up a discussion about possible optimizations or changes in the maintenance process.
+Connectivity Issue Escalation
+Subsequent investigations by the platform team identified a connectivity issue between CB CI and the Windows server. Based on this finding, we raised an incident, and the platform team is now working closely with the network team to resolve the issue.
 
