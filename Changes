@@ -1,9 +1,3 @@
-Initial Investigation
-Upon receiving the alert, we promptly checked the CB CI UI and observed that the system was offline. Since we do not have direct access to the logs or the ability to restart the server, we immediately notified the platform team to conduct a deeper investigation.
-
-New Relic Investigation
-In parallel, we utilized New Relic to monitor key performance metrics. We reviewed the running processes along with CPU and memory thresholds to rule out any performance-related issues. The metrics did not indicate any anomalies from a resource perspective.
-
-Connectivity Issue Escalation
-Subsequent investigations by the platform team identified a connectivity issue between CB CI and the Windows server. Based on this finding, we raised an incident, and the platform team is now working closely with the network team to resolve the issue.
+Application Impact
+Currently, no impact has been reported by the application team regarding this Windows server being down. We will monitor the situation and provide updates as soon as we receive any reports of impact.
 
