@@ -1,18 +1,19 @@
-Here’s a detailed description for your RITM request:
 
-Request Details:
-I would like to request temporary admin access to Splunk for testing purposes. This access is required to verify if the alerting mechanism in Splunk functions as expected when an admin-level activity is performed.
+Subject: Request for Approval to Test Bitbucket Admin Access Alert
 
-Duration:
-The access will be needed for [mention duration, e.g., 1 hour or 1 day].
+Dear [Recipient's Name],
 
-Purpose:
-The primary objective is to simulate an admin action and ensure that the alert is triggered correctly for monitoring validation.
+I would like to seek your approval for a testing activity. The purpose of this test is to ensure that an alert is triggered in Splunk whenever admin access is granted in Bitbucket.
 
-Please let me know if you need additional information or approvals.
+Once the alert is received, we will immediately revoke the admin access granted during the test.
+
+Please let me know if you approve or need further details.
+
+Best regards,
+Akash
 
 
 ---
 
-Let me know if you want to make it more concise or formal!
+Let me know if you want this in a more formal or casual tone.
 
