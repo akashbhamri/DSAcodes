@@ -1,19 +1,7 @@
+Here’s the revised description:
 
-Subject: Request for Approval to Test Bitbucket Admin Access Alert
+Description:
+"A test alert was generated to confirm if the alert triggers for Global Permission being granted. Please proceed to revoke the permission as part of the test process."
 
-Dear [Recipient's Name],
-
-I would like to seek your approval for a testing activity. The purpose of this test is to ensure that an alert is triggered in Splunk whenever admin access is granted in Bitbucket.
-
-Once the alert is received, we will immediately revoke the admin access granted during the test.
-
-Please let me know if you approve or need further details.
-
-Best regards,
-Akash
-
-
----
-
-Let me know if you want this in a more formal or casual tone.
+Let me know if you want to tweak it further!
 
