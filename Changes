@@ -1,7 +1,24 @@
-Here’s the revised description:
+Here’s the revised email with more detail:
 
-Description:
-"A test alert was generated to confirm if the alert triggers for Global Permission being granted. Please proceed to revoke the permission as part of the test process."
 
-Let me know if you want to tweak it further!
+---
+
+Subject: Splunk Test Alert – Admin Access Granted for Testing
+
+Dear [Recipient's Name],
+
+We deliberately granted admin access as part of a test to validate if the Splunk alert for "Global Permission Granted" is triggered correctly.
+The alert has been successfully received. An RITM has been raised to revoke the granted admin access and complete the test process.
+
+Please let me know if further details are required.
+
+Best regards,
+Akash
+[Your Designation]
+[Your Team/Department Name]
+
+
+---
+
+Want it to be more technical or detailed about the permission type?
 
