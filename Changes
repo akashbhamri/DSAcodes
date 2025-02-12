@@ -1,6 +1,21 @@
-Here's the revised version with that detail added:
+Here’s the revised version:
 
-"Thank you, Purvesh and Sheetal, for setting up these alerts. We have a request to add one more alert. On 4th February, we encountered a database table lock, which prevented our other server from acquiring the lock on this table. We would like an alert to be triggered for such incidents from the database end as well."
 
-Let me know if you want to make it more concise or formal!
+---
+
+Hi [DB Team],
+
+We request you to set an alert for the DATABASECHANGELOGLOCK table. On 4th February, we encountered an issue where the lock on this table was not released, causing other processes to fail in acquiring the lock.
+
+We would like an alert to be triggered if the LOCKED value remains 1 for more than a few minutes. This will help us monitor and resolve such issues proactively.
+
+Thank you in advance for your support!
+
+Best regards,
+[Your Name]
+
+
+---
+
+Let me know if you want to make it more concise or detailed!
 
