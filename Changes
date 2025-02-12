@@ -1,1 +1,45 @@
-rsync -av --exclude=blobs /appdata/install/sonatype-work/nexus3/ /appbin/install/sonatype-work/nexus3/
+Here’s the revised message with the sync command and blob exclusion:
+
+
+---
+
+Subject: Nexus Database Migration to Local Storage – Completed Successfully
+
+Dear Team,
+
+The migration of the Nexus database from NAS to local storage has been successfully completed. All services are up and running.
+
+Steps Completed:
+
+1. Database Migration – Moved from NAS to local storage (/local-mnt/sonatype-work/nexus3), excluding the blobs directory.
+
+
+2. Configuration Update – Updated the karaf.data directory to point to the new local storage.
+
+
+3. Nexus Restart – Verified service status post-restart.
+
+
+
+Command Used for Sync:
+
+rsync -av --progress --exclude=blobs /appdata/install/sonatype-work/nexus3/ /local-mnt/sonatype-work/nexus3/
+
+Command to Verify:
+
+curl -I http://<nexus-url>:8081
+
+Ensure you receive a 200 OK response.
+
+The Nexus URL is accessible at: http://<nexus-url>:8081
+
+Please reach out if any issues arise.
+
+Best Regards,
+[Your Name]
+
+
+---
+
+Let me know if you want to adjust the tone further!
+
