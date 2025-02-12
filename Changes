@@ -1,21 +1,10 @@
-Here’s the revised version:
+Here's an alternative explanation:
 
 
 ---
 
-Hi [DB Team],
-
-We request you to set an alert for the DATABASECHANGELOGLOCK table. On 4th February, we encountered an issue where the lock on this table was not released, causing other processes to fail in acquiring the lock.
-
-We would like an alert to be triggered if the LOCKED value remains 1 for more than a few minutes. This will help us monitor and resolve such issues proactively.
-
-Thank you in advance for your support!
-
-Best regards,
-[Your Name]
+The vendor has noted that the support bundle does not include any details regarding deadlocks or query execution. They have specifically requested that we provide these details from the database side. However, our database logs do not retain any trace of such events after the fact. As a result, we are unable to supply the vendor with the requested deadlock and query information, which limits our ability to investigate the issue further based solely on the current alert data.
 
 
 ---
-
-Let me know if you want to make it more concise or detailed!
 
