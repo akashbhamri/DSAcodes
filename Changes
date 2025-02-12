@@ -1,10 +1,6 @@
-Here's an alternative explanation:
+Here’s the refined subject line with the project key clearly mentioned:
 
+[Bitbucket Production] User 503014831 Updated Branch Permission for Project Key TESTA (Branch: Develop) – SSO Values: 503014669, 503014817
 
----
-
-The vendor has noted that the support bundle does not include any details regarding deadlocks or query execution. They have specifically requested that we provide these details from the database side. However, our database logs do not retain any trace of such events after the fact. As a result, we are unable to supply the vendor with the requested deadlock and query information, which limits our ability to investigate the issue further based solely on the current alert data.
-
-
----
+Let me know if you want to specify exactly what kind of update (e.g., added, modified, or removed) was done!
 
