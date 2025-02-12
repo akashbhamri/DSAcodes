@@ -1,45 +1,6 @@
-Here’s the revised message with the sync command and blob exclusion:
+Here's the revised version with that detail added:
 
+"Thank you, Purvesh and Sheetal, for setting up these alerts. We have a request to add one more alert. On 4th February, we encountered a database table lock, which prevented our other server from acquiring the lock on this table. We would like an alert to be triggered for such incidents from the database end as well."
 
----
-
-Subject: Nexus Database Migration to Local Storage – Completed Successfully
-
-Dear Team,
-
-The migration of the Nexus database from NAS to local storage has been successfully completed. All services are up and running.
-
-Steps Completed:
-
-1. Database Migration – Moved from NAS to local storage (/local-mnt/sonatype-work/nexus3), excluding the blobs directory.
-
-
-2. Configuration Update – Updated the karaf.data directory to point to the new local storage.
-
-
-3. Nexus Restart – Verified service status post-restart.
-
-
-
-Command Used for Sync:
-
-rsync -av --progress --exclude=blobs /appdata/install/sonatype-work/nexus3/ /local-mnt/sonatype-work/nexus3/
-
-Command to Verify:
-
-curl -I http://<nexus-url>:8081
-
-Ensure you receive a 200 OK response.
-
-The Nexus URL is accessible at: http://<nexus-url>:8081
-
-Please reach out if any issues arise.
-
-Best Regards,
-[Your Name]
-
-
----
-
-Let me know if you want to adjust the tone further!
+Let me know if you want to make it more concise or formal!
 
