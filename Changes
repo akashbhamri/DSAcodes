@@ -1,55 +1,10 @@
-Below is a more detailed email draft that includes additional context and specific questions:
-
-
----
-
-Subject: Request for Clarification on Query & Deadlock Data Retention Policy
-
-Hi [Recipient's Name],
-
-I hope you're doing well.
-
-I am reaching out regarding the recent incident where we experienced performance issues. During our initial analysis, we noticed that the query execution and deadlock data for that specific period were not available in our logs. To diagnose the root cause effectively—especially to identify which query might have taken longer than expected or if deadlocks played a role—I need to gather more information about our current logging practices.
-
-Could you please help clarify the following points?
-
-1. Data Retention Policy:
-
-What is the current retention period for our query execution and deadlock logs?
-
-Is there an automatic purge policy in place that might have removed older logs?
-
-
-
-2. Historical Data Retrieval:
-
-In scenarios where historical data is needed for troubleshooting, do we have an alternative process or backup that stores these logs?
-
-If such a process exists, could you provide guidance on how to access this data?
-
-
-
-3. Preventive Measures:
-
-Are there recommended configurations or best practices we can adopt to extend the retention period or capture additional details in future incidents?
-
-What adjustments, if any, can be made to improve our data capture for critical queries and deadlock events?
-
-
-
-
-Understanding these details will be invaluable in ensuring we can quickly identify and resolve similar issues in the future.
-
-Thank you for your assistance. I look forward to your guidance on this matter.
-
-Best regards,
-
-[Your Name]
-[Your Position]
-[Your Contact Information]
-
-
----
-
-Feel free to modify or expand on any section as needed before sending.
-
+(
+  echo "=== Stopped Containers ==="
+  docker ps -a --filter "status=exited"
+  
+  echo -e "\n=== Dangling Images ==="
+  docker images --filter "dangling=true"
+  
+  echo -e "\n=== Dangling Volumes ==="
+  docker volume ls --filter "dangling=true"
+) > docker_cleanup_details.txt
