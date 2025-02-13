@@ -4,7 +4,7 @@ Dear [Recipient Name],
 
 I hope you are well.
 
-Following our recent discussion with my manager, I would like to outline the requirements identified for the monitoring team to work independently. These points detail the necessary access and resource adjustments:
+Following our recent discussion with my manager, I would like to outline the requirements identified for the monitoring team to operate independently. The key points are as follows:
 
 CloudBees CI Controller & Server:
 
@@ -20,7 +20,7 @@ It is essential to have at least one senior team member with extensive troublesh
 
 Access Permissions:
 
-Ensure that all team members maintain access to the NPA account, RMPCI, and JKSlave. This is critical, especially in light of the planned revocation of these accesses from the monitoring team.
+Ensure that all team members maintain access to the NPA account, RMPCI, and JKSlave. This is critical, especially considering the planned revocation of these accesses from the monitoring team.
 
 
 KT Access:
@@ -28,10 +28,13 @@ KT Access:
 KT access from the build team is not required at this time.
 
 
+L2 Support Coverage:
 
-Please review the above points and let me know if any further clarification is needed or if there are additional steps we should take. Your support in implementing these changes is greatly appreciated.
+Previously, we received support from an L2 team that notified us of emails and called us during weekends. Since that support has been removed, we request similar assistance from another L2 team to help us maintain the same level of operational support.
 
-Thank you for your attention to this matter.
+
+
+Thank you for your attention to these matters. Please let me know if you need any further clarification or additional information.
 
 Best regards,
 
