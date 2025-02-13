@@ -1,10 +1,1 @@
-(
-  echo "=== Stopped Containers ==="
-  docker ps -a --filter "status=exited"
-  
-  echo -e "\n=== Dangling Images ==="
-  docker images --filter "dangling=true"
-  
-  echo -e "\n=== Dangling Volumes ==="
-  docker volume ls --filter "dangling=true"
-) > docker_cleanup_details.txt
+ps -eo pid,comm,pcpu,pmem | grep java > java_usage.txt
