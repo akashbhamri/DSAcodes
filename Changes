@@ -1,1 +1,6 @@
-ps -eo pid,comm,pcpu,pmem | grep java > java_usage.txt
+Here’s a polished version of that sentence:
+
+"The monitoring team manually cleaned up unused Docker images and containers after receiving approval, bringing usage under the threshold. As discussed, the team is collaborating with the container team to assess the impact and determine the frequency for automatically running the cleanup script."
+
+Let me know if you want it more formal or concise!
+
