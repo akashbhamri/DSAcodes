@@ -1,44 +1,27 @@
-Subject: Follow-Up on Monitoring Team's Requirements for Independent Operations
-
-Dear [Recipient Name],
-
-I hope you are well.
-
-Following our recent discussion with my manager, I would like to outline the requirements identified for the monitoring team to operate independently. The key points are as follows:
-
-CloudBees CI Controller & Server:
-
-Enable restarting access for both the controller and the server.
-
-Provide support bundle download access for all associated tools to facilitate deep and independent analysis.
+Below is a concise, professional email draft that incorporates both your previous points and the update from the BB vendor:
 
 
-Team Expertise:
+---
 
-It is essential to have at least one senior team member with extensive troubleshooting experience and comprehensive knowledge of our current tools.
+Subject: Follow-Up on High Utilization Issue & Database Indexing Concerns
 
+Hello [Recipient Name/Team],
 
-Access Permissions:
+We received an update from the BB vendor indicating that our questions around indexing are primarily related to the database side, which falls outside of Atlassian’s scope. They’ve advised us to reach out to our DBA team for further assistance on this matter.
 
-Ensure that all team members maintain access to the NPA account, RMPCI, and JKSlave. This is critical, especially considering the planned revocation of these accesses from the monitoring team.
+That said, we would still like to set up a call with the BB vendor to discuss any other relevant details. If possible, please include the Microsoft vendor as well. From our imdex data, we have not been able to pinpoint why we experienced unusually high utilization on February 3rd and 4th. Specifically, we’d like to understand:
 
-
-KT Access:
-
-KT access from the build team is not required at this time.
+1. What was the fragmentation percentage during that period?
 
 
-L2 Support Coverage:
-
-Previously, we received support from an L2 team that notified us of emails and called us during weekends. Since that support has been removed, we request similar assistance from another L2 team to help us maintain the same level of operational support.
+2. How did this fragmentation or indexing issue contribute to the high utilization and extended processing times?
 
 
 
-Thank you for your attention to these matters. Please let me know if you need any further clarification or additional information.
+Any insights or a clear breakdown from the DBA perspective would be greatly appreciated. Thank you for your assistance, and please let me know if you have any questions or need more information before scheduling the call.
 
 Best regards,
-
 [Your Name]
-[Your Position]
+[Your Title / Position]
 [Your Contact Information]
 
