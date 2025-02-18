@@ -1,27 +1,6 @@
-Below is a concise, professional email draft that incorporates both your previous points and the update from the BB vendor:
+Short description:
+We need access to the OS index to retrieve server root data for troubleshooting.
 
-
----
-
-Subject: Follow-Up on High Utilization Issue & Database Indexing Concerns
-
-Hello [Recipient Name/Team],
-
-We received an update from the BB vendor indicating that our questions around indexing are primarily related to the database side, which falls outside of Atlassian’s scope. They’ve advised us to reach out to our DBA team for further assistance on this matter.
-
-That said, we would still like to set up a call with the BB vendor to discuss any other relevant details. If possible, please include the Microsoft vendor as well. From our imdex data, we have not been able to pinpoint why we experienced unusually high utilization on February 3rd and 4th. Specifically, we’d like to understand:
-
-1. What was the fragmentation percentage during that period?
-
-
-2. How did this fragmentation or indexing issue contribute to the high utilization and extended processing times?
-
-
-
-Any insights or a clear breakdown from the DBA perspective would be greatly appreciated. Thank you for your assistance, and please let me know if you have any questions or need more information before scheduling the call.
-
-Best regards,
-[Your Name]
-[Your Title / Position]
-[Your Contact Information]
+Long description:
+To effectively troubleshoot various scenarios, we require access to the OS index, which provides crucial insights into server root data. This access will help diagnose and resolve system issues efficiently.
 
