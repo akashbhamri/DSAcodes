@@ -35,4 +35,44 @@ Next Steps:
 Continue monitoring with alerts and investigate further if the issue recurs.
 
 
+Index Data Review & Rebuild Frequency Proposal
+
+Overview:
+
+We have reviewed the index data from 15 to 13frb.
+
+Elevated values were observed only on Feb 2–4, with all other days remaining within the normal range.
+
+
+Data Limitations:
+
+We have limited data from the database to investigate this issue further.
+
+Since the database is not storing query execution data, it's not possible now to investigate the root cause.
+
+We can't involve vendor support since it falls outside their scope.
+
+
+Proposal:
+
+Change the index rebuild job from a daily schedule to a weekend-only schedule.
+
+
+Expected Impact:
+
+Daily rebuilds help maintain low fragmentation.
+
+With a weekend-only schedule, fragmentation may accumulate during weekdays, potentially impacting query performance—especially under heavy DML activity.
+
+It’s important to note that the CM vendor is outside their scope and the DB team has not confirmed what issues may arise from changing the schedule from daily to weekly.
+
+According to Microsoft’s SQL Server documentation, less frequent index maintenance can lead to increased fragmentation, which may degrade query performance. More details can be found here: SQL Server Index Fragmentation.
+
+
+Next Steps:
+
+Continue monitoring with alerts and investigate further if the issue recurs.
+
+
+
 
