@@ -1,83 +1,38 @@
-1. 24/7 Alert Monitoring and Issue Resolution: We constantly monitor alerts from New Relic, Splunk, and our internal scripts to quickly address issues like high CPU, memory, or swap usage and ensure system stability.
+Index Data Review & Rebuild Frequency Proposal
+
+Overview:
+
+We have reviewed the index data from 15 to 13frb.
+
+Elevated values were observed only on Feb 2–4, with all other days remaining within normal range.
 
 
-2. Setting Up and Improving Alerts: We create and fine-tune alerts in New Relic and Splunk using RITMs to catch potential problems early, working closely with our teams to adjust thresholds and reduce false alarms.
+Data Limitations:
+
+We have limited data from the database to investigate this issue further.
+
+Since the database is not storing query execution data, it's not possible now to investigate the root cause.
+
+We can't involve vendor support since it falls outside their scope.
 
 
-3. Onboarding Server Logs in Splunk: We add new server logs to Splunk so that every log is tracked and any issues can be identified promptly.
+Proposal:
+
+Change the index rebuild job from a daily schedule to a weekend-only schedule.
 
 
-4. Vendor Issue Escalation: When tool issues arise and we cannot pinpoint the cause through logs or by checking relevant files, we escalate the issue to the vendor. We implement the vendor’s recommendations in a test environment first and then inform the team to roll out the changes in the development and production environments.
+Expected Impact:
+
+Daily rebuilds help maintain low fragmentation.
+
+With a weekend-only schedule, fragmentation may accumulate during weekdays, potentially impacting query performance—especially under heavy DML activity.
+
+It's important to note that the CM vendor is outside their scope and the DB team has not confirmed what issues may arise from changing the schedule from daily to weekly.
 
 
-5. Tools Downtime & Root Cause Analysis: If any tool goes down, we check its health using New Relic APM, review key metrics for insights, analyze Splunk logs to identify the exact cause, and escalate the issue as needed.
+Next Steps:
 
-
-6. Root Directory Cleanup Coordination: We work with the UNIX team to monitor the root directory’s disk usage, initiate cleanup processes when usage gets too high, and report any issues since we do not have direct access.
-
-
-7. Monitoring Cleanup Jobs: We regularly check the status of cleanup jobs and inform the platform team immediately if any job fails or encounters issues during execution.
-
-
-8. Incident Management for Root Directory Issues: When problems occur during cleanup or if the root directory becomes inaccessible, we raise an incident with the UNIX team and follow up until the issue is resolved.
-
-
-9. Capacity Planning for Servers: We review and plan for the capacity of all servers (Production, Development, DR) to ensure sufficient resources are available and work with stakeholders to adjust capacity as needed.
-
-
-10. Supporting Server Patching: We assist in scheduling and coordinating server patching to keep systems secure and up to date while clearly communicating the patching plans to the team.
-
-
-11. Health Checks on DevOps Tools: We perform regular health checks on our DevOps tools to ensure they are running smoothly and address any early signs of issues to prevent downtime.
-
-
-12. Communicating Critical Alerts: We quickly notify the team of any critical alerts or tool outages through our internal communication channels, providing clear updates on the status and next steps.
-
-
-13. Group Chart of Platform Monitoring and Alerting: We maintain a comprehensive chart that outlines our entire monitoring and alerting process, keeping the documentation updated as tools or procedures change.
-
-
-
-
-
-
-1. 24/7 Alert Monitoring and Issue Resolution: We constantly monitor alerts from New Relic, Splunk, and internal scripts to quickly address issues like high CPU, memory, or swap usage and take prompt action to ensure system stability.
-
-
-2. Setting Up and Improving Alerts: We create and fine-tune alerts in New Relic and Splunk using RITMs to catch potential problems early and work closely with teams to adjust thresholds and reduce false alarms.
-
-
-3. Onboarding Server Logs in Splunk: We add new server logs to Splunk to ensure that all logs are tracked and any issues are identified promptly.
-
-
-4. Vendor Issue Resolution: When tool-related issues arise, we contact the vendor for troubleshooting and guidance. We test any recommended changes in a dedicated test environment before implementing them in development and production.
-
-
-5. Tools Downtime & Root Cause Analysis: If any tool goes down, we check its health using New Relic APM, review key metrics for insights, analyze Splunk logs to pinpoint the exact cause, initiate an IRC call if needed, and raise an incident with the dedicated team for resolution.
-
-
-6. Root Directory Cleanup Coordination: We collaborate with the UNIX team to monitor the root directory's disk usage, initiate cleanup processes when usage is too high, and report any issues encountered since we do not have direct access.
-
-
-7. Monitoring Cleanup Jobs: We regularly check the status of cleanup jobs and inform the platform team immediately if any job fails or faces issues during execution.
-
-
-8. Incident Management for Root Directory Issues: When problems occur during cleanup or if the root directory becomes inaccessible, we raise incidents with the UNIX team and follow up to ensure these issues are resolved quickly.
-
-
-9. Capacity Planning for Servers: We review and plan for the capacity of all servers (Production, Development, DR) to ensure sufficient resources are available and work with stakeholders to adjust capacity as needed.
-
-
-10. Supporting Server Patching: We assist with scheduling and coordinating server patching to keep systems secure and up to date while clearly communicating patching plans to the team.
-
-
-11. Health Checks on DevOps Tools: We perform regular health checks on DevOps tools to ensure they are operating correctly and address any early signs of issues to prevent downtime.
-
-
-12. Communicating Critical Alerts: We quickly notify the team of any critical alerts or tool outages via internal communication channels, providing clear updates on the status and next steps.
-
-
-13. Group Chart of Platform Monitoring and Alerting: We maintain a clear chart outlining the entire monitoring and alerting process and keep the documentation updated to reflect any changes in tools or procedures.
+Continue monitoring with alerts and investigate further if the issue recurs.
 
 
 
