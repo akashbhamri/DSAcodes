@@ -1,38 +1,23 @@
-Index Data Review & Rebuild Frequency Proposal
+Subject: Proposal to Use Only a 90% Threshold for Alerts
 
-Overview:
+Hi Praneeth,
 
-We reviewed the index data from 15 to 13frb and noticed elevated values only on Feb 2–4. All other days were within normal range.
+Following our meeting yesterday, I’m proposing that we eliminate the 85% threshold and rely solely on a 90% threshold for our CPU, memory, and filesystem alerts.
 
+Reasons for This Change:
 
-Data Limitations:
+Reduced Alert Noise:
+The 85% threshold often generates alerts for minor fluctuations that don’t necessarily indicate a critical issue. Sticking with a 90% threshold will help us avoid these non-essential alerts.
 
-We don't have enough database data to investigate further.
+Enhanced Focus on Critical Issues:
+With a single threshold at 90%, we can better prioritize alerts that reflect genuinely critical resource usage, ensuring our team focuses on resolving actual performance bottlenecks.
 
-Since the database isn’t storing query execution data, we can't pinpoint the root cause.
-
-Also, vendor support is out of scope for this issue.
-
-
-Proposal:
-
-Change the index rebuild job from a daily schedule to a weekend-only schedule.
+Simplified Monitoring Configuration:
+Maintaining just one threshold simplifies our monitoring setup and makes it easier to manage and adjust as needed.
 
 
-Expected Impact:
+Could you please share your thoughts on this approach? I’d like to ensure we’re aligned before making any changes.
 
-Daily rebuilds help keep fragmentation low and ensure updated statistics.
+Best regards,
+[Your Name]
 
-Microsoft’s documentation on index maintenance explains that rebuilding an index resets fragmentation and updates statistics. While it doesn’t directly say that less frequent rebuilds will harm performance, it indirectly suggests that regular maintenance is important.
-
-In environments with high DML activity, waiting until the weekend could allow fragmentation to build up during weekdays, which might affect query performance.
-
-Please note that the CM vendor is not responsible for this, and the DB team hasn't confirmed the exact issues that might arise from changing the schedule.
-
-
-Next Steps:
-
-Continue monitoring with alerts and investigate further if the issue recurs.
-
-
-https://learn.microsoft.com/en-us/sql/relational-databases/indexes/reorganize-and-rebuild-indexes?view=sql-server-ver16
