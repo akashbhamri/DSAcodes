@@ -1,21 +1,31 @@
-Subject: Request to Reschedule Rebuild Index Job
+Here’s a polished version of the email with the updated proposal:
+
+
+---
+
+Subject: Index Rebuild Job Rescheduling Proposal
 
 Hi Team,
 
-After reviewing application metrics for the past 5 months, we have identified the following:
+Following our internal discussions, we have decided not to proceed with changing the index rebuild frequency from daily to weekly. Instead, we propose rescheduling the current daily rebuild job from 9 PM EST to 7 PM EST.
 
-Response Times: Elevated response times have been observed.
+Reason for Change:
 
-Traffic Pattern: There is a notable drop in request volume around 7 PM EST.
+The earlier start time will help minimize the impact on system performance during peak hours.
 
-Apdex Score: The Apdex score remains strong.
+It also allows for better monitoring and issue resolution within regular support hours.
 
 
-We discussed these findings with Praneet, and he has approved the proposed change. Accordingly, we will raise a request to the DB team to reschedule the rebuild index job from 9 PM EST to 7 PM EST.
+Next Steps:
 
-Please let me know if there are any concerns or additional inputs.
+Please let us know if there are any concerns or dependencies with shifting the schedule.
+
+If there are no objections, we plan to implement the new schedule on [insert proposed date].
+
+
+Thank you for your cooperation. Looking forward to your feedback.
 
 Best regards,
-
 [Your Name]
+[Your Position]
 
