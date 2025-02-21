@@ -1,87 +1,21 @@
-Here's a detailed breakdown of the investigation and actions taken:
+Subject: Request to Reschedule Rebuild Index Job
+
+Hi Team,
+
+After reviewing application metrics for the past 5 months, we have identified the following:
+
+Response Times: Elevated response times have been observed.
+
+Traffic Pattern: There is a notable drop in request volume around 7 PM EST.
+
+Apdex Score: The Apdex score remains strong.
 
 
----
+We discussed these findings with Praneet, and he has approved the proposed change. Accordingly, we will raise a request to the DB team to reschedule the rebuild index job from 9 PM EST to 7 PM EST.
 
-1. Initial Investigation – New Relic Monitoring
+Please let me know if there are any concerns or additional inputs.
 
-Upon receiving the alert regarding high swap utilization, we initiated an investigation using New Relic. The swap usage had reached 85%, indicating potential memory pressure on the VM.
+Best regards,
 
-
----
-
-2. Observed Issue – High Swap Utilization (85%)
-
-Swap Utilization: Monitored data confirmed that swap usage had spiked to 85%.
-
-No Extra Processes: Upon reviewing the running processes through New Relic, no additional or unexpected processes were found consuming resources.
-
-Java Process Analysis: A deeper inspection revealed that the Java process was consuming an abnormally high amount of memory, leading to excessive swap usage. This suggested potential memory leaks or inefficient memory management within the Java application.
-
-
-
----
-
-3. Detailed Analysis – Java Process Memory Consumption
-
-Heap and Thread Dump Collection:
-
-Collected heap dump to analyze memory allocation, garbage collection behavior, and potential memory leaks.
-
-Captured thread dump to check for thread contention, deadlocks, or any thread-related bottlenecks.
-
-
-Swap Left on Device: The swap space was heavily utilized due to the Java process, leading to degraded performance and potential system slowdowns.
-
-
-
----
-
-4. Actions Taken
-
-Vendor Ticket Raised:
-
-A ticket was raised with the Java application vendor for in-depth analysis of the heap and thread dumps.
-
-Shared all relevant logs and dump files to assist in their debugging process.
-
-
-Internal Team Coordination:
-
-Cloud Team: Engaged the cloud team to assess if there are any infrastructure-level issues or optimizations required.
-
-Unit Team: Coordinating with the unit team to understand if any recent deployments or code changes could have caused the memory spike.
-
-Memory Upgrade Consideration: Discussing with both teams to evaluate if increasing the VM memory is necessary to prevent future swap issues.
-
-
-
-
----
-
-5. Next Steps
-
-Awaiting vendor feedback on the heap and thread dump analysis.
-
-Continue monitoring memory and swap usage via New Relic.
-
-Based on vendor input and internal assessment, decide on:
-
-Code optimizations or memory leak fixes.
-
-Increasing the VM's memory allocation if required.
-
-
-
-
----
-
-6. Root Cause Analysis – In Progress
-
-The RCA is currently in progress. Preliminary indications point towards the Java process as the primary contributor to high memory and swap usage. A detailed RCA will be provided post vendor analysis and after completing internal reviews.
-
-
----
-
-Would you like me to refine or add anything else to this?
+[Your Name]
 
