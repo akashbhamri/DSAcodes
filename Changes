@@ -1,6 +1,6 @@
-Here's a polished and professional version of your message with clear justification:
+Here’s a polished and professional version with clear justification:
 
-"Currently, we have access to the root CV, but it has been removed, which has created a dependency on the Unix team for accessing logs. Each time we need to investigate server-level issues, we must request logs from them, which can delay the troubleshooting process. Gaining direct access again would eliminate this dependency, streamline our investigations, and significantly improve our efficiency in identifying and resolving server-level issues."
+"We previously had access to the root CV, but it was removed as part of the wheel group remediation. As a result, we now rely on the Unix team to share logs whenever we need to investigate server-level issues, creating a dependency that can delay the troubleshooting process. Gaining direct access to the Splunk logs for our VM's CV would eliminate this dependency, streamline investigations, and enhance our efficiency in resolving server-level issues. We are requesting access strictly for our VM's CV to maintain proper scope and compliance."
 
-This version clearly explains the problem, its impact, and the benefit of granting access. Would you like any adjustments?
+This version clearly explains the situation, the impact, and the justification for the request while maintaining a professional tone. Would you like any changes?
 
