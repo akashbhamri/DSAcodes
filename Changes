@@ -1,2 +1,1 @@
-Santosh, I have a doubt regarding our conversation yesterday. If we modify the existing service to trigger alerts only on the L1 DL, considering that this service was originally used solely for triggering alerts for the main L3/L4 escalation policy, will changing the DL impact the existing critical alerts?
-
+"We’re already in discussion with NR. Some agent and Docker alerts are resolved on priority as soon as they are received, but the system has a default 24-hour delay in triggering alert closures, especially for process monitoring alerts."
