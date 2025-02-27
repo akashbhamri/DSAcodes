@@ -1,1 +1,1 @@
-"We’re already in discussion with NR. Some agent and Docker alerts are resolved on priority as soon as they are received, but the system has a default 24-hour delay in triggering alert closures, especially for process monitoring alerts."
+As we all know, the TKGI agent should start using the jkslave user, but the agent file is currently owned by rmpci. We should explore ways to change the file ownership while ensuring that jkslave has only the necessary write permissions to bring up the agents. I have already created an RITM for this request.
