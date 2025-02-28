@@ -1,4 +1,63 @@
+Root Cause Analysis (RCA) Report
 
-"Hi Praeeth Asharaf, as discussed, an alert has been set up for the TKGI agent. If it starts with 'rmpci,' we will receive an alert as shown below
+Incident Overview
 
-H/5 * * * *
+On Saturday the 22nd, during patching on the 01 server, an operational deviation occurred. The standard process required the use of Stonebranch to stop and start the server. However, when Stonebranch failed to perform the expected action, the monitoring team member (Satish) manually logged into the server and started the agent using the incorrect user account ("rmpci") instead of the designated "jkslave." This misstep led to issues with TKGI deployment. Additionally, it was observed that the production TKGI agent (vplrlctapda01) was configured with "rmpci" as the owner and granted full permissions, which introduces potential security and operational risks.
+
+Timeline of Events
+
+Patching Initiation: Patching was scheduled and executed on server 01 on Saturday the 22nd.
+
+Initial Action: The team attempted to use Stonebranch for a controlled stop/start of the server.
+
+Deviation from Process: Due to a failure in Stonebranch, Satish manually logged in and started the agent using the incorrect user ("rmpci").
+
+Resulting Impact: This action caused an issue with the TKGI deployment process.
+
+Follow-Up Measures: A RITM was raised by the monitoring team for the platform team to investigate and address the user permission and ownership issues. In parallel, a monitoring pipeline was created to trigger alerts for any future TKGI agent anomalies.
+
+
+Root Cause
+
+Manual Intervention Error: The failure of Stonebranch led to a manual intervention. Instead of seeking immediate support from the platform team, the monitoring team member opted to start the server manually, using the wrong user account.
+
+Incorrect User Configuration: The agent was started using "rmpci" rather than "jkslave," which is against the established process and directly impacted the TKGI deployment.
+
+Permission Misconfiguration: The production TKGI agent (vplrlctapda01) was found to have "rmpci" as its owner with full permissions, exacerbating the risk and complicating the resolution.
+
+
+Impact Assessment
+
+Operational Disruption: The TKGI deployment process was adversely affected, potentially leading to service interruptions.
+
+Security Risks: Incorrect user permissions on a production system introduce vulnerabilities and could lead to unauthorized operations.
+
+Process Non-Compliance: The deviation from the established process highlighted a gap in operational discipline, increasing the risk of similar errors in the future.
+
+
+Corrective Actions
+
+Immediate Resolution: A RITM has been raised for the platform team to investigate and correct the user ownership and permissions on the affected TKGI agent.
+
+Monitoring Enhancement: A dedicated pipeline has been implemented to monitor the TKGI agent and trigger alerts in case of irregularities.
+
+Enforcement of Procedures: The monitoring team will no longer manually start the server. Instead, they will strictly use Stonebranch, and if issues persist with Stonebranch, they will escalate the matter to the platform team for resolution.
+
+
+Preventive Measures
+
+Reinforce Standard Operating Procedures (SOPs): Emphasize the importance of using Stonebranch for server operations and ensure that all team members are trained and compliant with these procedures.
+
+Improve Tool Reliability: Investigate and resolve the underlying issues with Stonebranch to reduce the likelihood of failure during critical operations.
+
+Review and Update User Permissions: Reassess and correct the permissions and ownership settings for production systems to ensure that only authorized accounts (e.g., "jkslave") are used for operational tasks.
+
+Escalation Protocol: Develop a clear escalation process for situations where automated tools fail, ensuring immediate support from the platform team rather than resorting to manual interventions.
+
+Regular Audits: Conduct periodic audits of user permissions and process adherence to identify and address deviations before they impact production environments.
+
+
+Conclusion
+
+The incident on Saturday the 22nd was primarily due to a manual intervention error—stemming from Stonebranch's failure—that resulted in the use of an incorrect user account ("rmpci") during a critical patching operation. This not only disrupted the TKGI deployment process but also exposed a potential security risk due to improper user permissions. Moving forward, strict adherence to established procedures, improvements in automated tool reliability, and enhanced monitoring and escalation protocols will be key to preventing similar issues in the future.
+
