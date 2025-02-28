@@ -1,26 +1,23 @@
 #!/bin/bash
 
-# Server list (IP addresses or hostnames)
-SERVERS=("server1.ip" "server2.ip" "server3.ip")  # Replace with actual IPs
-SSH_USER="your_ssh_user"  # Replace with your SSH user
+# Server list
+SERVERS=("server1" "server2" "server3")
+SSH_USER="your_ssh_user"
 FAILED_SERVERS=()
 
 for SERVER in "${SERVERS[@]}"
 do
     echo "Checking UDeploy agent on $SERVER..."
-
-    # Fetch only the hostname of the remote server
     HOSTNAME=$(ssh -o StrictHostKeyChecking=no $SSH_USER@$SERVER "hostname")
 
-    # Check if rmpci is running uDeploy
     if ssh -o StrictHostKeyChecking=no $SSH_USER@$SERVER 'ps -eo user,pid,command | grep urban | grep -v grep | grep rmpci > /dev/null'; then
         echo "ALERT: Unauthorized UDeploy agent is running on $HOSTNAME"
         FAILED_SERVERS+=("$HOSTNAME")
     fi
 done
 
-# If any unauthorized process is found, trigger failure
 if [ ${#FAILED_SERVERS[@]} -gt 0 ]; then
-    export FAILED_SERVERS_LIST="${FAILED_SERVERS[*]}"  # Store in Jenkins environment variable
-    exit 1  # Fail the job
+    FAILED_SERVERS_LIST=$(IFS=,; echo "${FAILED_SERVERS[*]}")
+    echo "FAILED_SERVERS_LIST=$FAILED_SERVERS_LIST" > $WORKSPACE/env.properties  # Save to file for Jenkins
+    exit 1
 fi
