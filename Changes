@@ -48,3 +48,14 @@ Build URL: ${BUILD_UR
 
 
 ${BUILD_LOG_REGEX, regex="HOSTNAMES:\\s*(.*)", replacement="$1", maxMatches=1, showTruncatedLines=false}
+
+
+
+
+Unauthorized UDeploy agent detected on the following server(s):
+
+${BUILD_LOG_REGEX, regex="^([a-zA-Z0-9.-]+( [a-zA-Z0-9.-]+)*)$", maxMatches=1, showTruncatedLines=false}
+
+Job: ${JOB_NAME}
+Build: ${BUILD_NUMBER}
+URL: ${BUILD_URL}
