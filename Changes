@@ -1,10 +1,26 @@
-🚨 Unauthorized UDeploy agent detected! 🚨
+#!/bin/bash
 
-❗ Issue detected on: ${ENV, var="FAILED_SERVERS"}
+# Server list (IP addresses or hostnames)
+SERVERS=("server1.ip" "server2.ip" "server3.ip")  # Replace with actual IPs
+SSH_USER="your_ssh_user"  # Replace with your SSH user
+FAILED_SERVERS=()
 
-🔹 Job Name: ${JOB_NAME}
-🔹 Build Number: ${BUILD_NUMBER}
-🔹 Affected Server(s): ${ENV, var="FAILED_SERVERS"}
-🔹 Build URL: ${BUILD_URL}
+for SERVER in "${SERVERS[@]}"
+do
+    echo "Checking UDeploy agent on $SERVER..."
 
-Please investigate immediately!
+    # Fetch only the hostname of the remote server
+    HOSTNAME=$(ssh -o StrictHostKeyChecking=no $SSH_USER@$SERVER "hostname")
+
+    # Check if rmpci is running uDeploy
+    if ssh -o StrictHostKeyChecking=no $SSH_USER@$SERVER 'ps -eo user,pid,command | grep urban | grep -v grep | grep rmpci > /dev/null'; then
+        echo "ALERT: Unauthorized UDeploy agent is running on $HOSTNAME"
+        FAILED_SERVERS+=("$HOSTNAME")
+    fi
+done
+
+# If any unauthorized process is found, trigger failure
+if [ ${#FAILED_SERVERS[@]} -gt 0 ]; then
+    export FAILED_SERVERS_LIST="${FAILED_SERVERS[*]}"  # Store in Jenkins environment variable
+    exit 1  # Fail the job
+fi
