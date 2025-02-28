@@ -61,3 +61,11 @@ Conclusion
 
 The incident on Saturday the 22nd was primarily due to a manual intervention error—stemming from Stonebranch's failure—that resulted in the use of an incorrect user account ("rmpci") during a critical patching operation. This not only disrupted the TKGI deployment process but also exposed a potential security risk due to improper user permissions. Moving forward, strict adherence to established procedures, improvements in automated tool reliability, and enhanced monitoring and escalation protocols will be key to preventing similar issues in the future.
 
+
+Impact
+
+TKGI deployment was delayed by 30 minutes due to the incorrect user starting the agent.
+
+No major service disruption, but the issue led to a delay in deployment.
+
+Process non-compliance risk due to manual intervention outside the standard procedure.
