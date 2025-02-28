@@ -1,35 +1,46 @@
 #!/bin/bash
 
-# Server list
+# List of remote servers (IP or hostname)
 SERVERS=("server1" "server2" "server3")
 SSH_USER="your_ssh_user"
-FAILED_SERVERS=()
+
+# Array to hold any unauthorized hosts found
+UNAUTHORIZED_HOSTS=()
 
 for SERVER in "${SERVERS[@]}"
 do
     echo "Checking UDeploy agent on $SERVER..."
-    HOSTNAME=$(ssh -o StrictHostKeyChecking=no $SSH_USER@$SERVER "hostname")
+    
+    # Get the remote machine's actual hostname
+    REMOTE_HOSTNAME=$(ssh -o StrictHostKeyChecking=no $SSH_USER@$SERVER "hostname")
 
-    if ssh -o StrictHostKeyChecking=no $SSH_USER@$SERVER 'ps -eo user,pid,command | grep urban | grep -v grep | grep rmpci > /dev/null'; then
-        echo "ALERT: Unauthorized UDeploy agent is running on $HOSTNAME"
-        FAILED_SERVERS+=("$HOSTNAME")
+    # Check if 'rmpci' is running the udeploy agent
+    if ssh -o StrictHostKeyChecking=no $SSH_USER@$SERVER \
+       'ps -eo user,pid,command | grep urban | grep -v grep | grep rmpci > /dev/null'; then
+        echo "ALERT: Unauthorized UDeploy agent is running on $REMOTE_HOSTNAME"
+        UNAUTHORIZED_HOSTS+=("$REMOTE_HOSTNAME")
     fi
 done
 
-if [ ${#FAILED_SERVERS[@]} -gt 0 ]; then
-    FAILED_SERVERS_LIST=$(IFS=,; echo "${FAILED_SERVERS[*]}")
-    echo "FAILED_SERVERS_LIST=$FAILED_SERVERS_LIST" > $WORKSPACE/env.properties
-    cat $WORKSPACE/env.properties  # Debugging: Check if file is correct
+# If any unauthorized usage is found, fail the build and print them
+if [ ${#UNAUTHORIZED_HOSTS[@]} -gt 0 ]; then
+    # Print the hostnames in a single line so Jenkins can parse them
+    echo "HOSTNAMES: ${UNAUTHORIZED_HOSTS[@]}"
     exit 1
 else
-    echo "No unauthorized agent detected."
+    echo "No unauthorized usage found."
+    exit 0
 fi
 
 
 
-if [ -f $WORKSPACE/env.properties ]; then
-    source $WORKSPACE/env.properties
-    echo "Loaded FAILED_SERVERS_LIST: $FAILED_SERVERS_LIST"
-else
-    echo "env.properties file not found!"
-fi
+
+The following server(s) have an unauthorized UDeploy agent (running as rmpci):
+
+${BUILD_LOG_REGEX, regex="HOSTNAMES:(.*)", maxMatches=1, showTruncatedLines=false}
+
+Please investigate immediately!
+
+Job Name: ${JOB_NAME}
+Build Number: ${BUILD_NUMBER}
+Build URL: ${BUILD_URL}
