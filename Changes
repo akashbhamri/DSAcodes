@@ -1,2 +1,4 @@
 
-"Hi Praeeth Asharaf, as discussed, an alert has been set up for the TKGI agent. If it starts with 'rmpci,' we will receive an alert as shown belo
+"Hi Praeeth Asharaf, as discussed, an alert has been set up for the TKGI agent. If it starts with 'rmpci,' we will receive an alert as shown below
+
+H/5 * * * *
