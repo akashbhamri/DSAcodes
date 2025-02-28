@@ -1,2 +1,65 @@
-The permanent solution is to change the ownership of the TKGI agent file and restrict execute permissions solely to the "jkslave" user. This aligns with the existing configuration on other TKGI instances, except for vplrlctapda01, which requires the same enforcement to prevent unauthorized startups.
+Root Cause Analysis (RCA) Report
+
+Incident Overview
+
+On Saturday, the 22nd, during the patching of server 01, an issue occurred due to a deviation from the standard process. As per protocol, Stonebranch should have been used to stop and start the server. However, since Stonebranch did not function as expected, the monitoring team member, Satish, manually logged into the server and started the agent using the incorrect user account ("rmpci") instead of "jkslave".
+
+This caused a TKGI deployment issue, which was identified only when the release process started. The issue led to a 30-minute delay before it was resolved.
+
+Root Cause
+
+1. Deviation from Process: The monitoring team manually started the agent instead of escalating the issue when Stonebranch failed.
+
+
+2. Incorrect User Usage: The agent was started using "rmpci" instead of "jkslave", leading to TKGI deployment failure.
+
+
+3. Misconfigured Permissions: The production TKGI agent (vplrlctapda01) was found to have "rmpci" as its owner, with full permissions, which deviated from the standard configuration on other TKGI instances.
+
+
+4. Lack of Monitoring: The issue was detected only when the release started because there was no script in place to monitor TKGI agent permissions.
+
+
+
+Impact
+
+TKGI deployment was delayed by 30 minutes due to the incorrect user starting the agent.
+
+No major service disruption, but the issue led to a delay in deployment.
+
+Potential security and compliance risk due to incorrect ownership and permissions.
+
+
+Resolution Steps Taken
+
+1. RUN Team Intervention: A RUN team resource logged in and restarted the agent using the correct user ("jkslave"), resolving the issue.
+
+
+2. Monitoring Team Action: Raised an RITM for the platform team to investigate and correct the ownership and permissions of the TKGI agent.
+
+
+3. Monitoring Enhancement: A new script has been developed and deployed to continuously monitor TKGI agent file ownership and permissions. This script will trigger an alert if any deviations are detected, ensuring proactive issue detection.
+
+
+
+Permanent Solution
+
+To prevent recurrence, the ownership of the TKGI agent file must be changed to "jkslave", with execute permissions granted only to "jkslave." This is already the standard configuration for other TKGI instances, except for vplrlctapda01, which requires correction.
+
+Preventive Measures
+
+Strict Adherence to Process: The monitoring team will no longer manually start servers. If Stonebranch fails, they will escalate to the platform team instead of taking manual action.
+
+Permission Review: The platform team will correct the user ownership of the TKGI agent and ensure only "jkslave" has the necessary permissions.
+
+Monitoring & Alerts: A script has been deployed to monitor the TKGI agent file permissions and trigger alerts if any unauthorized changes occur.
+
+Stonebranch Reliability Check: Investigate and resolve the issue that caused Stonebranch failure, ensuring smoother automation in future operations.
+
+
+Conclusion
+
+The issue occurred due to incorrect user usage during a manual intervention when Stonebranch failed. Since no monitoring was in place for TKGI agent permissions, the problem was detected only when the release process started, leading to a 30-minute delay in deployment.
+
+Moving forward, the implementation of correct user permissions, strict adherence to process, and automated monitoring will prevent similar incidents in the future.
 
