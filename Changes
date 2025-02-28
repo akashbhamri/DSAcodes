@@ -18,6 +18,18 @@ done
 
 if [ ${#FAILED_SERVERS[@]} -gt 0 ]; then
     FAILED_SERVERS_LIST=$(IFS=,; echo "${FAILED_SERVERS[*]}")
-    echo "FAILED_SERVERS_LIST=$FAILED_SERVERS_LIST" > $WORKSPACE/env.properties  # Save to file for Jenkins
+    echo "FAILED_SERVERS_LIST=$FAILED_SERVERS_LIST" > $WORKSPACE/env.properties
+    cat $WORKSPACE/env.properties  # Debugging: Check if file is correct
     exit 1
+else
+    echo "No unauthorized agent detected."
+fi
+
+
+
+if [ -f $WORKSPACE/env.properties ]; then
+    source $WORKSPACE/env.properties
+    echo "Loaded FAILED_SERVERS_LIST: $FAILED_SERVERS_LIST"
+else
+    echo "env.properties file not found!"
 fi
