@@ -43,4 +43,8 @@ Please investigate immediately!
 
 Job Name: ${JOB_NAME}
 Build Number: ${BUILD_NUMBER}
-Build URL: ${BUILD_URL}
+Build URL: ${BUILD_UR
+
+
+
+${BUILD_LOG_REGEX, regex="HOSTNAMES:\\s*(.*)", replacement="$1", maxMatches=1, showTruncatedLines=false}
