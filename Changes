@@ -1,22 +1,10 @@
-#!/bin/bash
+🚨 Unauthorized UDeploy agent detected! 🚨
 
-SERVERS=("server1.ip" "server2.ip" "server3.ip")  # Replace with actual server IPs
-SSH_USER="your_ssh_user"  # Update with your SSH user
-FAILED_SERVERS=()
+❗ Issue detected on: ${ENV, var="FAILED_SERVERS"}
 
-for SERVER in "${SERVERS[@]}"
-do
-    echo "Checking UDeploy agent on $SERVER..."
+🔹 Job Name: ${JOB_NAME}
+🔹 Build Number: ${BUILD_NUMBER}
+🔹 Affected Server(s): ${ENV, var="FAILED_SERVERS"}
+🔹 Build URL: ${BUILD_URL}
 
-    ssh -o StrictHostKeyChecking=no $SSH_USER@$SERVER '
-        if ps -eo user,pid,command | grep urban | grep -v grep | grep rmpci > /dev/null; then
-            echo "ALERT: Unauthorized UDeploy agent is running as rmpci on $SERVER!"
-            exit 1
-        fi
-    ' || FAILED_SERVERS+=("$SERVER")
-done
-
-if [ ${#FAILED_SERVERS[@]} -gt 0 ]; then
-    echo "Unauthorized uDeploy agent found on: ${FAILED_SERVERS[@]}"
-    exit 1  # Fails the job if an issue is detected
-fi
+Please investigate immediately!
