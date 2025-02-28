@@ -1,1 +1,22 @@
-As we all know, the TKGI agent should start using the jkslave user, but the agent file is currently owned by rmpci. We should explore ways to change the file ownership while ensuring that jkslave has only the necessary write permissions to bring up the agents. I have already created an RITM for this request.
+#!/bin/bash
+
+SERVERS=("server1.ip" "server2.ip" "server3.ip")  # Replace with actual server IPs
+SSH_USER="your_ssh_user"  # Update with your SSH user
+FAILED_SERVERS=()
+
+for SERVER in "${SERVERS[@]}"
+do
+    echo "Checking UDeploy agent on $SERVER..."
+
+    ssh -o StrictHostKeyChecking=no $SSH_USER@$SERVER '
+        if ps -eo user,pid,command | grep urban | grep -v grep | grep rmpci > /dev/null; then
+            echo "ALERT: Unauthorized UDeploy agent is running as rmpci on $SERVER!"
+            exit 1
+        fi
+    ' || FAILED_SERVERS+=("$SERVER")
+done
+
+if [ ${#FAILED_SERVERS[@]} -gt 0 ]; then
+    echo "Unauthorized uDeploy agent found on: ${FAILED_SERVERS[@]}"
+    exit 1  # Fails the job if an issue is detected
+fi
