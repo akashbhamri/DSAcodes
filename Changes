@@ -59,3 +59,7 @@ ${BUILD_LOG_REGEX, regex="^([a-zA-Z0-9.-]+( [a-zA-Z0-9.-]+)*)$", maxMatches=1, s
 Job: ${JOB_NAME}
 Build: ${BUILD_NUMBER}
 URL: ${BUILD_URL}
+
+
+
+ALERT: Unauthorized UDeploy Agent on ${BUILD_LOG_REGEX, regex="^[a-zA-Z0-9._-]+( [a-zA-Z0-9._-]+)*$", maxMatches=1, showTruncatedLines=false}
