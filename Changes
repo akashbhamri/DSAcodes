@@ -1,12 +1,9 @@
+Unauthorized UDeploy agent detected on the following server(s):
 
-Sure! Here's a more polished and professional version of your message:
+${BUILD_LOG_REGEX, regex="^[a-zA-Z0-9._-]+( [a-zA-Z0-9._-]+)*$", maxMatches=1, showTruncatedLines=false}
 
-"Hi everyone,
+Job Name: ${JOB_NAME}
+Build Number: ${BUILD_NUMBER}
+Build URL: ${BUILD_URL}
 
-Going forward, the monitoring team will mute alerts only when the change reaches the implementation stage.
-
-Reshma, please inform the team if the CBCD activity is not scheduled to proceed tomorrow so they can unmute the alert accordingly."
-
-This version improves clarity and flow while maintaining a professional tone. Let me know if you'd like any further refinements!
-
-
+Please investigate immediately.
