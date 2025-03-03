@@ -1,9 +1,9 @@
-Unauthorized UDeploy agent detected on the following server(s):
+Here’s a refined version of your message with a professional and polished tone:
 
-${BUILD_LOG_REGEX, regex="^[a-zA-Z0-9._-]+( [a-zA-Z0-9._-]+)*$", maxMatches=1, showTruncatedLines=false}
+Short Description: Include the alert monitor name in the description.
 
-Job Name: ${JOB_NAME}
-Build Number: ${BUILD_NUMBER}
-Build URL: ${BUILD_URL}
+Long Description: "The application team is unable to access 《tool name》. Please investigate this on priority."
 
-Please investigate immediately.
+
+Let me know if you’d like further refinements!
+
