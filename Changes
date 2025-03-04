@@ -1,2 +1,51 @@
-Please refer to the Confluence page for installation instructions and upgrade the New Relic agent from version 7.11.1 to 8.15.0. Attach the download link as well. Start with the development environment first, and then schedule the production deployment accordingly.
+Here’s a well-structured description you can use for your vendor ticket:
+
+
+---
+
+Subject: Assistance Required for New Relic Java Agent Integration in CommanderApache
+
+Description:
+
+We are in the process of integrating the New Relic Java Agent with our CommanderApache setup. We have added the following line in our environment configuration:
+
+CATALINA_OPTS="$CATALINA_OPTS -javaagent:/appbin/newrelic/newrelic_latest_2025/newrelic/newrelic.jar"
+
+However, we are unsure if this is the correct approach for CommanderApache, or if the configuration should be placed in a different file, such as envvars or another startup script.
+
+Additionally, we would like clarification on the following:
+
+1. Correct location – Where should the -javaagent argument be added to ensure it is picked up when CommanderApache starts?
+
+
+2. Validation – How can we verify that the New Relic agent is correctly attached to the Apache process?
+
+
+3. Alternative approach – If CATALINA_OPTS is not the right variable for CommanderApache, what is the recommended method for enabling the New Relic agent?
+
+
+
+Please provide guidance on the proper configuration steps. Let us know if any additional logs or details are required from our side.
+
+Environment Details:
+
+CommanderApache Version: [Add version]
+
+Operating System: [Add OS details]
+
+New Relic Agent Version: [Add version]
+
+
+Looking forward to your response.
+
+Best regards,
+[Your Name]
+[Your Team/Organization]
+
+
+---
+
+This ticket clearly explains the issue while requesting specific guidance. Let me know if you need any modifications!
+
+
 
