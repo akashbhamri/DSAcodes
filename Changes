@@ -1,2 +1,2 @@
-"Achyuth, based on the current metrics, an increase in resources doesn’t seem necessary at this point. However, if you have specific concerns, I can set up a call with the coverage team tomorrow. A clear justification will be needed for approval, but they might consider it. Let me know your preferred time to connect."
+Please refer to the Confluence page for installation instructions and upgrade the New Relic agent from version 7.11.1 to 8.15.0. Attach the download link as well. Start with the development environment first, and then schedule the production deployment accordingly.
 
