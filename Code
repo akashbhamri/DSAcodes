@@ -1,2 +1,16 @@
-The utilization returned to normal after aborting the pipeline, which had been running for 11 hours on a single stage. Praneeth, we need your help in defining a process to automatically abort pipelines that exceed a certain duration. In most cases, we are unable to reach the application team in time, so we should also have the ability to abort the pipeline from our end when necessary.
+Initial Investigation
+
+After receiving an alert about high root utilization, we began our analysis. Checking the system metrics, we noticed a spike in resource usage, prompting us to take further action.
+
+Incident Raised to Unix Team
+
+As per the process, we raised an incident with the Unix team to investigate and clean up any files contributing to the issue. They identified and provided a list of files for removal, which we proceeded to clean up.
+
+Further Analysis and Findings
+
+Despite the cleanup, the utilization remained high. Digging deeper, we identified a specific process ID that was consuming excessive resources. Tracing it further, we found that a pipeline had been running for over 11 hours in a single stage.
+
+Action Taken and Next Steps
+
+We aborted the pipeline to bring utilization back to normal. Currently, we are coordinating with the application team to determine the root cause of why the pipeline got stuck and impacted the VM. The RCA is in progress.
 
