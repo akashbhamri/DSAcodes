@@ -1,6 +1,9 @@
-Here's a more refined version:
+Got it! You can add it as a checklist item in your Tool Health report like this:
 
-"No, Rahul. We used to receive over 100 alerts earlier, but we've fine-tuned them significantly. In our call, we added alerts for closing alerts, active alerts, and weekend activity, bringing the count down to around 25. However, only 6 to 8 of these are the key alerts."
+✅ APM dashboard checked
+✅ Utilization dashboard checked
+✅ Workload monitoring checked
+✅ No critical alerts detected in Prod & Dev
 
-This keeps it professional, concise, and clear. Let me know if you want any further adjustments!
+This keeps it clear and structured. If you want a different format, let me know!
 
