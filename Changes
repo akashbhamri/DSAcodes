@@ -1,2 +1,12 @@
+Here’s the same information in a copyable format without table borders:
 
-wrapper.java.additional.221=-javaagent:/appbin/newrelic/newrelic_latest_2025/newrelic/newrelic.jar
+Total Alerts Received: 35
+Open Alerts: -
+Closed Alerts: 12
+Actionable Active Alerts: 12
+Removed Alerts: 6
+Threshold Adjustment: After discussion, we removed the 85% threshold and now have only a 90% threshold. CPU, memory, and filesystem alerts at 85% were removed.
+Other Alerts Closed: -
+
+This should be easier to copy. Let me know if you need any tweaks!
+
