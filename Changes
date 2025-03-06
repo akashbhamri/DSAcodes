@@ -1,9 +1,2 @@
-Here’s your refined checklist:
 
-✅ APM Dashboard Checked (Reviewed app performance, response times, and errors)
-✅ Utilization Dashboard Checked (Monitored CPU, memory, disk, and network usage)
-✅ Workload Monitoring Checked (Checked for active alerts in Prod and Dev environments)
-✅ No Critical Alerts Detected (Confirmed system stability)
-
-This keeps it clear and to the point. Let me know if you need any changes!
-
+wrapper.java.additional.221=-javaagent:/appbin/newrelic/newrelic_latest_2025/newrelic/newrelic.jar
