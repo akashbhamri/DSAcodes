@@ -1,2 +1,8 @@
+Here’s a more polished and professional way to phrase your message:
 
-alias myssh='ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no'
+Hi Ashraf and Praneeth,
+
+We haven't set up Stonebranch for the servers listed below yet. As a result, the monitoring team has to manually bring them down and back up. Could you confirm whether we should continue handling this, or if someone from the platform team will assist with the process?
+
+Thanks.
+
