@@ -1,8 +1,60 @@
-Here’s a more polished and professional way to phrase your message:
+Based on the checklist shown in the image, here’s what you need to check step by step after the Daylight Saving Time (DST) change:
 
-Hi Ashraf and Praneeth,
+1️⃣ Check Timestamp Updates on All Servers
 
-We haven't set up Stonebranch for the servers listed below yet. As a result, the monitoring team has to manually bring them down and back up. Could you confirm whether we should continue handling this, or if someone from the platform team will assist with the process?
+Run date (Linux) or Get-Date (Windows) to verify that servers have the correct time.
 
-Thanks.
+Ensure that all time zones are updated correctly.
+
+
+2️⃣ Perform Server Health Check
+
+Verify CPU, memory, and disk usage to ensure no unusual spikes.
+
+Check if any services failed or crashed due to the time change.
+
+
+3️⃣ Check Log Rotation After DST Change
+
+Ensure logs are being written correctly without missing or duplicate entries.
+
+Verify log rotation settings to confirm they are handling the time shift properly.
+
+
+4️⃣ Validate Cron Jobs & Scheduled Scripts
+
+Confirm that scheduled jobs (cron jobs, batch jobs) ran at the correct time.
+
+Check if any jobs were missed or executed twice due to the DST change.
+
+
+5️⃣ Verify Timestamps in Logs
+
+Open logs and ensure timestamps reflect the correct updated time.
+
+Look for any skipped or duplicated log entries.
+
+
+6️⃣ Ensure Monitoring Dashboards Are Synced
+
+Verify that Splunk, New Relic, or other monitoring tools are showing the correct time.
+
+Check if alerts or reports were triggered incorrectly.
+
+
+7️⃣ Confirm Batch Jobs Completion
+
+Ensure that all batch jobs completed successfully.
+
+Look for failures or delays caused by the time change.
+
+
+8️⃣ Capture Evidence
+
+Take screenshots or logs as proof of successful validation.
+
+Share findings with the team and report any issues.
+
+
+Let me know if you need a more detailed explanation for any step!
 
