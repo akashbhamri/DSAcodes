@@ -1,6 +1,20 @@
-Here’s a refined and professional version of your message:
+Initial Investigation
 
-"The controller experienced an unexpected partial downtime, but it was not fully down. As a result, the restart count remains at 0, and we did not receive an alert, as alerts are triggered only when the restart count reaches 1. Additionally, there were no utilization-related issues reported for this instance. For reference, please see the snapshot below."
+We have observed an alert in Splunk logs indicating that our database server is unable to connect to the application server. There could be multiple reasons for this issue.
 
-This version improves clarity, removes errors, and maintains a professional tone. Let me know if you want any further refinements!
+Actions Taken
+
+Incident Raised: We have raised an incident with the database team for further investigation.
+
+Vendor Support: A support ticket has been raised with the Bitbucket vendor to analyze potential causes. All relevant support bundles and files have been attached to the ticket for reference.
+
+
+New Relic Investigation
+
+All utilization levels are within the defined threshold.
+
+No signs of high resource utilization were observed from the New Relic monitoring data.
+
+
+Further updates will be provided based on the ongoing investigations.
 
