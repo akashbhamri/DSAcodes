@@ -1,25 +1,26 @@
-Initial Investigation
-
-We have received a CPU utilization alert indicating high usage on the Java process. Upon further investigation, we identified that only the Java process is causing the high utilization.
-
-Actions Taken
-
-Thread & Heap Dump Collection: We collected thread and heap dumps of the Java process using the following pipeline:
-(Provide pipeline details if needed)
-
-Vendor Support: A support ticket has been raised with the vendor, attaching all relevant dumps and logs for further analysis.
-
-Cloud Coverage Coordination: We are coordinating with the cloud coverage team to assess whether resource scaling is required, as the current instance has only 8 cores.
-
-
-New Relic Investigation
-
-Observed sustained high CPU utilization on the Java process.
-
-No significant memory spikes or abnormal GC behavior were detected.
-
-Other system metrics remain within normal thresholds, indicating no broader system-wide issue.
-
-
-Further updates will be shared based on the ongoing investigation.
+✅ Report Name
+📄 Description
+🕒 Frequency & Time
+👤 Responsible
+📩 Status
+Daily PCF Releases Scan Report
+Contains details of the daily PCF scan report for SecOps, Reporting, and IS Metrics teams.
+🗓️ Every day @ 11 PM EST
+Satish
+✅ Email sent with attachment
+Container Apps Scan Report
+Regular security and performance scan report for containerized applications.
+🗓️ Daily @ 12:00 PM EST
+Satish
+✅ Email sent with attachment
+Promotion Pipeline for Container Apps
+Summary of the promotion pipeline progress for containerized applications.
+🗓️ Daily @ 12:00 PM EST
+Satish
+✅ Email sent with attachment
+DevOps Daily Executive Summary Report
+Contains application deployment status and DevOps RITM/Incident details.
+🗓️ Weekdays before 12 PM EST
+Satish
+✅ Email sent with content
 
