@@ -1,20 +1,25 @@
 Initial Investigation
 
-We have observed an alert in Splunk logs indicating that our database server is unable to connect to the application server. There could be multiple reasons for this issue.
+We have received a CPU utilization alert indicating high usage on the Java process. Upon further investigation, we identified that only the Java process is causing the high utilization.
 
 Actions Taken
 
-Incident Raised: We have raised an incident with the database team for further investigation.
+Thread & Heap Dump Collection: We collected thread and heap dumps of the Java process using the following pipeline:
+(Provide pipeline details if needed)
 
-Vendor Support: A support ticket has been raised with the Bitbucket vendor to analyze potential causes. All relevant support bundles and files have been attached to the ticket for reference.
+Vendor Support: A support ticket has been raised with the vendor, attaching all relevant dumps and logs for further analysis.
+
+Cloud Coverage Coordination: We are coordinating with the cloud coverage team to assess whether resource scaling is required, as the current instance has only 8 cores.
 
 
 New Relic Investigation
 
-All utilization levels are within the defined threshold.
+Observed sustained high CPU utilization on the Java process.
 
-No signs of high resource utilization were observed from the New Relic monitoring data.
+No significant memory spikes or abnormal GC behavior were detected.
+
+Other system metrics remain within normal thresholds, indicating no broader system-wide issue.
 
 
-Further updates will be provided based on the ongoing investigations.
+Further updates will be shared based on the ongoing investigation.
 
