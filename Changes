@@ -1,30 +1,35 @@
-✅ Report Name
-📄 Description
-🕒 Frequency & Time
-👤 Responsible
-📩 Status
-Daily PCF Releases Scan Report
-Contains details of the daily PCF scan report for SecOps, Reporting, and IS Metrics teams.
-🗓️ Every day @ 11 PM EST
-Satish
-✅ Email sent with attachment
-Container Apps Scan Report
-Regular security and performance scan report for containerized applications.
-🗓️ Daily @ 12:00 PM EST
-Satish
-✅ Email sent with attachment
-Promotion Pipeline for Container Apps
-Summary of the promotion pipeline progress for containerized applications.
-🗓️ Daily @ 12:00 PM EST
-Satish
-✅ Email sent with attachment
-DevOps Daily Executive Summary Report
-Contains application deployment status and DevOps RITM/Incident details.
-🗓️ Weekdays before 12 PM EST
-Satish
-✅ Email sent with content
+Here’s the updated message with the correct EST time conversion:
 
 
-📌 Daily Report Sharing Checklist
-🔹 Objective: Ensure timely and accurate report sharing with relevant teams.
+---
+
+Subject: Database Connection Issues – Bitbucket Failing to Connect
+
+Hi [DB Team],
+
+We are facing database connection issues with Bitbucket. The logs show the following error:
+
+org.hibernate.exception.JDBCConnectionException: could not prepare statement  
+SqlExceptionHelper bitbucket - Interrupted during connection acquisition
+
+This issue occurred between March 10, 2025, 10:39 AM EST to March 11, 2025, 9:30 AM EST.
+
+This suggests that either the database is unavailable, the network connection is unstable, or there is a long-running query holding connections for too long.
+
+Could you please check:
+
+1. If there are any ongoing long-running queries or locks on the database?
+
+
+2. If there were any recent performance issues, high load, or restarts?
+
+
+3. If the connection pool is reaching its limit due to too many active connections?
+
+
+
+Let us know your findings so we can proceed with further troubleshooting.
+
+Thanks,
+[Your Name]
 
