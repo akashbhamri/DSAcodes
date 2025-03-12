@@ -1,4 +1,9 @@
-source="/appbin/atlassian/application-data/bitbucket/log/*" "SSH"  
-| rex field=_raw "git-upload-pack\s+(?<repo>[^\"\s]+)"  
-| stats count by repo  
-| sort -count
+Subject: Update on Bitbucket Database Connection Investigation
+
+Hi [Client's Name],
+
+We have engaged both the DB team and the vendor to investigate the Bitbucket database connection issue. The DB team is checking for long-running queries, locks, and performance concerns, while the vendor is analyzing potential application-level issues. Additionally, we are reviewing network and application logs to identify any anomalies related to SSH/HTTPS traffic or timeouts. We will share further updates as soon as we receive more insights. Please let us know if you need any additional details.
+
+Thanks,
+[Your Name]
+
