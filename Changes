@@ -1,4 +1,4 @@
 source="/appbin/atlassian/application-data/bitbucket/log/*" "SSH"  
-| rex field=_raw "repositories/(?<repo_id>\d+)"  
-| stats count by repo_id  
+| rex field=_raw "git-upload-pack\s+(?<repo>[^\"\s]+)"  
+| stats count by repo  
 | sort -count
