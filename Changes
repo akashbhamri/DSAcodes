@@ -1,1 +1,4 @@
-"Appdata has reached full capacity. Can you confirm if we can clean up any data under the below path? Also, what is the retention policy for this data?"
+You can phrase it more clearly like this:
+
+"We have configured a synthetic alert for this controller. Could we temporarily disable it for 10 minutes to verify whether the alert triggers? If the alert is received, we will enable it for others as well."
+
