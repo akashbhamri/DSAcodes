@@ -1,23 +1,4 @@
-Here’s a different way to phrase your request:
-
-
----
-
-Subject: Need Further Insights on Bitbucket Database Connection Issue
-
-Hi [Team],
-
-We are currently investigating the database connection issue with Bitbucket and have also reached out to the DB team for further analysis. However, in the meantime, could you check from the application side if there are any factors contributing to this issue? Specifically:
-
-Any unusual SSH or HTTPS traffic patterns
-
-Possible network disruptions or timeouts
-
-Any application-level constraints or bottlenecks that might be affecting connections
-
-
-Your insights will help us narrow down the root cause more efficiently. Let us know if you find anything unusual.
-
-Thanks,
-[Your Name]
-
+source="/appbin/atlassian/application-data/bitbucket/log/*" "SSH"  
+| rex field=_raw "repositories/(?<repo_id>\d+)"  
+| stats count by repo_id  
+| sort -count
