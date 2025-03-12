@@ -1,4 +1,2 @@
-You can phrase it more clearly like this:
-
-"We have configured a synthetic alert for this controller. Could we temporarily disable it for 10 minutes to verify whether the alert triggers? If the alert is received, we will enable it for others as well."
+"We are actively investigating the root cause of alerts across all tools, except CloudBees CI. If any issues arise, our team is responsible for analyzing them, working on the respective tool, and providing timely updates."
 
