@@ -1,1 +1,16 @@
-My role involves ensuring the accuracy and completeness of daily report-sharing. This includes verifying that emails are correctly sent to designated distribution lists, checking for necessary attachments, and confirming the presence of relevant content. I also compile a checklist and share it with the platform team for review and further action."
+Here's the revised explanation incorporating the vendor's recommendation:
+
+Disabling "Enable Audit Log Entries for Read Events"
+This setting logs every time a user accesses a page in the web UI. Since most companies don’t require this level of logging, we can disable it to reduce the load on the Audit Table and avoid frequent SQL query executions. If needed for business purposes, it can always be enabled later for verification.
+
+Enabling "Enable Audit Log Cleanup"
+If this setting is not enabled, the Audit Table will accumulate a large amount of data, leading to high storage usage and performance issues. Enabling it allows us to set a retention period, ensuring optimal system performance while keeping only the necessary logs.
+
+High Oracle Process Utilization via UDeploy
+Frequent executions from UDeploy to the database are causing high Oracle process utilization. Disabling unnecessary audit log entries and enabling log cleanup will help reduce the load on the database, improving overall performance and preventing excessive resource consumption.
+
+Vendor Recommendation
+Based on the vendor's recommendation, enabling audit log cleanup and optimizing audit settings will help manage database performance more efficiently. Implementing these changes will align with best practices and prevent unnecessary system strain.
+
+Let me know if this covers everything or if you need further refinements.
+
