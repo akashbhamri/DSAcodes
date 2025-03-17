@@ -1,1 +1,1 @@
-Can you get a thread dump for the DB process? We've already collected it from the app side and will be sending it to the vendor for analysis."
+Jerrold, can you please prioritize this RITM? We need to get this done as we are receiving multiple emails and alerts from Teams regarding high CPU utilization of the Oracle process, which is being triggered by our RMPCI use. The vendor has suggested this as the first fix.
