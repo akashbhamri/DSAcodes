@@ -1,1 +1,1 @@
-Jerrold, can you please prioritize this RITM? We need to get this done as we are receiving multiple emails and alerts from Teams regarding high CPU utilization of the Oracle process, which is being triggered by our RMPCI use. The vendor has suggested this as the first fix.
+Our db.pool.size is currently set to 160. Could you recommend how much we should increase it to prevent this issue from happening again? Also, we'd like to understand how this change will help in the long run.
