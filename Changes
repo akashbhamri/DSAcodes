@@ -1,1 +1,1 @@
-Our db.pool.size is currently set to 160. Could you recommend how much we should increase it to prevent this issue from happening again? Also, we'd like to understand how this change will help in the long run.
+Praneeth, can we track this alert in the Confluence action item instead of the daily summary? The vendor is requesting a thread and heap dump, along with an increase in pool size, which might take some time. I'll keep you in the loop with each update."
