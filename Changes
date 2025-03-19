@@ -1,11 +1,2 @@
-Subject: Recommendation from Vendor: Increase Database Pool Size Max to 200
-
-Hi [Client's Name],
-
-As per the vendor's recommendation, we need to increase the Database Pool Size Max from 160 to 200 to improve handling of concurrent connections. However, we will closely monitor the system performance, and if we observe any issues related to increased load, we will adjust the value accordingly.
-
-Please confirm if we can proceed with this change.
-
-Best regards,
-[Your Name]
+I am raising an RITM to set up an alert script at the CJOC (CloudBees Jenkins Operations Center) level to monitor the uptime of the controller. The script should continuously check the status of the controller, and if it goes down, it should automatically trigger an alert. The alert notifications should be sent to the designated distribution list ([DL Name]) to ensure the relevant teams are informed. Additionally, please enable PagerDuty integration so that real-time incident notifications are triggered for a faster response. If the controller remains down for an extended period, an escalation mechanism should be in place to ensure timely resolution. Please review this request and let me know if any additional details are required.
 
