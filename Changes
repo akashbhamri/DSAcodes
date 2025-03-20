@@ -11,13 +11,13 @@ OUTPUT_FILE="$WORKSPACE/network_health_report.csv"
 
 # Create CSV headers if the file doesn't exist
 if [[ ! -f "$OUTPUT_FILE" ]]; then
-    echo "Server,Hostname,Latency (ms),Packet Loss (%),Ping Status,Traceroute Status,MTR Status,Final Analysis" > $OUTPUT_FILE
+    echo "Server,Hostname,Latency (ms),Packet Loss (%),Ping Status,Traceroute Status,MTR Status,Final Analysis" > "$OUTPUT_FILE"
 fi
 
 echo "Checking server: $SERVER_IP"
 
-# Execute commands remotely via SSH
-SSH_CMD=$(ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no "$USERNAME@$SERVER_IP" bash -s << 'ENDSSH'
+# Execute commands remotely via SSH and store the output
+SSH_CMD=$(ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no "$USERNAME@$SERVER_IP" bash << 'ENDSSH'
     # Fetch Hostname
     HOSTNAME=$(hostname)
 
@@ -66,7 +66,10 @@ SSH_CMD=$(ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no "$USERNAME@$SERVER_IP
 ENDSSH
 )
 
-# Append the result to CSV
-echo "\"$SERVER_IP\",\"$SSH_CMD\"" >> "$OUTPUT_FILE"
-
-echo "✅ Network check completed. Results saved in $OUTPUT_FILE"
+# **Ensure SSH output is properly formatted**
+if [[ -n "$SSH_CMD" ]]; then
+    echo "\"$SERVER_IP\",\"$SSH_CMD\"" >> "$OUTPUT_FILE"
+    echo "✅ Network check completed. Results saved in $OUTPUT_FILE"
+else
+    echo "❌ Error: No output received from server $SERVER_IP"
+fi
