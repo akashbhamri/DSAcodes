@@ -1,9 +1,6 @@
+You can ask in a more professional way:
 
-You can clarify the situation with the following response:
+"Was this issue observed only during the mentioned time frame, or have there been multiple occurrences between 10 AM and 2 PM? If there were multiple instances, could you provide the timestamps to help us analyze the pattern?"
 
-Message:
-
-"The issue does not appear to be related to accessing the S3 bucket. From the logs, we can see that the Bitbucket backend server (vplrictapda07 - 10.65.5.120:7990) was down due to a System-Ping failure. This indicates a connectivity or server availability issue, rather than an S3 access problem. Could you please confirm if there are any logs or errors specifically pointing to an S3 access failure? If so, please share them so we can investigate further."
-
-This response clarifies that the issue is server-related, not S3-related, while also keeping the conversation open in case they have additional logs pointing to an S3 problem.
+This makes it clear that you're asking whether the issue was isolated or recurring.
 
