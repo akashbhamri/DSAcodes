@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Ensure the SERVER_IPS and USERNAME parameters are set
+# Ensure SERVER_IPS and USERNAME parameters are set
 if [[ -z "$SERVER_IPS" || -z "$USERNAME" ]]; then
     echo "Error: SERVER_IPS or USERNAME is missing. Pass both as Jenkins parameters."
     exit 1
@@ -11,70 +11,68 @@ OUTPUT_FILE="$WORKSPACE/network_health_report.csv"
 
 # Create CSV headers if the file doesn't exist
 if [[ ! -f "$OUTPUT_FILE" ]]; then
-    echo "Server,Hostname,Latency (ms),Packet Loss (%),Ping Status,Traceroute Status,MTR Status,Final Analysis" > $OUTPUT_FILE
+    echo "Server,Hostname,Latency (ms),Packet Loss (%),Ping Status,Traceroute Status,MTR Status,Final Analysis" > "$OUTPUT_FILE"
 fi
 
-# Convert SERVER_IPS (comma-separated) into an array
+# Convert comma-separated IPs into an array
 IFS=',' read -r -a IP_ARRAY <<< "$SERVER_IPS"
 
-# Loop through each IP
+# Loop through each IP and check network health
 for SERVER_IP in "${IP_ARRAY[@]}"; do
     echo "Checking server: $SERVER_IP"
 
     # Execute commands remotely via SSH
-    SSH_CMD=$(ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no "$USERNAME@$SERVER_IP" bash -s << ENDSSH
+    SSH_CMD=$(ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no "$USERNAME@$SERVER_IP" bash -s << 'ENDSSH'
         # Fetch Hostname
-        HOSTNAME=\$(hostname)
+        HOSTNAME=$(hostname)
 
         # Ping Test (5 packets)
-        PING_OUTPUT=\$(ping -c 5 $SERVER_IP)
-        PING_RESULT=\$(echo "\$PING_OUTPUT" | awk -F'/' 'END { print \$5 }')
-        PACKET_LOSS=\$(echo "\$PING_OUTPUT" | grep -oP '\d+(?=% packet loss)')
+        PING_OUTPUT=$(ping -c 5 8.8.8.8)
+        PING_RESULT=$(echo "$PING_OUTPUT" | awk -F'/' 'END { print $5 }')
+        PACKET_LOSS=$(echo "$PING_OUTPUT" | grep -oP '\d+(?=% packet loss)')
 
         # Traceroute Test
-        TRACEROUTE_OUTPUT=\$(traceroute -m 5 $SERVER_IP)
+        TRACEROUTE_OUTPUT=$(traceroute -m 5 8.8.8.8)
         TRACEROUTE_STATUS="All Good"
-        if echo "\$TRACEROUTE_OUTPUT" | grep -q "* * *"; then
+        if echo "$TRACEROUTE_OUTPUT" | grep -q "* * *"; then
             TRACEROUTE_STATUS="Routing Issue Detected"
         fi
 
         # MTR Test
-        MTR_OUTPUT=\$(mtr -rw $SERVER_IP)
+        MTR_OUTPUT=$(mtr -rw 8.8.8.8)
         MTR_STATUS="All Good"
-        if echo "\$MTR_OUTPUT" | grep -q "packet loss"; then
+        if echo "$MTR_OUTPUT" | grep -q "packet loss"; then
             MTR_STATUS="Packet Loss Detected"
         fi
 
         # Determine Ping Status
         PING_STATUS="All Good"
-        if [[ -z "\$PING_RESULT" ]]; then
+        if [[ -z "$PING_RESULT" ]]; then
             PING_STATUS="Ping Failed"
-        elif (( \$(echo "\$PING_RESULT > 200" | bc -l) )); then
+        elif (( $(echo "$PING_RESULT > 200" | bc -l) )); then
             PING_STATUS="High Latency (Issue)"
         fi
 
         # Packet Loss Status
         PACKET_LOSS_STATUS="No Packet Loss"
-        if [[ -z "\$PACKET_LOSS" ]] || [[ "\$PACKET_LOSS" -eq 0 ]]; then
+        if [[ -z "$PACKET_LOSS" ]] || [[ "$PACKET_LOSS" -eq 0 ]]; then
             PACKET_LOSS_STATUS="No Packet Loss"
-        elif [[ "\$PACKET_LOSS" -gt 5 ]]; then
+        elif [[ "$PACKET_LOSS" -gt 5 ]]; then
             PACKET_LOSS_STATUS="High Packet Loss"
         fi
 
         # Final Analysis
         FINAL_ANALYSIS="All Good"
-        if [[ "\$PING_STATUS" == "High Latency (Issue)" || "\$PACKET_LOSS_STATUS" == "High Packet Loss" || "\$TRACEROUTE_STATUS" == "Routing Issue Detected" || "\$MTR_STATUS" == "Packet Loss Detected" ]]; then
+        if [[ "$PING_STATUS" == "High Latency (Issue)" || "$PACKET_LOSS_STATUS" == "High Packet Loss" || "$TRACEROUTE_STATUS" == "Routing Issue Detected" || "$MTR_STATUS" == "Packet Loss Detected" ]]; then
             FINAL_ANALYSIS="Network Issues Detected, Needs Investigation"
         fi
 
-        echo "\$HOSTNAME,\$PING_RESULT,\$PACKET_LOSS,\$PING_STATUS,\$TRACEROUTE_STATUS,\$MTR_STATUS,\$FINAL_ANALYSIS"
-    ENDSSH
+        echo "$HOSTNAME,$PING_RESULT,$PACKET_LOSS,$PING_STATUS,$TRACEROUTE_STATUS,$MTR_STATUS,$FINAL_ANALYSIS"
+ENDSSH
     )
 
     # Append the result to CSV
     echo "\"$SERVER_IP\",\"$SSH_CMD\"" >> "$OUTPUT_FILE"
-
-    echo "✅ Network check completed for $SERVER_IP"
 done
 
-echo "✅ All servers checked. Results saved in $OUTPUT_FILE"
+echo "✅ Network check completed. Results saved in $OUTPUT_FILE"
