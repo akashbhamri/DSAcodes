@@ -1,2 +1,72 @@
-I am raising an RITM to set up an alert script at the CJOC (CloudBees Jenkins Operations Center) level to monitor the uptime of the controller. The script should continuously check the status of the controller, and if it goes down, it should automatically trigger an alert. The alert notifications should be sent to the designated distribution list ([DL Name]) to ensure the relevant teams are informed. Additionally, please enable PagerDuty integration so that real-time incident notifications are triggered for a faster response. If the controller remains down for an extended period, an escalation mechanism should be in place to ensure timely resolution. Please review this request and let me know if any additional details are required.
+#!/bin/bash
 
+# Ensure the server IP parameter is provided
+if [[ -z "$SERVER_IP" ]]; then
+    echo "Error: SERVER_IP parameter is missing. Pass it as a Jenkins parameter."
+    exit 1
+fi
+
+# Jenkins workspace output file
+OUTPUT_FILE="$WORKSPACE/network_health_report.csv"
+
+# Create CSV headers
+echo "Server,Latency (ms),Packet Loss (%),Ping Status,Traceroute Status,MTR Status,Final Analysis" > $OUTPUT_FILE
+
+echo "Checking server: $SERVER_IP"
+
+# 1. Ping Test (Latency & Packet Loss)
+PING_OUTPUT=$(ping -c 5 $SERVER_IP)
+PING_RESULT=$(echo "$PING_OUTPUT" | awk -F'/' 'END { print $5 }')
+PACKET_LOSS=$(echo "$PING_OUTPUT" | grep -oP '\d+(?=% packet loss)')
+
+# Evaluate Ping Status
+if [[ -z "$PING_RESULT" ]]; then
+    PING_STATUS="Ping Failed"
+elif (( $(echo "$PING_RESULT > 200" | bc -l) )); then
+    PING_STATUS="High Latency (Issue)"
+else
+    PING_STATUS="All Good"
+fi
+
+# Evaluate Packet Loss Status
+if [[ -z "$PACKET_LOSS" ]] || [[ "$PACKET_LOSS" -eq 0 ]]; then
+    PACKET_LOSS_STATUS="No Packet Loss"
+elif [[ "$PACKET_LOSS" -gt 5 ]]; then
+    PACKET_LOSS_STATUS="High Packet Loss"
+else
+    PACKET_LOSS_STATUS="Minor Packet Loss"
+fi
+
+# 2. Traceroute Check
+TRACEROUTE_OUTPUT=$(traceroute -m 5 $SERVER_IP)
+if echo "$TRACEROUTE_OUTPUT" | grep -q "* * *"; then
+    TRACEROUTE_STATUS="Routing Issue Detected"
+else
+    TRACEROUTE_STATUS="All Good"
+fi
+
+# 3. MTR Check
+MTR_OUTPUT=$(mtr -rw $SERVER_IP)
+if echo "$MTR_OUTPUT" | grep -q "packet loss"; then
+    MTR_STATUS="Packet Loss Detected"
+else
+    MTR_STATUS="All Good"
+fi
+
+# Final Analysis
+if [[ "$PING_STATUS" == "High Latency (Issue)" || "$PACKET_LOSS_STATUS" == "High Packet Loss" || "$TRACEROUTE_STATUS" == "Routing Issue Detected" || "$MTR_STATUS" == "Packet Loss Detected" ]]; then
+    FINAL_ANALYSIS="Network Issues Detected, Needs Investigation"
+else
+    FINAL_ANALYSIS="All Good, No Issues"
+fi
+
+# Append results to CSV
+echo "\"$SERVER_IP\",\"$PING_RESULT\",\"$PACKET_LOSS\",\"$PING_STATUS\",\"$TRACEROUTE_STATUS\",\"$MTR_STATUS\",\"$FINAL_ANALYSIS\"" >> $OUTPUT_FILE
+
+echo "✅ Network check completed. Results saved in $OUTPUT_FILE"
+
+# Mark the build as failed if any issue is detected
+if grep -q "Network Issues Detected" "$OUTPUT_FILE"; then
+    echo "❌ Some network issues found. Check the report."
+    exit 1
+fi
