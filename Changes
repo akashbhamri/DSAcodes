@@ -1,2 +1,4 @@
-"Since providing additional access to everyone isn't possible, please create a script to download the support bundles from all tools. This will ensure secure and controlled access while making the necessary data available when needed."
+Update: There has been no further update yet. Unix and NFS teams are still working on the RCA. The last occurrence was between 9:54 AM - 9:57 AM ET, impacting DB, UCM, and ACM teams. The Storage team observed high load average, leading to DB query failures. Applications faced 3-4 minutes of impact, while DB experienced 20+ minutes. Five occurrences have been noted so far. The team has taken TCP dumps and is awaiting inputs from the NetApp team. DApply is causing issues for customers applying for credit. ACM and i2r face complete inaccessibility, impacting SLA and agent productivity.
+
+Satish from the monitoring team will provide further updates.
 
