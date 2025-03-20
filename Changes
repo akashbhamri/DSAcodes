@@ -1,6 +1,2 @@
-The best question to ask is:
-
-"We need an alert specifically for the DATABASECHANGELOGLOCK table when it remains locked for more than 5 minutes. Since SQL Server doesn’t provide this by default, is there a way to set up a custom alert for this scenario?"
-
-This keeps it direct and focused on your exact requirement. If they say it's not possible, you can then follow up with alternative solutions like SQL Agent Jobs or monitoring system tables (sys.dm_tran_locks).
+"Jerrold, could you please raise a support ticket with the CBCI vendor regarding the issue we faced yesterday?"
 
