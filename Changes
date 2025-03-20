@@ -1,129 +1,23 @@
-#!/bin/bash
-# This script requires two Jenkins parameters:
-# SERVER_IPS : A comma-separated list of server IPs (e.g., "192.168.1.1,192.168.1.2")
-# USERNAME   : The SSH username to log into each target server
+Here’s the final version with the source included:
 
-# Verify required parameters
-if [[ -z "$SERVER_IPS" || -z "$USERNAME" ]]; then
-    echo "Error: SERVER_IPS or USERNAME is missing. Pass both as Jenkins parameters."
-    exit 1
-fi
 
-# Define output CSV file (in Jenkins workspace)
-OUTPUT_FILE="$WORKSPACE/network_health_report.csv"
+---
 
-# Create CSV header if the file doesn't exist
-if [[ ! -f "$OUTPUT_FILE" ]]; then
-    echo "Server,Hostname,Ext_Latency(ms),Ext_Packet_Loss(%),Ext_Ping_Status,Ext_Traceroute_Status,Ext_MTR_Status,Ext_Final_Analysis,Local_Latency(ms),Local_Packet_Loss(%),Local_Ping_Status,Local_Final_Analysis" > "$OUTPUT_FILE"
-fi
+Subject: Server Health Report & Bitbucket Incident Update
 
-# Convert the comma-separated list into an array
-IFS=',' read -r -a IP_ARRAY <<< "$SERVER_IPS"
+Hi Team,
 
-# Loop through each IP
-for SERVER_IP in "${IP_ARRAY[@]}"; do
-    echo "Checking server: $SERVER_IP"
+I have collected the server health data across all servers and compiled it into a CSV file for review. All servers are in good health. Let me know if you need any specific insights from it.
 
-    # 1. Fetch remote hostname via SSH (only used for identification)
-    REMOTE_HOSTNAME=$(ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no "$USERNAME@$SERVER_IP" "hostname" 2>/dev/null)
-    if [[ -z "$REMOTE_HOSTNAME" ]]; then
-        REMOTE_HOSTNAME="Unknown"
-    fi
+Additionally, Bitbucket experienced degraded performance on March 19, 2025, which may have caused intermittent errors, including potential 504 Gateway Timeout issues. The incident has since been resolved. You can find more details on the official Bitbucket status page: https://bitbucket.status.atlassian.com.
 
-    ###########################################
-    # 2. External Tests: Run locally on Jenkins slave targeting SERVER_IP
-    ###########################################
-    EXT_PING_OUTPUT=$(ping -c 5 "$SERVER_IP")
-    EXT_PING_RESULT=$(echo "$EXT_PING_OUTPUT" | awk -F'/' 'END { print $5 }')
-    EXT_PACKET_LOSS=$(echo "$EXT_PING_OUTPUT" | grep -oP '\d+(?=% packet loss)')
+If you encountered any related issues, please verify and update accordingly. Let me know if any further action is needed.
 
-    # Evaluate External Ping Status
-    if [[ -z "$EXT_PING_RESULT" ]]; then
-        EXT_PING_STATUS="Ping Failed"
-    elif (( $(echo "$EXT_PING_RESULT > 200" | bc -l) )); then
-        EXT_PING_STATUS="High Latency (Issue)"
-    else
-        EXT_PING_STATUS="All Good"
-    fi
+Thanks,
+[Your Name]
 
-    # Evaluate External Packet Loss Status
-    if [[ -z "$EXT_PACKET_LOSS" || "$EXT_PACKET_LOSS" -eq 0 ]]; then
-        EXT_PACKET_LOSS_STATUS="No Packet Loss"
-    elif [[ "$EXT_PACKET_LOSS" -gt 5 ]]; then
-        EXT_PACKET_LOSS_STATUS="High Packet Loss"
-    else
-        EXT_PACKET_LOSS_STATUS="Minor Packet Loss"
-    fi
 
-    # External Traceroute Test
-    EXT_TR_OUTPUT=$(traceroute -m 5 "$SERVER_IP")
-    if echo "$EXT_TR_OUTPUT" | grep -q "* * *"; then
-        EXT_TR_STATUS="Routing Issue Detected"
-    else
-        EXT_TR_STATUS="All Good"
-    fi
+---
 
-    # External MTR Test
-    EXT_MTR_OUTPUT=$(mtr -rw "$SERVER_IP")
-    if echo "$EXT_MTR_OUTPUT" | grep -q "packet loss"; then
-        EXT_MTR_STATUS="Packet Loss Detected"
-    else
-        EXT_MTR_STATUS="All Good"
-    fi
+This keeps it clear, professional, and includes the source for reference. Let me know if you need any changes!
 
-    # External Final Analysis: if any external test indicates an issue, mark as needing investigation
-    if [[ "$EXT_PING_STATUS" == "High Latency (Issue)" || "$EXT_PACKET_LOSS_STATUS" == "High Packet Loss" || "$EXT_TR_STATUS" == "Routing Issue Detected" || "$EXT_MTR_STATUS" == "Packet Loss Detected" ]]; then
-        EXT_FINAL_ANALYSIS="External Issues Detected"
-    else
-        EXT_FINAL_ANALYSIS="All Good"
-    fi
-
-    ###########################################
-    # 3. Local (Self) Tests: Run remotely via SSH on the target server.
-    #    We use ping to 127.0.0.1 as a self-check.
-    ###########################################
-    LOCAL_RESULTS=$(ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no "$USERNAME@$SERVER_IP" << 'ENDSSH'
-        # Self-test: Ping the loopback address
-        SELF_PING_OUTPUT=$(ping -c 5 127.0.0.1)
-        SELF_PING_RESULT=$(echo "$SELF_PING_OUTPUT" | awk -F'/' 'END { print $5 }')
-        SELF_PACKET_LOSS=$(echo "$SELF_PING_OUTPUT" | grep -oP '\d+(?=% packet loss)')
-        
-        # Evaluate local ping status
-        if [[ -z "$SELF_PING_RESULT" ]]; then
-            SELF_PING_STATUS="Ping Failed"
-        elif (( $(echo "$SELF_PING_RESULT > 200" | bc -l) )); then
-            SELF_PING_STATUS="High Latency (Issue)"
-        else
-            SELF_PING_STATUS="All Good"
-        fi
-
-        # Evaluate local packet loss status
-        if [[ -z "$SELF_PACKET_LOSS" || "$SELF_PACKET_LOSS" -eq 0 ]]; then
-            SELF_PACKET_LOSS_STATUS="No Packet Loss"
-        elif [[ "$SELF_PACKET_LOSS" -gt 5 ]]; then
-            SELF_PACKET_LOSS_STATUS="High Packet Loss"
-        else
-            SELF_PACKET_LOSS_STATUS="Minor Packet Loss"
-        fi
-
-        # Final local analysis
-        if [[ "$SELF_PING_STATUS" == "High Latency (Issue)" || "$SELF_PACKET_LOSS_STATUS" == "High Packet Loss" ]]; then
-            SELF_FINAL_ANALYSIS="Local Issues Detected"
-        else
-            SELF_FINAL_ANALYSIS="All Good"
-        fi
-
-        echo "$SELF_PING_RESULT,$SELF_PACKET_LOSS,$SELF_PING_STATUS,$SELF_FINAL_ANALYSIS"
-ENDSSH
-    )
-
-    ###########################################
-    # 4. Write all results to CSV
-    ###########################################
-    # The LOCAL_RESULTS is a comma-separated string of 4 values:
-    # Local_Latency, Local_Packet_Loss, Local_Ping_Status, Local_Final_Analysis
-    echo "\"$SERVER_IP\",\"$REMOTE_HOSTNAME\",\"$EXT_PING_RESULT\",\"$EXT_PACKET_LOSS\",\"$EXT_PING_STATUS\",\"$EXT_TR_STATUS\",\"$EXT_MTR_STATUS\",\"$EXT_FINAL_ANALYSIS\",$LOCAL_RESULTS" >> "$OUTPUT_FILE"
-    echo "✅ Completed checks for $SERVER_IP"
-done
-
-echo "✅ All servers checked. Results saved in $OUTPUT_FILE"
