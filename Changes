@@ -1,2 +1,29 @@
-We have raised an incident with the Network Team to investigate the 503 and 504 errors encountered on Bitbucket between 10:00 AM EST and 2:26 PM EST on March 19. They are reviewing potential causes, including load balancer, firewall, and network latency issues. We will share further updates once we receive their findings.
+Here’s a properly formatted response based on the details in the image:
+
+
+---
+
+Issue Summary:
+No changes were implemented from our end during the reported time. The issue has been shared via the incident.
+
+Application Type:
+
+This is an intranet application.
+
+It was working fine earlier, and the issue started recently.
+
+
+Error Details:
+
+Error screenshots have been attached to the incident for reference.
+
+
+Affected URLs:
+
+Bitbucket
+
+CloudBees CI
+
+
+Let me know if you need further modifications.
 
