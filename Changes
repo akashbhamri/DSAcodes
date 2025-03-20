@@ -9,12 +9,20 @@ fi
 # Jenkins workspace output file
 OUTPUT_FILE="$WORKSPACE/network_health_report.csv"
 
-# Create CSV headers
-echo "Server,Latency (ms),Packet Loss (%),Ping Status,Traceroute Status,MTR Status,Final Analysis" > $OUTPUT_FILE
+# Create CSV headers if the file doesn't exist
+if [[ ! -f "$OUTPUT_FILE" ]]; then
+    echo "Server,Hostname,Latency (ms),Packet Loss (%),Ping Status,Traceroute Status,MTR Status,Final Analysis" > $OUTPUT_FILE
+fi
 
 echo "Checking server: $SERVER_IP"
 
-# 1. Ping Test (Latency & Packet Loss)
+# 1. Fetch Hostname (Using SSH)
+HOSTNAME=$(ssh -o ConnectTimeout=5 "$SERVER_IP" "hostname" 2>/dev/null)
+if [[ -z "$HOSTNAME" ]]; then
+    HOSTNAME="Hostname Unreachable"
+fi
+
+# 2. Ping Test (Latency & Packet Loss)
 PING_OUTPUT=$(ping -c 5 $SERVER_IP)
 PING_RESULT=$(echo "$PING_OUTPUT" | awk -F'/' 'END { print $5 }')
 PACKET_LOSS=$(echo "$PING_OUTPUT" | grep -oP '\d+(?=% packet loss)')
@@ -37,7 +45,7 @@ else
     PACKET_LOSS_STATUS="Minor Packet Loss"
 fi
 
-# 2. Traceroute Check
+# 3. Traceroute Check
 TRACEROUTE_OUTPUT=$(traceroute -m 5 $SERVER_IP)
 if echo "$TRACEROUTE_OUTPUT" | grep -q "* * *"; then
     TRACEROUTE_STATUS="Routing Issue Detected"
@@ -45,7 +53,7 @@ else
     TRACEROUTE_STATUS="All Good"
 fi
 
-# 3. MTR Check
+# 4. MTR Check
 MTR_OUTPUT=$(mtr -rw $SERVER_IP)
 if echo "$MTR_OUTPUT" | grep -q "packet loss"; then
     MTR_STATUS="Packet Loss Detected"
@@ -53,15 +61,15 @@ else
     MTR_STATUS="All Good"
 fi
 
-# Final Analysis
+# 5. Final Analysis
 if [[ "$PING_STATUS" == "High Latency (Issue)" || "$PACKET_LOSS_STATUS" == "High Packet Loss" || "$TRACEROUTE_STATUS" == "Routing Issue Detected" || "$MTR_STATUS" == "Packet Loss Detected" ]]; then
     FINAL_ANALYSIS="Network Issues Detected, Needs Investigation"
 else
     FINAL_ANALYSIS="All Good, No Issues"
 fi
 
-# Append results to CSV
-echo "\"$SERVER_IP\",\"$PING_RESULT\",\"$PACKET_LOSS\",\"$PING_STATUS\",\"$TRACEROUTE_STATUS\",\"$MTR_STATUS\",\"$FINAL_ANALYSIS\"" >> $OUTPUT_FILE
+# 6. Append results to CSV
+echo "\"$SERVER_IP\",\"$HOSTNAME\",\"$PING_RESULT\",\"$PACKET_LOSS\",\"$PING_STATUS\",\"$TRACEROUTE_STATUS\",\"$MTR_STATUS\",\"$FINAL_ANALYSIS\"" >> $OUTPUT_FILE
 
 echo "✅ Network check completed. Results saved in $OUTPUT_FILE"
 
