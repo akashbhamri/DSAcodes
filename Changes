@@ -1,12 +1,2 @@
-Initial Investigation
-
-Upon receiving an alert indicating that the Oracle DB was not accessible, we promptly raised an incident with the Unix team. Simultaneously, we checked the server utilization to identify any potential issues and gathered relevant metrics for further analysis.
-
-New Relic Investigation
-
-To gain more insights, we collected server performance metrics from New Relic. These details were shared with the Unix team to assist in troubleshooting the issue and identifying any resource constraints.
-
-Root Cause Analysis (RCA) & Resolution
-
-After escalating the incident to the DB team, they discovered that the oraaudit mount point had reached 100% capacity, preventing the database from functioning properly. To resolve the issue, they performed a cleanup of the mount point, freeing up space. Once the cleanup was completed, the Oracle DB became accessible again, and normal operations were restored.
+A synthetic alert was triggered, indicating that the server failed to reach the New Relic location. Additionally, the provided timestamps show that server metrics were missing in New Relic, which is a strong indication that the server was unresponsive during that period. This issue also occurred on March 15. Please investigate the root cause.
 
