@@ -1,2 +1,8 @@
-A synthetic alert was triggered, indicating that the server failed to reach the New Relic location. Additionally, the provided timestamps show that server metrics were missing in New Relic, which is a strong indication that the server was unresponsive during that period. This issue also occurred on March 15. Please investigate the root cause.
+Hi Santish,
+
+The server metrics were not reflected in New Relic on both March 15 and March 21. Here is the URL for reference.
+
+Ubix has not identified any issues on the server side, and we haven't found any error logs on our end either. Due to this, we received a synthetic alert.
+
+Let me know how we can proceed.
 
