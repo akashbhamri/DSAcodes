@@ -1,2 +1,2 @@
-As per the process change, it should be in the implementation stage first; only then can we mute the alert.
+We haven't encountered any issues with the URL, and there is no indication of a server restart from the UNIX end. Additionally, no errors were found in the application logs. However, we noticed that server data was not being fetched in New Relic, which led to the location failing to respond to pings. Please refer to the URL below for reference.
 
