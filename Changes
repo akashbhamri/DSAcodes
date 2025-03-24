@@ -1,3 +1,16 @@
-docker run -d --name grafana \
-  -p 3000:3000 \
-  nexus.app.syfbank.com:8093/devops_monitoring/grafana:latest
+You can phrase your request in different ways:
+
+Formal Request:
+
+"Praneeth, could you please approve this and add the required access? I need the RMP CI pass to install Grafana, Prometheus, and InfluxDB on the test server using containerization."
+
+Concise and Direct:
+
+"Praneeth, can you approve this and grant access? I need the RMP CI pass for setting up monitoring tools on the test server."
+
+Polite and Professional:
+
+"Hi Praneeth, could you help with approving this and adding the necessary permissions? I need the RMP CI pass to proceed with containerizing Grafana, Prometheus, and InfluxDB on the test server."
+
+Let me know if you'd like any tweaks!
+
