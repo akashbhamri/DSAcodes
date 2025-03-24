@@ -1,3 +1,4 @@
-docker run -d --name grafana \
-  -p 3000:3000 \
-  nexus.app.syfbank.com:8093/devops_monitoring/grafana:latest
+
+I appreciate the effort, but this is getting overwhelming for us. Can we be more selective about what we take on? We also need to communicate this properly because, in the end, all the blame will come to DevOps only.
+
+latest
