@@ -1,4 +1,1 @@
-
-I appreciate the effort, but this is getting overwhelming for us. Can we be more selective about what we take on? We also need to communicate this properly because, in the end, all the blame will come to DevOps only.
-
-latest
+As per the UNIX team’s confirmation, there are no reported issues on the server, and no errors were detected in the logs. However, we still received a ‘host not responding’ alert in our workload. Could you provide insights into how the system determines if a host is responding or not? We need to understand the underlying mechanism that triggers this alert.
