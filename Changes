@@ -1,1 +1,1 @@
-Can you check if there are any logs showing "Authentication failure" while using su - jkslave? Someone might have entered the wrong password during the timeframe mentioned below, which resulted in the jkslave account getting locked.
+su - jkslave command could have been run on any server. Do you want to share the complete server list so we can check across all of them for authentication failure logs?
