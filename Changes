@@ -1,1 +1,1 @@
-su - jkslave command could have been run on any server. Do you want to share the complete server list so we can check across all of them for authentication failure logs?
+We need a script to automatically detect and bring up controller and worker nodes if they go down. This has been a recurring dependency, especially during weekends, impacting our operations. Implementing this script will help us proactively prevent downtime and ensure system stability. Can someone from the team take ownership of this request?
