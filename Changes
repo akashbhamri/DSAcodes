@@ -1,4 +1,8 @@
-The sandbox server Praneeth (vlducdapda03) is experiencing an average database response time of 0.22 seconds. This indicates that the database queries from this server are taking 220 milliseconds to complete.
+You can say:
 
-However, our UCD servers are performing normally, so the issue is specific to the sandbox environment and does not impact production or deployment servers.
+Hi Padala,
+
+We found the following error on our server when this query got locked, but we are not sure about the exact error on the database side. Could you help check if there are any related errors or logs in the database that might give more insight?
+
+Let me know if this works!
 
