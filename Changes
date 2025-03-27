@@ -1,1 +1,4 @@
-platform monitoring team contacted the Tanium team to investigate multiple su - jkslave password attempts that led to the account being locked. However, Tanium confirmed that no logs were recorded during that timeframe. Currently, the platform team is working to identify the root cause.
+The sandbox server Praneeth (vlducdapda03) is experiencing an average database response time of 0.22 seconds. This indicates that the database queries from this server are taking 220 milliseconds to complete.
+
+However, our UCD servers are performing normally, so the issue is specific to the sandbox environment and does not impact production or deployment servers.
+
