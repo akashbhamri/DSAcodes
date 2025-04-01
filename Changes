@@ -1,8 +1,20 @@
-let
-    StartDate = #date(2025, 1, 1),
-    EndDate = #date(2025, 12, 31),
-    DateList = List.Dates(StartDate, Number.From(EndDate - StartDate) + 1, #duration(1, 0, 0, 0)),
-    TableFromList = Table.FromList(DateList, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
-    ChangedType = Table.TransformColumnTypes(TableFromList, {{"Column1", type date}})
-in
-    ChangedType
+Here’s an even more polished and professional version of your message:
+
+
+---
+
+Subject: Persistent Database Issue & Network Query – Next Steps
+
+Hi [Recipient's Name],
+
+The database issue has been recurring for quite some time, and despite multiple checks, the root cause remains unidentified. We have already consulted the database team, and they have confirmed that no long-running queries were executed during the affected period. Below is the latest update from their end.
+
+To move towards a permanent resolution, I would appreciate it if you could provide the spurve and designation IP details along with the port information for NWTQORM. I will coordinate with the network team to investigate any potential concerns from their side.
+
+Additionally, please advise on the specific areas we should revalidate with the database team to conduct a more in-depth analysis. Your insights will be invaluable in ensuring a thorough investigation and a lasting resolution.
+
+Looking forward to your guidance.
+
+Best regards,
+[Your Name]
+
