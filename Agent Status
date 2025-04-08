@@ -1,2 +1,35 @@
-"We received an alert indicating that a user was added to the branch level using SSO. However, as per the process, users should not be added this way. It should be configured as shown in the snapshot below."
+Sure! Here are different ways to write a short description and a detailed description for disabling services from auto-start after reboot on DR servers:
+
+
+---
+
+Short Description:
+
+"Disabling auto-start for specific services on DR servers."
+
+
+---
+
+Detailed Descriptions (Variations):
+
+1. "This task ensures that the listed services on the DR servers are disabled from automatically starting after a reboot by modifying their systemd settings."
+
+
+2. "To prevent unwanted restarts after system reboot, the following systemd services on DR servers will be disabled using appropriate systemctl commands."
+
+
+3. "Disabling auto-restart for the mentioned services on DR servers to ensure they do not start automatically post-reboot unless manually triggered."
+
+
+4. "This activity involves disabling systemd services on DR servers to stop them from initiating automatically after a system reboot, ensuring controlled startup."
+
+
+5. "The below services will be configured on DR servers to remain inactive after reboot by disabling their systemd entries."
+
+
+
+
+---
+
+If you provide the actual server and service names, I can include them in the phrasing directly too. Let me know!
 
