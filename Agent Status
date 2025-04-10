@@ -1,21 +1,4 @@
-Got it! Here's the updated version with that point included:
+Today, our uDeploy application experienced an outage due to a server-side process crash triggered by an unexpected spike in heap memory usage. Upon thorough investigation, we determined that this incident coincided with a QA deployment executed at 4:19 PM. During the deployment, the "Push Application Pallet" step unusually took about 28 minutes to upload the required files. This prolonged operation dramatically increased heap memory consumption, eventually rendering the application unresponsive and causing the process crash.
 
-
----
-
-Hi Praneeth,
-
-I've reviewed both the JIRA tickets, and it looks like the work on CloudBees Analytics—especially involving coordination with the vendor—would require more than 3 hours of effort daily.
-
-Additionally, I don’t have prior experience with this tool, so I’d need to start from scratch, which would add to the time and ramp-up needed. Given that I’m currently leading the monitoring team and handling several other key responsibilities, I’m afraid I don’t have the bandwidth to take this on at the moment.
-
-I hope you understand, and please let me know if there’s any other way I can support.
-
-Best regards,
-[Your Name]
-
-
----
-
-Want to soften it more or make it firmer?
+We are currently reviewing our deployment procedures and memory management strategies to prevent future occurrences.
 
