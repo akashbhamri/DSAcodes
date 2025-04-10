@@ -1,14 +1,3 @@
-Subject: SQL Server Memory Utilization Threshold Confirmation
+team had created the directory directly under 07/appbin for the New Relic APM (new version) installation in Bitbucket. We were initially unaware that this change was required to proceed with the setup. However, since the path wasn’t added to any configuration file and only the directory was created and the JAR extracted, there was no impact.
 
-Hi Sathr3ddy,
-
-As discussed in our last call, we've observed that the SQL Server memory utilization on the below servers consistently stays around 90%. As we know, it's normal SQL Server behavior to utilize most of the available memory, especially when we've allocated 70–80% of the total server memory for SQL.
-
-We would like to confirm if it's appropriate to set the memory alert threshold at 95% utilization sustained for 15 minutes for the following servers. Please let us know if you're aligned with this approach.
-
-Additionally, just to clarify — even if we increase the total memory, SQL Server will still utilize a similar percentage of it, correct?
-
-Looking forward to your confirmation.
-
-Thanks,
-[Your Name]
+Moving forward, we will ensure that such changes go through the proper change process, including adding the necessary path references in relevant files.
