@@ -1,77 +1,14 @@
-Below is a sample message you could send to your Bitbucket vendor. This message explains your overall objective from the start, outlines what you’re trying to enable, and asks specific questions to guide the discussion on how best to integrate browser monitoring using New Relic.
+Subject: SQL Server Memory Utilization Threshold Confirmation
 
+Hi Sathr3ddy,
 
----
+As discussed in our last call, we've observed that the SQL Server memory utilization on the below servers consistently stays around 90%. As we know, it's normal SQL Server behavior to utilize most of the available memory, especially when we've allocated 70–80% of the total server memory for SQL.
 
-Subject: Enabling New Relic Browser Monitoring on Bitbucket Data Center
+We would like to confirm if it's appropriate to set the memory alert threshold at 95% utilization sustained for 15 minutes for the following servers. Please let us know if you're aligned with this approach.
 
-Message:
+Additionally, just to clarify — even if we increase the total memory, SQL Server will still utilize a similar percentage of it, correct?
 
-Hello [Vendor Contact/Team],
+Looking forward to your confirmation.
 
-We’re currently working on enhancing our monitoring capabilities for our Bitbucket Data Center environment by enabling New Relic Browser Monitoring. Our goal is to have a snippet inserted into every page served by Bitbucket so that we can track real user monitoring metrics and gain deeper insights into page performance.
-
-To achieve this, we need to integrate a small JavaScript snippet (provided by New Relic) into the Bitbucket application’s HTML (specifically into the <head> section of every page). We understand that Bitbucket Data Center does not offer a built-in “Custom HTML” option like some other Atlassian products (e.g., Jira or Confluence), and we need guidance on the best method to accomplish this in a supported and upgrade-safe manner.
-
-We have a few questions regarding how we can move forward:
-
-1. Environment Setup
-
-Can you confirm that our Bitbucket instance is indeed running on Data Center, and detail any specific limitations or considerations for injecting custom code in this environment?
-
-
-
-2. Built-In Customization
-
-Does Bitbucket Data Center offer any native UI-based configuration or settings (similar to “Custom HTML” in other Atlassian products) for adding header or footer scripts that can be used for browser monitoring?
-
-
-
-3. Template or Resource File Modifications
-
-In the absence of a built-in UI option, would you recommend modifying the Velocity templates or other resource files to inject the New Relic browser snippet?
-
-If so, can you provide best practices or guidance on which files would be most appropriate for modification and how to ensure that these changes persist through upgrades?
-
-
-
-4. Marketplace Plugin Options
-
-Are there any officially supported Marketplace plugins or add-ons that facilitate custom header/footer injection for Bitbucket Data Center?
-
-If such plugins exist, could you advise on the recommended plugin(s) and any potential caveats with using them?
-
-
-
-5. Reverse Proxy Injection
-
-As an alternative, would configuring our reverse proxy (NGINX/Apache) to inject the New Relic snippet into HTML responses be a supported approach for Bitbucket Data Center?
-
-What potential issues should we be aware of if we choose this method?
-
-
-
-6. Upgrade and Maintenance Considerations
-
-How might any custom modifications or injections affect future Bitbucket Data Center upgrades?
-
-What steps should we take to ensure that our monitoring integration remains compatible and maintainable over time?
-
-
-
-
-We appreciate your guidance on this matter and look forward to your recommendations to enable browser monitoring in a manner that is both effective and supported within our Bitbucket Data Center environment.
-
-Thank you for your assistance.
-
-Best regards,
-
+Thanks,
 [Your Name]
-[Your Position]
-[Your Organization]
-
-
----
-
-This message lays out what you’re doing (enabling browser monitoring with New Relic), why it’s needed, and asks pertinent questions to ensure a smooth integration with Bitbucket Data Center. Feel free to adjust the wording based on your internal communication style and additional details specific to your environment.
-
