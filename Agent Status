@@ -1,3 +1,32 @@
-team had created the directory directly under 07/appbin for the New Relic APM (new version) installation in Bitbucket. We were initially unaware that this change was required to proceed with the setup. However, since the path wasn’t added to any configuration file and only the directory was created and the JAR extracted, there was no impact.
-
-Moving forward, we will ensure that such changes go through the proper change process, including adding the necessary path references in relevant files.
+Sub ConvertTimestampsInCDE()
+    Dim ws As Worksheet
+    Dim rng As Range
+    Dim cell As Range
+    Dim lastRow As Long
+    Dim colNum As Long
+    
+    ' Use the active sheet (or specify a sheet, e.g., Sheets("Sheet1"))
+    Set ws = ActiveSheet
+    
+    ' Columns 3, 4, 5 are C, D, E
+    For colNum = 3 To 5
+        ' Find the last used row in this column
+        lastRow = ws.Cells(ws.Rows.Count, colNum).End(xlUp).Row
+        
+        ' Create a range from row 2 down to the last row in the current column
+        Set rng = ws.Range(ws.Cells(2, colNum), ws.Cells(lastRow, colNum))
+        
+        ' Convert each timestamp to a readable date/time
+        For Each cell In rng
+            If IsNumeric(cell.Value) And cell.Value <> "" Then
+                ' Convert milliseconds to days since 1970, then add Excel date serial
+                cell.Value = (cell.Value / 1000) / 86400 + DateSerial(1970, 1, 1)
+                
+                ' Format the cell as date/time
+                cell.NumberFormat = "dd-mmm-yyyy hh:mm:ss"
+            End If
+        Next cell
+    Next colNum
+    
+    MsgBox "Columns C, D, and E converted to date/time!", vbInformation
+End Sub
