@@ -1,36 +1,6 @@
-Got it! Here's an updated version of your message acknowledging that Red Hat already identified the cause, but you're still seeking deeper insights and long-term preventive actions:
 
+We understand that the issue was caused by a Java process. However, since the process has completed, we are unable to identify the main and detailed logs related to it. Even the application vendor was not able to assist in this case.
 
----
+In a similar issue previously, Red Hat support helped us identify which specific process or thread was triggered during the spike, which allowed us to resolve the problem effectively.
 
-Subject: Follow-up on High CPU Utilization - Java Process Root Cause and Preventive Actions
-
-Hi [Recipient/Team],
-
-Thanks for the update regarding the cause of high CPU utilization being linked to a Java process. However, since the process has already completed and we don’t have the required permissions to analyze it in depth, we still need clarity on a few points:
-
-1. What exactly within the Java process led to such a high CPU spike?
-
-
-2. Can this behavior occur again under similar load/conditions?
-
-
-3. Do we need to consider scaling resources (CPU/memory) on this critical server to handle such scenarios more effectively?
-
-
-4. What best practices or tuning can be implemented to prevent such high utilization going forward?
-
-
-
-We request that a case be raised with Red Hat to help us get detailed insights and recommendations for long-term mitigation.
-
-Let us know once the case is initiated or if you need additional information from our side.
-
-Thanks,
-[Your Name]
-
-
----
-
-Would you like a shorter version too, for a Teams or Slack message?
-
+Hence, we request you to please raise a case with the Red Hat vendor as well. We've already raised a case with the application vendor, but additional insights from Red Hat could help us get to the root cause.
