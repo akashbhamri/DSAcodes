@@ -1,6 +1,22 @@
+Sure! Here's the updated version of your message including the mention of the crash utility being used:
 
-We understand that the issue was caused by a Java process. However, since the process has completed, we are unable to identify the main and detailed logs related to it. Even the application vendor was not able to assist in this case.
 
-In a similar issue previously, Red Hat support helped us identify which specific process or thread was triggered during the spike, which allowed us to resolve the problem effectively.
+---
 
-Hence, we request you to please raise a case with the Red Hat vendor as well. We've already raised a case with the application vendor, but additional insights from Red Hat could help us get to the root cause.
+Hi Team,
+
+We understand that the issue was triggered by a Java process. However, since the process has already completed, we are unable to capture the main or detailed logs related to it. The application vendor was also unable to provide further assistance.
+
+We noticed that the crash utility was used to analyze the system, but we couldn't identify which Java thread or process specifically caused the spike during that time.
+
+In a previous similar incident, Red Hat support helped us identify the exact process/thread that led to the issue using their in-depth analysis of crash data, which enabled us to resolve it effectively.
+
+Hence, we request you to please raise a case with the Red Hat vendor. Their expertise in crash analysis would be valuable in identifying the Java process or thread responsible during the spike, so we can take appropriate preventive action.
+
+For your reference, we have already raised a case with the application vendor, and their investigation is ongoing.
+
+
+---
+
+Let me know if you'd like it formatted more formally or in bullet points for a report/ticket.
+
