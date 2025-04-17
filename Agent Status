@@ -1,22 +1,20 @@
-Sure! Here's the updated version of your message including the mention of the crash utility being used:
+Sure! Here's a more polished and professional version of your message:
 
 
 ---
+
+Subject: Temporary Reassignment of UDeploy Access RITM
 
 Hi Team,
 
-We understand that the issue was triggered by a Java process. However, since the process has already completed, we are unable to capture the main or detailed logs related to it. The application vendor was also unable to provide further assistance.
+Please refrain from assigning the UDeploy access RITM to the Monitoring team at this time. We are currently facing an issue in the pipeline that is preventing access from being provisioned correctly to the application team. As a result, the RITM remains in a pending state.
 
-We noticed that the crash utility was used to analyze the system, but we couldn't identify which Java thread or process specifically caused the spike during that time.
+We are reassigning the UDeploy access RITM back to the Admin team for now. Once the issue is resolved, we will notify you, and you may proceed with the assignment accordingly.
 
-In a previous similar incident, Red Hat support helped us identify the exact process/thread that led to the issue using their in-depth analysis of crash data, which enabled us to resolve it effectively.
-
-Hence, we request you to please raise a case with the Red Hat vendor. Their expertise in crash analysis would be valuable in identifying the Java process or thread responsible during the spike, so we can take appropriate preventive action.
-
-For your reference, we have already raised a case with the application vendor, and their investigation is ongoing.
+Thank you for your cooperation.
 
 
 ---
 
-Let me know if you'd like it formatted more formally or in bullet points for a report/ticket.
+Let me know if you want a more casual or more technical version.
 
