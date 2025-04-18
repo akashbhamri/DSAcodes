@@ -1,4 +1,5 @@
 index=syf_apps "SVC-APP-RLCT" ("fail" OR "denied" OR "lockout" OR "Invalid")
 | rex "user '(?<username>[^']+)'"
-| stats count by host username
+| rex "GET\s(?<api_path>/[^\s]+)"
+| stats count by host username api_path
 | sort -count
