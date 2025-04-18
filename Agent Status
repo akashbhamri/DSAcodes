@@ -1,3 +1,1 @@
-index=wineventlog "SVC-APP-RLCT" EventCode=4625
-| stats count by Workstation_Name
-| sort -count
+We had a call with the Udeploy vendo on 17/04 and they confirmed that there is currently no way to determine why the "push pallet" process took a long time to complete. They advised us to collect the thread and heap dumps of the process if the issue occurs again, so they can perform a deeper analysis.
