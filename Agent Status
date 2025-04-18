@@ -1,5 +1,3 @@
-We are currently retaining critical data on our NAS file system as per compliance requirements, which mandate a minimum retention period of three years. Given the volume and importance of this data, we are unable to perform any cleanup or archival of files that fall within this timeframe.
-
-As the current storage is nearing capacity, and to prevent potential service disruptions or data loss, we have requested an additional 10TB of space. This expansion will ensure business continuity and help us maintain compliance without compromising performance.
-
-Please let us know if you need any further details or supporting documentation.
+index=syf_apps "SVC-APP-RLCT" ("fail" OR "denied" OR "invalid" OR "lockout" OR "authentication")
+| table _time, host, source, sourcetype, Event
+| sort _time
