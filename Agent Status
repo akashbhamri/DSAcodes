@@ -1,3 +1,3 @@
-index=syf_apps "SVC-APP-RLCT" ("fail" OR "denied" OR "invalid" OR "lockout" OR "authentication")
-| table _time, host, source, sourcetype, Event
-| sort _time
+index=wineventlog "SVC-APP-RLCT" EventCode=4625
+| stats count by Workstation_Name
+| sort -count
