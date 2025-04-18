@@ -1,4 +1,4 @@
-index=SVC-APP-RLCT "Invalid credentials for user"
+index=syf_apps "SVC-APP-RLCT" ("fail" OR "denied" OR "lockout" OR "Invalid")
 | rex "user '(?<username>[^']+)'"
 | stats count by host username
 | sort -count
