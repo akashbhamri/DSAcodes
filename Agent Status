@@ -1,1 +1,4 @@
-We had a call with the Udeploy vendo on 17/04 and they confirmed that there is currently no way to determine why the "push pallet" process took a long time to complete. They advised us to collect the thread and heap dumps of the process if the issue occurs again, so they can perform a deeper analysis.
+We have not observed any UI performance degradation despite memory usage exceeding 90%. As a result, we would like to understand whether this level of usage is considered acceptable. If so, we are proposing to increase the memory threshold to 95% for a duration of 15 minutes. Kindly confirm if this adjustment is appropriate
+
+
+"We have not observed any UI performance degradation, even though the memory usage has been consistently exceeding the current threshold range of 90% to 95%. We would like to confirm if this level of memory utilization is acceptable. If so, we propose adjusting the alert threshold to trigger only when memory usage exceeds 95% for a sustained duration of 15 minutes. Kindly advise if this change would be appropriate."
