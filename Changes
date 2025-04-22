@@ -1,4 +1,3 @@
-index=windows (EventCode=4740 OR EventCode=4625 OR EventCode=4771)
-user="svc-app-rlct"
+index=windows (EventCode=4740 OR EventCode=4625 OR 
 | table _time, EventCode, host, ComputerName, user, ClientAddress, Workstation
 | sort -_time
