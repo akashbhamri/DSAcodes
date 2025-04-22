@@ -1,1 +1,7 @@
-Below are the details of our database server and application server. I have also reviewed this with the network team, and they have confirmed that no network issues were observed between the source and destination during the reported period
+Here’s your message rephrased in a different way:
+
+
+---
+
+I see that pcp is installed on the server but not active. How can I enable it? Does this need to be done from the Unix end? Also, can the vendor check the crash logs for this process?
+
