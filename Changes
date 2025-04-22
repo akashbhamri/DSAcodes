@@ -1,3 +1,4 @@
 index=windows (EventCode=4740 OR EventCode=4625 OR EventCode=4771)
-user="your.username@syf.com"
+user="svc-app-rlct"
 | table _time, EventCode, host, ComputerName, user, ClientAddress, Workstation
+| sort -_time
