@@ -1,7 +1,38 @@
-Here’s your message rephrased in a different way:
+Got it, Akash! Here's a clear and professional way to say that message, especially if you're updating a ticket or informing your IT/AD team:
 
 
 ---
 
-I see that pcp is installed on the server but not active. How can I enable it? Does this need to be done from the Unix end? Also, can the vendor check the crash logs for this process?
+Suggested Message:
+
+> I checked the Splunk logs for my server and noticed repeated "invalid credentials" errors from the Bitbucket project, starting right after my password reset on Jan 10. However, I couldn’t find any relevant entries on other servers.
+
+Since the authentication is routed via a VIP (Load Balancer), it’s likely that the actual Domain Controller (DC) causing the lockout is behind the load balancer and isn’t directly visible in the logs.
+
+Due to this, I’m unable to identify which specific DC is locking the account. Requesting support to trace the binding DC behind the VIP and clear any cached credentials if necessary.
+
+
+
+
+---
+
+Let me know if you want a version that's even shorter or more casual.
+
+Thanks for that, Akash. Here's a polished version of your message that clearly conveys what you're trying to say:
+
+
+---
+
+Refined Message:
+
+> We've experienced a similar issue even before the recent password reset. Please refer to the attached snapshot and the sheet below, which contains the raw logs indicating which Bitbucket project is causing the account to get locked.
+
+As the authentication request goes through a VIP (behind a load balancer), we are unable to directly trace the specific Domain Controller (DC) responsible for the lockout. Requesting assistance to identify the binding DC behind the VIP and clear any cached credentials if required.
+
+
+
+
+---
+
+Let me know if you're sending this as an email or through a ticketing system — I can tailor the tone accordingly.
 
