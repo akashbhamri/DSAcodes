@@ -1,3 +1,5 @@
-index=windows (EventCode=4740 OR EventCode=4625 OR 
-| table _time, EventCode, host, ComputerName, user, ClientAddress, Workstation
-| sort -_time
+index=myf_apps "SVC-APP-RLCT" ("Invalid" OR "user (\"username\":{\"-}") earliest="11/01/2024:00:00:00" latest=now
+| rex "GET\s(?<api_path>/[^\s]+)"
+| eval date=strftime(_time, "%Y-%m-%d")
+| stats count by date host username api_path
+| sort date
