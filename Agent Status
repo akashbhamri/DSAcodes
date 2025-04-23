@@ -1,5 +1,0 @@
-(index=palo_alto OR index=vmwarensx OR index=zscaler)
-dest_ip="10.144.35.157" dest_port=389
-("invalid credentials" OR session_end_reason="auth-failure" OR action=deny)
-| table _time, src_ip, dest_ip, dest_port, action, session_end_reason, host, app, user
-| sort _time desc
