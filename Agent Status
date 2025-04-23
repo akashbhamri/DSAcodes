@@ -1,2 +1,4 @@
-index=your_index_name "DIR_ERROR"
-| table _time host source log_level message
+index=syf_apps "DIR_ERROR"
+| rex "error code\\s*=\\s*(?<error_code>\\d+)"
+| rex "DSID-\\d+:\\d+, problem (?<dsid_problem>\\d+)"
+| table _time host source log_level error_code dsid_problem message
