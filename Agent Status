@@ -1,4 +1,5 @@
-index=syf_apps "DIR_ERROR"
-| rex "error code\\s*=\\s*(?<error_code>\\d+)"
-| rex "DSID-\\d+:\\d+, problem (?<dsid_problem>\\d+)"
+index=syf_apps "LDAP" "error code"
+| eval message=coalesce(_raw, message)
+| rex field=message "error code\s*=\s*(?<error_code>\d+)"
+| rex field=message "DSID-.*?, problem\s(?<dsid_problem>\d+)"
 | table _time host source log_level error_code dsid_problem message
