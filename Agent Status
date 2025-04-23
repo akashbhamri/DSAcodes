@@ -1,12 +1,1 @@
-Got it! Here’s a more conversational way to put it:
-
-
----
-
-"We're facing a bit of a challenge here with over 10,000 IPs, and it’s tough to pinpoint exactly which one is causing the issue. On top of that, we’re not getting enough logs from the network side to narrow it down further. Since we’re not able to get the full visibility we need, the best way forward would be to shift away from AD and move to Okta for authentication. This should help prevent similar issues in the future and provide us with a more reliable solution."
-
-
----
-
-This version sounds a bit more like something you'd say in a conversation with a colleague or team. Let me know if you'd like it adjusted!
-
+On the 17th and 23rd, the svc-app-rlct account got locked due to six incorrect password attempts. After checking with both the AD and network teams, it turns out the source could be any one of over 1,200 IPs, which makes it extremely difficult to isolate the exact origin. We've also reviewed our own logs, but there’s no clear indication that any of our servers are sending incorrect credentials. Given this, we’re focusing on preventive measures instead to avoid similar issues going forward
