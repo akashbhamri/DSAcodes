@@ -1,13 +1,1 @@
-Request to configure an automated mechanism to capture Java thread dumps and heap dumps when the Java process crosses resource usage thresholds.
-
-Details:
-
-Application Name: [Your Java Application Name]
-
-Environment: [Production / UAT / Staging]
-
-Trigger Conditions:
-
-CPU usage > 80%
-
-Memory usage > 2GB
+Requesting this to be considered for implementation in the upcoming sprint. This feature needs to be enabled on the server to help with performance diagnostics. Appreciate your support.
