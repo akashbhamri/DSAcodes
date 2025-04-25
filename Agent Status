@@ -1,3 +1,1 @@
-We’ve noticed that our service account has been getting locked frequently since April 17, and we’re currently unable to identify the source of these lockouts. Would it be possible for you to check from the AD side and help us pinpoint the cause?
-
-We’d also appreciate any suggestions or preventive measures we can take to avoid such issues in the future.
+"Since the password is not being stored anywhere, they haven't encountered any issues with this account."
