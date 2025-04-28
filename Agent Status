@@ -1,1 +1,4 @@
-We have reviewed all the pipelines and jobs, and confirmed that it is not configured at the pipeline or job level. It is only configured at the script level using the withCredentials block, which appears to be working as expected."
+curl -k https://splunkiszawsheavyforwarder.secfybank.com:8443/services/collector/event \
+  -H "Authorization: Splunk 67f9f776-e615-4e03-8686-9fdf8cca436e" \
+  -H "Content-Type: application/json" \
+  -d '{"event":"hello from Jenkins freestyle test","sourcetype":"jenkins"}'
