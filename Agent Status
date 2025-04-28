@@ -1,4 +1,0 @@
-curl -k https://splunkiszawsheavyforwarder.secfybank.com:8443/services/collector/event \
-  -H "Authorization: Splunk 67f9f776-e615-4e03-8686-9fdf8cca436e" \
-  -H "Content-Type: application/json" \
-  -d '{"event":"hello from Jenkins freestyle test","sourcetype":"jenkins"}'
