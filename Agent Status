@@ -1,1 +1,5 @@
-Would it be possible to set up an alert to notify our DL (distribution list) when the issue occurs for the first time? This way, we can immediately check which processes are running at that moment.
+index=syf_apps "SVC-APP-RLCT" ("fail" OR "denied" OR "lockout" OR "Invalid")
+| rex "user (?<username>[^ ]+)"
+| rex "GET\s(?<api_path>/[^\s]+)"
+| where _time >= strptime("2025-04-01", "%Y-%m-%d") AND _time < strptime("2025-04-29", "%Y-%m-%d")
+| timechart span=1d count
