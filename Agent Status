@@ -1,5 +1,6 @@
-index=syf_apps "SVC-APP-RLCT" ("fail" OR "denied" OR "lockout" OR "Invalid")
+index=syf_apps "SVC-APP-RLCT" ("fail" OR "denied" OR "lockout" OR "Invalid" OR "authenticated")
 | rex "user (?<username>[^ ]+)"
 | rex "GET\s(?<api_path>/[^\s]+)"
+| eval status=if(match(_raw, "Invalid|fail|denied|lockout"), "Invalid", "Authenticated")
 | where _time >= strptime("2025-04-01", "%Y-%m-%d") AND _time < strptime("2025-04-29", "%Y-%m-%d")
-| timechart span=1d count
+| timechart span=1d count by status
