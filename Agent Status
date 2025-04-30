@@ -1,1 +1,1 @@
-"As per our discussion, we have a dedicated group for monitoring alerts and logging the respective actions. Please let me know if you’d like to be added, so you can get regular insights on ongoing activities."
+"You can first run the command to capture the details and save them in a .txt file for review. Once you've verified the captured information, you can proceed with the docker system prune command to remove unused Docker resources. This command doesn't require root access
