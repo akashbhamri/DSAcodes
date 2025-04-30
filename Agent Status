@@ -1,6 +1,1 @@
-As per Santosh's confirmation, the HikariCP connection pool has already been enabled for some applications. We would like to have the same setup enabled in our Dev environment for testing. Once validated, we can proceed to implement it in Production as well.
-
-Also, please ensure JMX monitoring is enabled for the HikariCP pool.
-
-Important:
-Kindly do not close the RITMs. Feel free to reach out to me directly on Teams if you need any clarifications.
+"As per our discussion, we have a dedicated group for monitoring alerts and logging the respective actions. Please let me know if you’d like to be added, so you can get regular insights on ongoing activities."
