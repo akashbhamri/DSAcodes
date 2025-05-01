@@ -1,1 +1,1 @@
-"Although the thread count is high, CPU utilization remains normal. We are currently working with the vendor to investigate this and determine whether the observed thread count is within acceptable limits. If it is deemed normal, we will update our alerting thresholds based on their recommendations
+We are currently experiencing an authentication issue in the DAL-DEV3 environment. Could you please confirm if the system is still under maintenance, or if this might be due to a different issue?
