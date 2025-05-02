@@ -1,4 +1,39 @@
-Thank you for the detailed analysis. We are actively working on the recommended action items with our internal team.
+We have received updates from our Nexus Repository vendor regarding performance improvements and best practices. Below is a summary of their recommendations:
 
-We do have one question — currently, we’ve set up an alert to trigger when the thread count exceeds 300 for this server.
-Would you consider this an ideal threshold, or do you suggest a different value or monitoring approach?
+
+---
+
+🛠️ Key Recommendations:
+
+1. Switch to PostgreSQL Database:
+
+Why: The current embedded database (H2/OrientDB) may not efficiently handle our growing data and request volumes.
+
+Benefit: PostgreSQL offers better performance, scalability, and reliability for large-scale operations.
+
+
+
+2. Enable Auto-Blocking on Proxy Repositories:
+
+Why: Some proxy repositories are not responding promptly, leading to unnecessary thread consumption.
+
+Benefit: Enabling auto-blocking (httpclient.autoBlock=true) will prevent these repositories from consuming threads when not responding in time.
+
+
+
+
+
+---
+
+🔧 Action Items:
+
+Database Migration: Plan and execute the migration from the embedded database to PostgreSQL.
+
+Configuration Update: Enable auto-blocking on the identified proxy repositories.
+
+
+To facilitate the implementation of these recommendations, we have raised the following RITMs with the Platform Team:
+
+RITM1234567 – PostgreSQL Database Migration
+
+RITM7654321 – Proxy Repository Configuration Update
