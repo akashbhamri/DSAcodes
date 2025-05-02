@@ -1,1 +1,40 @@
-I would like to confirm whether there have been any recent changes to the Jetty thread configuration in our Nexus Repository. Specifically, has the maxThreads setting been increased from the default value of 400 to 800?
+Morning
+
+A1: Date
+
+B1: APM Morning Status
+
+C1: APM Morning Comment
+
+D1: APM Afternoon Status
+
+E1: APM Afternoon Comment
+
+F1: APM Night Status
+
+G1: APM Night Comment
+
+H1: Utilization Morning Status
+
+I1: Utilization Morning Comment
+
+J1: Utilization Afternoon Status
+
+K1: Utilization Afternoon Comment
+
+L1: Utilization Night Status
+
+M1: Utilization Night Comment
+
+N1: Workload Morning Status
+
+O1: Workload Morning Comment
+
+P1: Workload Afternoon Status
+
+Q1: Workload Afternoon Comment
+
+R1: Workload Night Status
+
+S1: Workload Night Comment
+
