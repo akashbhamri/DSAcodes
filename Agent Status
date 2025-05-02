@@ -1,1 +1,4 @@
-"We recently set up this alert, and I'm actively working with the application vendor to determine the correct threshold values.
+Thank you for the detailed analysis. We are actively working on the recommended action items with our internal team.
+
+We do have one question — currently, we’ve set up an alert to trigger when the thread count exceeds 300 for this server.
+Would you consider this an ideal threshold, or do you suggest a different value or monitoring approach?
