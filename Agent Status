@@ -1,40 +1,56 @@
-Morning
+Here are five precise questions to send to your vendor:
 
-A1: Date
+1. When httpclient.autoBlock is disabled, how long will a connector thread wait for a remote response before it times out and is released?
+ 
 
-B1: APM Morning Status
 
-C1: APM Morning Comment
+2. After a read/socket timeout elapses, does Nexus immediately free the thread, or will it retry (opening a new socket) up to the configured retry count before releasing it?
+ 
 
-D1: APM Afternoon Status
 
-E1: APM Afternoon Comment
+3. Are idle HTTP connections evicted from the pool after a configured “idle timeout,” and if so, what is the default idle timeout and how frequently does Nexus check for and remove idle connections?
+ 
 
-F1: APM Night Status
 
-G1: APM Night Comment
+4. **What are the current global and per-proxy configuration values for:
 
-H1: Utilization Morning Status
+Connection/Socket Timeout
 
-I1: Utilization Morning Comment
+Request (read) Timeout
 
-J1: Utilization Afternoon Status
+Retry Attempts**
+ 
 
-K1: Utilization Afternoon Comment
 
-L1: Utilization Night Status
 
-M1: Utilization Night Comment
+5. With auto-block disabled, is there any additional mechanism (beyond the standard timeouts and retries) that will kill or unblock long-running requests, or will threads simply remain tied up until the timeout elapses?
+ 
 
-N1: Workload Morning Status
 
-O1: Workload Morning Comment
 
-P1: Workload Afternoon Status
 
-Q1: Workload Afternoon Comment
 
-R1: Workload Night Status
 
-S1: Workload Night Comment
+Here are five key questions to ask your vendor after enabling httpclient.autoBlock:
+
+1. What are the effective read-timeout, retry-attempt, and health-check interval settings that will govern when a proxy is auto-blocked and subsequently re-checked?
+ 
+
+
+2. Once a proxy is marked “auto-blocked,” how long until the first health-check occurs, and what sequence of retry intervals (e.g., Fibonacci backoff up to 60 min) will Nexus use to probe for recovery?
+ 
+
+
+3. As soon as the remote becomes available again, what is the maximum delay before Nexus unblocks the proxy and resumes traffic through it?
+
+
+
+4. With auto-block enabled, will connector threads be released immediately by returning an error when a proxy is blocked, or can threads still remain tied up until the health-check completes?
+ 
+
+
+5. How will a blocked proxy impact group-repository behavior—will requests fail fast over to other members, or could failures cascade and slow down group resolution?
+ 
+
+
 
