@@ -1,1 +1,27 @@
-We are awaiting an update from the VMware vendor regarding this issue. We’ve shared all the relevant details with our application vendor, and once we hear back from them, we will let you know if they recommend increasing the socket count to avoid this issue."
+We are currently investigating a performance issue where only vplrlctapda08 is experiencing high load average, while other similar VMs (vplrlctapda06 and vplrlctapda07), which also show CPU co-stop metrics, do not exhibit the same spike in load average.
+
+As part of our analysis, the cloud/infra team has identified a possible NUMA imbalance due to the current VM CPU configuration, which is 1 socket × 16 cores. They have recommended changing it to either:
+
+2 sockets × 8 cores, or
+
+4 sockets × 4 cores
+
+
+to better align with the ESXi host's physical socket/core layout and reduce co-stop scheduling delays.
+
+Before we proceed with any configuration change, we wanted to consult with you as the application/vendor team and understand a few things:
+
+1. Why might vplrlctapda08 be showing high load average, while 06 and 07 (with similar configurations and co-stop presence) are not?
+
+
+2. Are there any differences in application behavior, workload patterns, or scheduled jobs that could explain this spike specifically on 08?
+
+
+3. Would the recommended CPU socket/core layout change from the cloud team be safe from an application performance and licensing perspective?
+
+
+4. Are there any application-level checks or metrics we should collect before applying this change?
+
+
+
+We aim to ensure the VM layout is optimized without impacting application performance or behavior. Your inputs will be critical to make the right decision.
