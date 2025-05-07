@@ -1,1 +1,1 @@
-"I've attempted to set this up in New Relic, but it's not successfully pinging the private location. As a workaround, we may need to implement a script on CJOC to monitor it instead."
+We are awaiting an update from the VMware vendor regarding this issue. We’ve shared all the relevant details with our application vendor, and once we hear back from them, we will let you know if they recommend increasing the socket count to avoid this issue."
