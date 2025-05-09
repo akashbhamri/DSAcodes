@@ -1,52 +1,38 @@
-Nexus Auto Blocking – Explained Simply
+Here are a few alternative subject lines and phrasings you can use to communicate your message professionally and clearly:
 
-What is it?
+Subject Line Options:
 
-Auto blocking is a feature in Nexus that automatically blocks a remote repository if it's slow or not responding.
-
-
----
-
-When Auto Blocking is ENABLED:
-
-Nexus tries to contact a remote repo.
-
-If it doesn't respond in 20 seconds, it tries again (3 times total).
-
-If all 3 fail, Nexus blocks that remote.
+1. Action Required: Update DevOps Tools Architecture Diagram for Upcoming Sprint
 
 
-What happens next:
-
-Nexus stops using the blocked remote.
-
-It checks it again later (every 10s, 20s, 30s, etc., up to 60 minutes).
-
-Once it's working, Nexus unblocks it automatically.
+2. Follow-Up: DevOps Architecture Diagram Update Based on OOM Discussion
 
 
-Benefits:
+3. Request to Update Architecture Diagram as Discussed in DevOps Call
 
-No delay for builds or users.
 
-Keeps Nexus fast and responsive.
+4. Architecture Diagram Revision Needed – RITM Raised
 
-Prevents server resource issues.
 
+5. Sprint Item: Architecture Diagram Update as per OOM Discussion
+
+
+
+Message Body (Rephrased):
+
+Hi Jerrold,
+
+As discussed during our DevOps OOM call, the current architecture diagram for all DevOps tools needs to be updated to reflect the changes we aligned on. We've already raised the RITM for this task.
+
+Kindly update the diagram accordingly and ensure it's included in the upcoming sprint.
+
+Let me know if you need any additional inputs.
+
+Best regards,
+[Your Name]
 
 
 ---
 
-When Auto Blocking is DISABLED:
+Would you like this formatted as an email or message template?
 
-Nexus tries the slow or down remote every time.
-
-Even after 3 failures, it does not block it.
-
-This causes:
-
-Long delays (up to a minute per request),
-
-Thread exhaustion (Nexus gets overloaded),
-
-Slower builds and system slowdowns.
