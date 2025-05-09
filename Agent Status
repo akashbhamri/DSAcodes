@@ -1,1 +1,1 @@
-"As per the recommendation from the coverage team, we are considering increasing the cores per socket from 1 to 16. We are currently seeking internal approval for this change and also checking with our BB vendor to confirm if this is a supported configuration and whether it could help us avoid the current issue."
+"UDeploy Dev environment is up, but we’re experiencing issues with the agents — some are active while others are not. We're currently unable to bring all agents up."
