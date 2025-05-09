@@ -1,5 +1,1 @@
-As discussed during our recent DevOps OOM call—where you were also present—the architecture diagram for all DevOps tools needs to be updated to reflect the changes we agreed upon. We've already raised the RITM for this activity.
-
-Kindly proceed with updating the architecture diagram accordingly and ensure it's added to the upcoming sprint.
-
-Let me know if you need any further clarification.
+"As per the recommendation from the coverage team, we are considering increasing the cores per socket from 1 to 16. We are currently seeking internal approval for this change and also checking with our BB vendor to confirm if this is a supported configuration and whether it could help us avoid the current issue."
