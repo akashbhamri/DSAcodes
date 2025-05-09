@@ -1,9 +1,52 @@
-This is an urgent escalation. We are facing a severe performance issue on node vplrlctapda08, where the load average is extremely high, and the response time has significantly degraded. This issue is isolated to this node — all other nodes are stable.
+Nexus Auto Blocking – Explained Simply
 
-As a result, we were forced to bring down the BB service on this node to prevent further impact.
+What is it?
 
-We have already attached the Red Hat analysis and all relevant logs for your review. Despite previous attempts to reach out, we have not received any actionable support so far.
+Auto blocking is a feature in Nexus that automatically blocks a remote repository if it's slow or not responding.
 
-We request your immediate involvement and resolution. The impact is critical and business-affecting, and we need this addressed on top priority.
 
-Looking forward to a prompt response.
+---
+
+When Auto Blocking is ENABLED:
+
+Nexus tries to contact a remote repo.
+
+If it doesn't respond in 20 seconds, it tries again (3 times total).
+
+If all 3 fail, Nexus blocks that remote.
+
+
+What happens next:
+
+Nexus stops using the blocked remote.
+
+It checks it again later (every 10s, 20s, 30s, etc., up to 60 minutes).
+
+Once it's working, Nexus unblocks it automatically.
+
+
+Benefits:
+
+No delay for builds or users.
+
+Keeps Nexus fast and responsive.
+
+Prevents server resource issues.
+
+
+
+---
+
+When Auto Blocking is DISABLED:
+
+Nexus tries the slow or down remote every time.
+
+Even after 3 failures, it does not block it.
+
+This causes:
+
+Long delays (up to a minute per request),
+
+Thread exhaustion (Nexus gets overloaded),
+
+Slower builds and system slowdowns.
