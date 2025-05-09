@@ -1,1 +1,35 @@
-"UDeploy Dev environment is up, but we’re experiencing issues with the agents — some are active while others are not. We're currently unable to bring all agents up."
+Sub ConvertTimestampsToDate()
+    Dim ws As Worksheet
+    Dim rng As Range
+    Dim cell As Range
+    Dim col As Range
+    Dim lastRow As Long
+    Dim colsToConvert As Variant
+    Dim colName As Variant
+
+    ' Define which columns to convert by header name
+    colsToConvert = Array("dateScheduled", "dateStarted", "dateEnded")
+
+    Set ws = ThisWorkbook.Sheets(1) ' or use sheet name like: Sheets("Sheet1")
+
+    ' Loop through each column name
+    For Each colName In colsToConvert
+        On Error Resume Next
+        Set col = ws.Rows(1).Find(What:=colName, LookIn:=xlValues, LookAt:=xlWhole)
+        On Error GoTo 0
+        
+        If Not col Is Nothing Then
+            lastRow = ws.Cells(ws.Rows.Count, col.Column).End(xlUp).Row
+            Set rng = ws.Range(ws.Cells(2, col.Column), ws.Cells(lastRow, col.Column))
+            
+            For Each cell In rng
+                If IsNumeric(cell.Value) And cell.Value <> "" Then
+                    cell.Value = (cell.Value / 1000) / 86400 + DateSerial(1970, 1, 1)
+                    cell.NumberFormat = "dd-mmm-yyyy hh:mm:ss"
+                End If
+            Next cell
+        End If
+    Next colName
+
+    MsgBox "Timestamps converted successfully!", vbInformation
+End Sub
