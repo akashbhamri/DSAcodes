@@ -1,3 +1,6 @@
-thread dump was captured while the process was actively running, using a script that is specifically designed to execute only when the target process is live. Given this, there should definitely be an associated process present in the thread dump.
 
-Kindly review the dump in detail and confirm. Please let us know if you notice anything unusual or inconsistent.
+The thread dump was collected while the process was actively running. It was captured using a script that is specifically designed to execute only when the target process is present. As evidenced by the snapshot below, if the process were not running, the script would have returned a message such as “No such process.”
+
+However, in this case, the script executed successfully, which confirms that the process was indeed running at the time of collection. Therefore, the thread dump should correspond to an active process.
+
+Kindly review the dump in detail and let us know if you notice any inconsistencies.
