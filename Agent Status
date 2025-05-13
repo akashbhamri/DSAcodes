@@ -1,2 +1,2 @@
-"Hi Venkata,
-I've scheduled a meeting to discuss this issue further. Please make sure to join the call so we can align on the RCA and next steps
+The UNIX team observed high disk I/O on vplrlctapda08 and identified the root cause as an incorrect count-per-socket configuration for the VM. They've now adjusted the socket configuration and have requested TMUS to monitor if this resolves the disk I/O issue. If the problem persists, the UNIX team will explore other potential causes.
+
