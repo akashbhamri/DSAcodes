@@ -1,6 +1,4 @@
+vendor has recommended increasing the Java XMX memory allocation from 2GB to 4GB. This configuration is already applied in the production environment. To align development with production and adhere to the vendor’s recommendation, we are planning to implement the same change in the dev environment. We have raised an RITM with the platform team to carry out this update. Meanwhile, the vendor is still reviewing the thread dumps of the Java process for further analysis.
 
-The thread dump was collected while the process was actively running. It was captured using a script that is specifically designed to execute only when the target process is present. As evidenced by the snapshot below, if the process were not running, the script would have returned a message such as “No such process.”
 
-However, in this case, the script executed successfully, which confirms that the process was indeed running at the time of collection. Therefore, the thread dump should correspond to an active process.
-
-Kindly review the dump in detail and let us know if you notice any inconsistencies.
+---
