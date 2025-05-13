@@ -1,1 +1,2 @@
-server went down, and only Rahul was available at the time. However, our monitoring resource logged out at 9 PM, so Rahul's message was missed. He had pinned a message regarding the maintenance window timing, which the Unix team is currently requesting."
+"Hi Venkata,
+Could you please clarify why this incident was reassigned to our queue? We're still awaiting the RCA for the issue. Just to note, increasing the core per socket is a preventive measure, not the actual root cause. We need the underlying reason for the occurrence."
