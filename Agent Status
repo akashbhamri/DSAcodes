@@ -1,2 +1,29 @@
-The UNIX team observed high disk I/O on vplrlctapda08 and identified the root cause as an incorrect count-per-socket configuration for the VM. They've now adjusted the socket configuration and have requested TMUS to monitor if this resolves the disk I/O issue. If the problem persists, the UNIX team will explore other potential causes.
+Hi Rahul,
 
+Here’s what we usually do for any patching activity:
+
+1. Check the Unix team’s email and collect the list of servers from the attached sheet.
+
+
+2. Update the server list in the platform team chat, since they have scheduled weekend activities.
+
+
+3. Wait for confirmation from the platform team:
+
+If there’s no activity, we prepare the communication and inform the application team.
+
+If there is any activity, we raise an RITM and reschedule the patching.
+
+
+
+4. Before patching, we manually bring down most of the services running on the servers.
+
+
+5. Once the Unix team completes the patching, we bring up the services we had stopped.
+
+
+6. We then monitor all tools to check if they are working as expected, including reviewing the New Relic dashboard.
+
+
+
+Let me know if you need more details on any step.
