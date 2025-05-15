@@ -1,17 +1,1 @@
-Subject: Request for Approval to Add jenkins Index to Existing Splunk Role
-
-Hi [Role Owner's Name],
-
-Hope you’re doing well.
-
-As recommended by the Splunk team, we are planning to add the jenkins index to the existing Splunk role that we currently have access to, instead of creating a new role. This will help streamline access management and allow us to query Jenkins-related logs efficiently.
-
-Since you are the owner of the role, we would like to request your approval before proceeding with this change.
-
-Please let us know if you’re okay with this update, or if you need any further details.
-
-Thanks and regards,
-Akash Bhamri
-
-
----
+alert is being triggered by a custom script created by the Build team. As per our Confluence documentation, the Monitoring team is responsible only for monitoring alerts that come directly from tools like New Relic, Splunk, or for node-down scenarios. Any alerts triggered by custom scripts are outside the scope of Monitoring, and the respective team that owns the script is responsible for managing and monitoring those alerts.
