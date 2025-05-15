@@ -1,1 +1,5 @@
-"We have brought up the 08 BB service on the VM. So far, there are no load average spikes, and the Wait I/O is within normal limits. We will continue to monitor the service and update this thread if any issues arise."
+Short Description:
+Unable to connect to network in new AWS WorkSpace
+
+Detailed Description:
+I’m facing a network connectivity issue in a newly created AWS WorkSpace. I'm unable to connect to the internet or internal network. The WorkSpace launches but does not allow any network access. Security groups, VPC, and route tables appear configured, but no connectivity is established. Please assist in resolving the network issue.
