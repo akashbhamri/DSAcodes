@@ -1,1 +1,3 @@
-To gain better insight into deadlock occurrences, we have set up an alert to monitor and capture these events in real-time. We will also be checking this further with the DB team to analyze the root cause and identify a resolution.
+This is a common issue occurring on the DB servers, particularly on Praneeth’s side. It’s related to database deadlocks, where two or more transactions block each other by holding locks on resources the others need. The database engine (like SQL Server or Oracle) typically detects such deadlocks and resolves them automatically by terminating one of the transactions, allowing the other to proceed.
+
+Since the system is handling it on its own without impact, I don't think it needs to be included in the daily summary. We’ll continue to work on this offline with the DB team to identify any underlying causes or patterns. Please confirm if you're aligned with this approach.
