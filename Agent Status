@@ -1,4 +1,5 @@
-As discussed, we have added you to the call.
-We will review and discuss the issue using the architecture diagram. Notes will be taken during the discussion, and we will update the diagram accordingly.
+Short Description:
+Request to add the jenkins index to an existing Splunk role for access.
 
-To ensure clarity, we will go through one architecture diagram per day, explaining each in a different way to ensure complete understanding.
+Description:
+As per the recommendation from the Splunk team, instead of creating a new role, we are requesting to add the jenkins index to an already existing Splunk role that we currently have access to. This approach ensures consistent role management while allowing us to search and analyze Jenkins-related logs efficiently without duplicating permissions or roles.
