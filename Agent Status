@@ -1,5 +1,17 @@
-Short Description:
-Request to add the jenkins index to an existing Splunk role for access.
+Subject: Request for Approval to Add jenkins Index to Existing Splunk Role
 
-Description:
-As per the recommendation from the Splunk team, instead of creating a new role, we are requesting to add the jenkins index to an already existing Splunk role that we currently have access to. This approach ensures consistent role management while allowing us to search and analyze Jenkins-related logs efficiently without duplicating permissions or roles.
+Hi [Role Owner's Name],
+
+Hope you’re doing well.
+
+As recommended by the Splunk team, we are planning to add the jenkins index to the existing Splunk role that we currently have access to, instead of creating a new role. This will help streamline access management and allow us to query Jenkins-related logs efficiently.
+
+Since you are the owner of the role, we would like to request your approval before proceeding with this change.
+
+Please let us know if you’re okay with this update, or if you need any further details.
+
+Thanks and regards,
+Akash Bhamri
+
+
+---
