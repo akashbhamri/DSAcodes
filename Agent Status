@@ -1,5 +1,1 @@
-Short Description:
-Unable to connect to network in new AWS WorkSpace
-
-Detailed Description:
-I’m facing a network connectivity issue in a newly created AWS WorkSpace. I'm unable to connect to the internet or internal network. The WorkSpace launches but does not allow any network access. Security groups, VPC, and route tables appear configured, but no connectivity is established. Please assist in resolving the network issue.
+To gain better insight into deadlock occurrences, we have set up an alert to monitor and capture these events in real-time. We will also be checking this further with the DB team to analyze the root cause and identify a resolution.
