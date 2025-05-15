@@ -1,3 +1,4 @@
-This is a common issue occurring on the DB servers, particularly on Praneeth’s side. It’s related to database deadlocks, where two or more transactions block each other by holding locks on resources the others need. The database engine (like SQL Server or Oracle) typically detects such deadlocks and resolves them automatically by terminating one of the transactions, allowing the other to proceed.
+As discussed, we have added you to the call.
+We will review and discuss the issue using the architecture diagram. Notes will be taken during the discussion, and we will update the diagram accordingly.
 
-Since the system is handling it on its own without impact, I don't think it needs to be included in the daily summary. We’ll continue to work on this offline with the DB team to identify any underlying causes or patterns. Please confirm if you're aligned with this approach.
+To ensure clarity, we will go through one architecture diagram per day, explaining each in a different way to ensure complete understanding.
