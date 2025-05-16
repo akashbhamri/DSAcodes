@@ -1,7 +1,1 @@
-This alert is related to the deployment marker, which logs deployment details into New Relic. The script was created by Achyuth, who is currently part of the IAC team.
-
-From our end, everything appears to be functioning correctly. If the deployment details fail to upload to New Relic, the alert should ideally be triggered for the application team only.
-
-For deeper context or clarification, Achyuth can provide more insights, as he was involved in developing this script.
-
-Please refer to the RITM mentioned below for additional information.
+"Hi Pranwerh, just a quick note — the monitoring team operates on a 24/5 schedule. Over the weekend, they provide on-call support, so if there's an issue, they can be reached by phone and will look into it accordingly.
