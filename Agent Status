@@ -1,1 +1,7 @@
-Monitoring team is responsible only for monitoring alerts that come directly from tools like New Relic, Splunk, or for node-down scenarios. Any alerts triggered by custom scripts are outside the scope of Monitoring. Until such scripts are officially communicated and properly handed over to the Monitoring team, they will remain the responsibility of the team that created them.
+This alert is related to the deployment marker, which logs deployment details into New Relic. The script was created by Achyuth, who is currently part of the IAC team.
+
+From our end, everything appears to be functioning correctly. If the deployment details fail to upload to New Relic, the alert should ideally be triggered for the application team only.
+
+For deeper context or clarification, Achyuth can provide more insights, as he was involved in developing this script.
+
+Please refer to the RITM mentioned below for additional information.
