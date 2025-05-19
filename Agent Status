@@ -1,1 +1,3 @@
-"Hi Pranwerh, just a quick note — the monitoring team operates on a 24/5 schedule. Over the weekend, they provide on-call support, so if there's an issue, they can be reached by phone and will look into it accordingly.
+I've noticed that the basic software such as Microsoft Word, Excel, Teams, and Outlook are not pre-installed on my new AWS workspace. Could you please confirm if this is expected behavior?
+
+Also, is there any standard procedure or configuration I should follow to have these applications installed automatically?
