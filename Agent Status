@@ -1,2 +1,2 @@
-"I had a call with them, and it's been recommended to increase the memory and CPU for the DB server due to the high number of worker threads. They are currently checking with the Windows team regarding the recommended specifications. I'll connect with them today and share an update on the progress."
 
+"We need to temporarily mute New Relic alerts on all servers before the activity begins to avoid unnecessary noise. Let’s ensure this is done in a controlled and reversible manner."
