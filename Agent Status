@@ -1,38 +1,5 @@
-Here’s a professional email you can send to request a review of the modifications you added to the architecture diagram based on the discussion:
+It's been almost 5 days, but the default software like Outlook and Microsoft Office still hasn't been installed on my system.
 
+When I try to raise an RITM manually, it asks for cost center details, which I believe shouldn't be required for standard installations.
 
----
-
-Subject: Request for Review: Updated Architecture Diagram Based on Discussion
-
-Hi Team,
-
-As per our recent discussion, I’ve updated the architecture diagram to include the following points:
-
-DR not running (noted)
-
-HTTPS 443 AD communication in PHX
-
-Elasticsearch two-way communication
-
-NAS team data mirroring (Validation)
-
-Clarification on DR to PROD NAS connection
-
-Current state of DR NAS (read/write)
-
-Last arrow representing PROD to PHX DB (clarified as confusion point)
-
-
-I’ve incorporated these changes in the latest version of the diagram. Kindly review the updates and let me know if anything additional needs to be added or modified.
-
-Looking forward to your feedback.
-
-Best regards,
-Akash
-
-
----
-
-Let me know if you want to attach the diagram or reference a specific file/link.
-
+Could you please look into this or guide me on the correct process to get this resolved?
