@@ -1,5 +1,2 @@
-It's been almost 5 days, but the default software like Outlook and Microsoft Office still hasn't been installed on my system.
+"I had a call with them, and it's been recommended to increase the memory and CPU for the DB server due to the high number of worker threads. They are currently checking with the Windows team regarding the recommended specifications. I'll connect with them today and share an update on the progress."
 
-When I try to raise an RITM manually, it asks for cost center details, which I believe shouldn't be required for standard installations.
-
-Could you please look into this or guide me on the correct process to get this resolved?
