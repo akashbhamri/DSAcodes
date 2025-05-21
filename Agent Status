@@ -1,2 +1,5 @@
+"We have configured Splunk alerts for all critical database and application logs. These alerts are essential, as they can indicate issues that may significantly impact the application. If an alert is triggered, it must be analyzed promptly to assess and mitigate any potential risks."
 
-"We need to temporarily mute New Relic alerts on all servers before the activity begins to avoid unnecessary noise. Let’s ensure this is done in a controlled and reversible manner."
+
+
+"When a Splunk alert is triggered, it's important to collect all relevant information associated with the alert. Since logs can reflect multiple underlying issues, thorough analysis is required to identify the root cause and implement the appropriate fix."
