@@ -1,12 +1,25 @@
-Sure! Here's a more polished and professional version of your message:
+Certainly! Here's the updated email with the added context about issues users face even after access is granted via script:
 
 
 ---
 
-"Could you please discuss this with Raghvendra and Nagendra, as this seems to be a server-side response issue from JIRA? It's a critical task, so a deeper investigation would be helpful. Raghvendra also mentioned that they’ve worked on a similar issue before, which might provide some useful context."
+Subject: Request for UDeploy Admin Access for Prod and Dev Environments
+
+Hi [Recipient's Name],
+
+I hope you're doing well.
+
+As the monitoring team is currently handling all access-related RITMs, they may encounter challenges related to UDeploy access in both production and development environments. Even after access is provided to users via scripts, there are instances where users still face issues or inconsistencies while accessing UDeploy. These cases often require deeper troubleshooting and validation.
+
+To effectively address and resolve such access-related tasks, I would like to request admin access for both Prod and Dev UDeploy environments. This will enable me to assist in identifying and fixing these issues promptly.
+
+Please let me know if any further information or approvals are needed.
+
+Best regards,
+Akash
 
 
 ---
 
-Let me know if you'd like a more formal or casual version as well.
+Let me know if you'd like to tweak the tone or add more technical details.
 
