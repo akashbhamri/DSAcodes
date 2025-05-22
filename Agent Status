@@ -1,1 +1,12 @@
-DevOps Support DL will be added to alerts generated from Splunk and custom scripts. These alerts must be monitored accordingly. For New Relic, although the DL will not be added, any alerts containing keywords such as CloudBees CI, uDeploy, Bitbucket, Nexus, Jenkins, Sonar, CloudBees, Controller, or Pod should still be monitored by the team.
+Sure! Here's a more polished and professional version of your message:
+
+
+---
+
+"Could you please discuss this with Raghvendra and Nagendra, as this seems to be a server-side response issue from JIRA? It's a critical task, so a deeper investigation would be helpful. Raghvendra also mentioned that they’ve worked on a similar issue before, which might provide some useful context."
+
+
+---
+
+Let me know if you'd like a more formal or casual version as well.
+
