@@ -1,5 +1,1 @@
-"We have configured Splunk alerts for all critical database and application logs. These alerts are essential, as they can indicate issues that may significantly impact the application. If an alert is triggered, it must be analyzed promptly to assess and mitigate any potential risks."
-
-
-
-"When a Splunk alert is triggered, it's important to collect all relevant information associated with the alert. Since logs can reflect multiple underlying issues, thorough analysis is required to identify the root cause and implement the appropriate fix."
+DevOps Support DL will be added to alerts generated from Splunk and custom scripts. These alerts must be monitored accordingly. For New Relic, although the DL will not be added, any alerts containing keywords such as CloudBees CI, uDeploy, Bitbucket, Nexus, Jenkins, Sonar, CloudBees, Controller, or Pod should still be monitored by the team.
