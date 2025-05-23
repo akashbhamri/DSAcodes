@@ -1,7 +1,3 @@
-index=syf_apps 
-source="/appbin/atlassian/application-data/bitbucket/log/*.log" 
-log_level=ERROR 
-| rex field=_raw "(?i)Caused by:\s+(?<exception_class>[^\s:]+)(?::\s*(?<exception_message>.*))?"
-| stats count AS occurrences BY exception_class exception_message
-| sort - occurrences
-| table occurrences exception_class exception_message
+We encountered a sudden memory spike on the Java process, which resulted in the process being terminated due to an OutOfMemoryError, as reflected in the logs. Upon reviewing the incident, the vendor analyzed the logs and identified memory-related entries that could potentially explain the issue. While the exact root cause is yet to be confirmed, the vendor recommended increasing the memory allocation (-Xmx) to 4GB, in line with the deployment requirements.
+
+He also advised that if the issue reoccurs, we should capture thread and heap dumps for further analysis. Since increasing the memory allocation, we have not observed any abnormal load on the uDeploy Dev server, and the application has been stable.
