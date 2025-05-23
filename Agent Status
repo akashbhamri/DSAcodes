@@ -1,3 +1,5 @@
-We encountered a sudden memory spike on the Java process, which resulted in the process being terminated due to an OutOfMemoryError, as reflected in the logs. Upon reviewing the incident, the vendor analyzed the logs and identified memory-related entries that could potentially explain the issue. While the exact root cause is yet to be confirmed, the vendor recommended increasing the memory allocation (-Xmx) to 4GB, in line with the deployment requirements.
+Hi Praneeth,
 
-He also advised that if the issue reoccurs, we should capture thread and heap dumps for further analysis. Since increasing the memory allocation, we have not observed any abnormal load on the uDeploy Dev server, and the application has been stable.
+I've attached the document containing all the alerts for your review. Please take a look and let me know if you notice any gaps or have any feedback.
+
+Thanks!
