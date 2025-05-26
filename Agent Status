@@ -1,8 +1,38 @@
-As per the earlier suggestion, we increased the memory on the uDeploy server to 4GB. However, the high utilization issue has resurfaced even after this change. While a restart temporarily resolves the problem, this is not a sustainable solution.
+Sub ConvertTimestampsToDate()
+    Dim rng As Range
+    Dim cell As Range
+    Dim col As Range
+    Dim lastRow As Long
+    Dim colsToConvert As Variant
+    Dim colName As Variant
 
-Given that multiple teams rely heavily on this server, and it's critical to our operations, we need to identify and address the root cause as a matter of urgency.
+    ' Define which columns to convert by header name
+    colsToConvert = Array("dateScheduled", "dateStarted", "dateEnded")
 
-We’ve attached all the relevant details and logs for your reference. Requesting you to please prioritize this issue and investigate it on an urgent basis.
+    Set ws = ThisWorkbook.Sheets(1) ' or use sheet name: Sheets("Sheet1")
 
-Thanks for your support.
+    ' Loop through each column name
+    For Each colName In colsToConvert
+        On Error Resume Next
+        Set col = ws.Rows(1).Find(What:=colName, LookIn:=xlValues, LookAt:=xlWhole)
+        On Error GoTo 0
 
+        If Not col Is Nothing Then
+            lastRow = ws.Cells(ws.Rows.Count, col.Column).End(xlUp).Row
+            Set rng = ws.Range(ws.Cells(2, col.Column), ws.Cells(lastRow, col.Column))
+
+            For Each cell In rng
+                If IsNumeric(cell.Value) And cell.Value <> "" Then
+                    ' Convert to Excel datetime
+                    cell.Value = (cell.Value / 1000) / 86400 + DateSerial(1970, 1, 1)
+                    ' Convert UTC to IST (+5:30)
+                    cell.Value = cell.Value + TimeSerial(5, 30, 0)
+                    ' Format as dd-mmm-yyyy hh:mm:ss AM/PM
+                    cell.NumberFormat = "dd-mmm-yyyy hh:mm:ss AM/PM"
+                End If
+            Next cell
+        End If
+    Next colName
+
+    MsgBox "Timestamps converted successfully!", vbInformation
+End Sub
