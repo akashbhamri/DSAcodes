@@ -1,38 +1,22 @@
-Sub ConvertTimestampsToDate()
-    Dim rng As Range
-    Dim cell As Range
-    Dim col As Range
-    Dim lastRow As Long
-    Dim colsToConvert As Variant
-    Dim colName As Variant
+Here’s a cleaner and more professional way to convey the message shown in the image:
 
-    ' Define which columns to convert by header name
-    colsToConvert = Array("dateScheduled", "dateStarted", "dateEnded")
 
-    Set ws = ThisWorkbook.Sheets(1) ' or use sheet name: Sheets("Sheet1")
+---
 
-    ' Loop through each column name
-    For Each colName In colsToConvert
-        On Error Resume Next
-        Set col = ws.Rows(1).Find(What:=colName, LookIn:=xlValues, LookAt:=xlWhole)
-        On Error GoTo 0
+Incident Summary:
+Alert: [vdlrctdp04v1] UDeploy Dev Server – CPU Utilization above 90% for over 30 minutes.
 
-        If Not col Is Nothing Then
-            lastRow = ws.Cells(ws.Rows.Count, col.Column).End(xlUp).Row
-            Set rng = ws.Range(ws.Cells(2, col.Column), ws.Cells(lastRow, col.Column))
+Action Taken:
+Upon receiving the alert, we immediately logged into the server to investigate. We observed that the UDeploy Dev server was experiencing high CPU usage due to a background Java process.
+We restarted the UDeploy server, after which the performance normalized. Additionally, we reviewed logs and gathered thread and heap dumps for further analysis. We also consulted Hema Ralle and captured her inputs.
 
-            For Each cell In rng
-                If IsNumeric(cell.Value) And cell.Value <> "" Then
-                    ' Convert to Excel datetime
-                    cell.Value = (cell.Value / 1000) / 86400 + DateSerial(1970, 1, 1)
-                    ' Convert UTC to IST (+5:30)
-                    cell.Value = cell.Value + TimeSerial(5, 30, 0)
-                    ' Format as dd-mmm-yyyy hh:mm:ss AM/PM
-                    cell.NumberFormat = "dd-mmm-yyyy hh:mm:ss AM/PM"
-                End If
-            Next cell
-        End If
-    Next colName
+As this is a recurring issue, we raised a vendor ticket. As advised previously, the CPU limit was increased from 2 to 4 GB, but the issue persists. Further suggestions from the vendor are awaited to prevent recurrence.
 
-    MsgBox "Timestamps converted successfully!", vbInformation
-End Sub
+Impact:
+UDeploy Dev server was down, resulting in application impact for approximately 30 minutes.
+
+
+---
+
+Let me know if you want it shortened or formatted for an email, report, or ticket note.
+
