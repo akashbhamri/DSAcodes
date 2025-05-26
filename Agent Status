@@ -1,5 +1,18 @@
-Hi Praneeth,
+Sure! Here's the updated version with "maintenance window" included:
 
-I've attached the document containing all the alerts for your review. Please take a look and let me know if you notice any gaps or have any feedback.
+
+---
+
+Hi Asharaf,
+
+Could you please remove this alert that's being generated through the custom script? We already have a similar alert configured in New Relic, which we mute during the maintenance window.
+
+If it's not feasible to remove it, could you share the pipeline URL where this alert is triggered? That way, we can disable it during the maintenance window to avoid receiving duplicate alerts.
 
 Thanks!
+
+
+---
+
+Let me know if you'd like it in a more concise or informal version.
+
