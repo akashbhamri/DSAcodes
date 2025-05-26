@@ -1,18 +1,3 @@
-Sure! Here's the updated version with "maintenance window" included:
+Hi Team,
 
-
----
-
-Hi Asharaf,
-
-Could you please remove this alert that's being generated through the custom script? We already have a similar alert configured in New Relic, which we mute during the maintenance window.
-
-If it's not feasible to remove it, could you share the pipeline URL where this alert is triggered? That way, we can disable it during the maintenance window to avoid receiving duplicate alerts.
-
-Thanks!
-
-
----
-
-Let me know if you'd like it in a more concise or informal version.
-
+We're seeing high utilization on the uDeploy server again, even after increasing the memory. The issue temporarily subsided after a restart. We've collected the necessary logs and are currently working on the root cause analysis.
