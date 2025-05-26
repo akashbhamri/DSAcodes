@@ -1,3 +1,8 @@
-Hi Team,
+As per the earlier suggestion, we increased the memory on the uDeploy server to 4GB. However, the high utilization issue has resurfaced even after this change. While a restart temporarily resolves the problem, this is not a sustainable solution.
 
-We're seeing high utilization on the uDeploy server again, even after increasing the memory. The issue temporarily subsided after a restart. We've collected the necessary logs and are currently working on the root cause analysis.
+Given that multiple teams rely heavily on this server, and it's critical to our operations, we need to identify and address the root cause as a matter of urgency.
+
+We’ve attached all the relevant details and logs for your reference. Requesting you to please prioritize this issue and investigate it on an urgent basis.
+
+Thanks for your support.
+
