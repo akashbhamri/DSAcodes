@@ -1,18 +1,1 @@
-We have analyzed the high CPU usage observed on May 26 around 3:55 PM using New Relic APM and uDeploy.
-
-We checked uDeploy and confirmed that there were no heavy or high-resource deployments during that time (also verified for May 9).
-
-In New Relic, we identified that a Java thread named jese-nio-exec was consuming high CPU. This thread is commonly associated with Netty, which handles asynchronous HTTP request processing.
-
-Notably, this same thread was observed running during both days when the issue occurred (May 9 and May 26), and was in a Runnable state, meaning it was actively executing code.
-
-A drop in the Appdex score was also seen, indicating some performance impact during the spike.
-
-
-Next Steps:
-
-We are sharing these findings with the vendor team for further analysis.
-
-If any issue is confirmed with this thread or related processing, we’ll take necessary action accordingly.
-
-We’ll share an update once we receive feedback from the vendor.
+development environment is completely down and it's critically impacting users. Immediate attention is required to identify and resolve the issue."
