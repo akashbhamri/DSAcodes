@@ -1,1 +1,8 @@
-"Hi Irene, the Jira team mentioned that the issue seems to be related to LDAP. Could you please confirm if your findings align with this?"
+Yes, we have also observed the "heap out of memory" issue. As per your recommendation, we have already increased the heap size to 4GB. However, we are still experiencing the issue intermittently.
+
+Interestingly, we have the same setup running in production without encountering this problem, which suggests that there may be something specific running at the time that is triggering this behavior.
+
+We need to identify the exact cause of the memory spike during those periods. Continuously increasing the memory allocation is not a sustainable solution.
+
+Kindly investigate further and provide your insights on the root cause of this issue.
+
