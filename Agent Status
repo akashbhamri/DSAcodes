@@ -1,8 +1,54 @@
-Yes, we have also observed the "heap out of memory" issue. As per your recommendation, we have already increased the heap size to 4GB. However, we are still experiencing the issue intermittently.
+Absolutely! Here's a refined message that includes:
 
-Interestingly, we have the same setup running in production without encountering this problem, which suggests that there may be something specific running at the time that is triggering this behavior.
+Validation of all heap dumps
 
-We need to identify the exact cause of the memory spike during those periods. Continuously increasing the memory allocation is not a sustainable solution.
+Highlighting the issue with the May 27th dump
 
-Kindly investigate further and provide your insights on the root cause of this issue.
+Requesting automation steps
+
+Asking for root cause analysis of high heap memory
+
+
+
+---
+
+✅ Final Message (Professional & Complete)
+
+> Hi team,
+
+We have uploaded heap and thread dumps for all the days when the issue occurred. Kindly validate all files and let us know if you notice any issues.
+
+📅 Dump Validation Summary
+
+May 9: Heap dump (~2.89 GB) and all thread dumps are complete and valid.
+
+May 26: Heap dump (~3.3 GB) and thread dumps are healthy.
+
+May 27: Heap dump is only ~103 MB, and several thread dumps are 0 KB in size.
+This strongly indicates the heap/thread dump generation was incomplete or failed — likely due to JVM instability, process termination, or insufficient resources during that time.
+
+
+🔍 Request
+
+1. Please validate the uploaded dumps and confirm if you observe any additional issues.
+
+
+2. Help us analyze the valid heap dumps (May 9 and May 26) to identify the root cause of high heap memory usage.
+
+
+3. Share the steps to automate heap and thread dump collection directly on the server, especially during OOM or performance degradation.
+
+
+4. If there are alternative and more reliable ways to capture these dumps (e.g., JVM options, Prometheus exporters, etc.), please let us know.
+
+
+
+Let us know if further inputs are needed from our side.
+
+
+
+
+---
+
+Would you like me to convert this into a Jira ticket format, email draft, or Slack message template?
 
