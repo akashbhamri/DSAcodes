@@ -1,52 +1,27 @@
-Got it! If you want to question or challenge IBM’s recommendation to increase the heap size — especially since the issue happens only occasionally, not daily — here’s a professional and clear way to frame your message with smart counter-questions:
+Here’s a professionally written and clear version of your message that you can use to communicate with your team, manager, or include in a ticket update:
 
 
 ---
 
-📨 Message to IBM (heap increment concern):
+📌 Status Update on Heap Size Recommendation for DOD Tool
 
-Hi [IBM Engineer's Name],
+The vendor is still analyzing the heap and thread dumps related to the recent memory issue.
 
-Thank you for reviewing the heap dumps and sharing your recommendation to increase the heap size from 2–4 GB to 8 GB or higher.
+In the meantime, they have recommended increasing the heap size from the current 4 GB to more than 8 GB, with a maximum suggested limit of 13 GB for the DOD tool. This is based on their preliminary assessment.
 
-However, we’ve observed that the high heap memory issue occurs only at specific times — not consistently across all days. With that in mind, we would like to understand more before proceeding with a permanent heap size increase:
+However, since the issue is not consistently occurring and we want to ensure the root cause is fully understood, we’ve shared our concerns and follow-up questions with the vendor — particularly around:
 
+Whether the spike is related to specific load patterns or jobs,
 
----
+If there's any indication of a memory leak,
 
-❓ Our Follow-up Questions:
-
-1. Given that the heap spike happens only during certain time windows, could this be related to a specific job or load pattern instead of an overall heap size limitation?
-
-
-2. Is there any clear indication of a memory leak or unusual object retention in the dumps from the affected day, versus the other days where the system behaved normally with the current heap settings?
+And whether alternative optimizations (e.g., GC tuning or memory cleanup) can be explored before increasing heap permanently.
 
 
-3. Could a temporary or dynamic approach be used (e.g., heap tuning or JVM GC settings optimization) instead of a full heap size increase?
-
-
-4. Does the dump from May 27 show signs of corruption purely due to heap exhaustion, or could there be other causes (e.g., dump being interrupted, disk space, GC issues)?
-
-
-5. Before increasing heap permanently to 8 GB or more, can we isolate what exact component/class/thread is driving heap usage abnormally during that time?
-
-
-6. Would you recommend enabling verbose GC logging or memory analyzer tools proactively, instead of changing the heap right away?
-
-
+We have requested the vendor to conduct a deeper analysis of the heap and thread dumps and are currently awaiting their detailed response before moving forward with any heap size change.
 
 
 ---
 
-We want to ensure that the root cause is fully understood and addressed appropriately, rather than masking a potential issue with a larger heap.
-
-Looking forward to your guidance on the above.
-
-Thanks,
-[Your Name]
-
-
----
-
-Would you like me to turn this into a downloadable message or official response for your support ticket?
+Would you like this reformatted for an email or support ticket response?
 
