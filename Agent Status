@@ -1,1 +1,3 @@
-"Based on the current recommendation, it is advised to increase the heap size, with a minimum of 4GB and a maximum of 13GB."
+The index rebuild issue has occurred again today, and once again, no alert was triggered for it. We need your urgent assistance to look into this, as it’s critical that both the index rebuild job and the associated alert mechanism are functioning as expected.
+
+Requesting your support to investigate and resolve this on priority.
