@@ -1,10 +1,2 @@
-As we had modified the index rebuild window earlier from 9 PM to 7 PM, could you please confirm if the alerting script was also adjusted accordingly at that time?
 
-Additionally, to ensure we don’t miss future occurrences:
-
-Can you set up a fallback mechanism that triggers an alert in case the primary alert fails to execute?
-
-Also, could you please explore the possibility of setting up an alert for long-running queries, not just index jobs? This would help us detect performance issues early.
-
-
-Appreciate your support on this.
+"There was no chat created for this request. We've discussed this multiple times before — the approval is only granted based on the designated approver listed in ServiceNow. This is the standard process."
