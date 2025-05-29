@@ -1,5 +1,7 @@
-Hi Danny/Team,
+schedule has been updated to Saturday, as we recently changed the maintenance window timing?
+Also, once the final window time is confirmed, kindly update the alert schedule accordingly.
 
-We would like to set up a call with our DB team right away to finalize the schedule for both weekdays and the weekend. The DB team will also require support from the BB vendor side to make a decision.
+Additionally, we have a quick question:
+Is it possible to configure the alert to trigger based solely on threshold breaches (e.g., if a job exceeds the defined duration), regardless of the scheduled time? Or do we need to keep updating the schedule each time to make it work?
 
-Kindly share your availability or timestamps that work for you.
+Looking forward to your
