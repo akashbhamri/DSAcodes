@@ -1,1 +1,9 @@
-"Just a reminder, I had requested an update on the concern discussed during yesterday's call, which you agreed to raise in the vendor ticket. Since LDAP is stating there are no issues on their end, it might be better to inform them that we've received feedback from the vendor and request them to investigate further, rather than simply stating there's no issue."
+Hi Manoj,
+
+This issue occurred due to a long-running index rebuild job that exceeded the expected duration. A similar incident had taken place earlier, after which the execution window was revised from 9 PM EST to 7 PM EST.
+
+Since the DB team was unable to identify the root cause during the previous occurrence, there were several rounds of discussions at that time as well. We are once again engaging with them to determine the RCA. Although the DBA team had set up an alert for this issue, it did not get triggered as expected.
+
+An incident has been raised to address both the prolonged index rebuild issue and the alert failure. We will keep you informed as soon as we receive further updates from the DB team.
+
+Please find the vendor ticket reference below for your tracking.
