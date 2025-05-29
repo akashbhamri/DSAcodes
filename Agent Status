@@ -1,1 +1,1 @@
-lwe're actively working on this from our side. Along with continuous follow-ups with the vendor, we’re also performing our own analysis and sharing all findings and workarounds with them in real-time. Please refer to the vendor ticket below — we’re currently awaiting a response from their L3 support team."
+"Based on the current recommendation, it is advised to increase the heap size, with a minimum of 4GB and a maximum of 13GB."
