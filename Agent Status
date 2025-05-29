@@ -1,4 +1,4 @@
-Here’s the updated version including the request for RCA on priority:
+Got it! Here's a refined version tailored for raising the incident to the DBA team:
 
 
 ---
@@ -7,16 +7,14 @@ Short Description:
 Index rebuild job ran longer than expected; alert did not trigger
 
 Description:
-The index rebuild job exceeded the expected duration, resulting in performance impact. This issue had occurred earlier as well, after which the rebuild window was revised from 9 PM EST to 7 PM EST.
+The index rebuild job took longer than expected, causing performance impact. This issue had occurred earlier as well, after which the rebuild window was revised from 9 PM EST to 7 PM EST.
 
-Although an alert was configured by the DBA team, it did not trigger during this occurrence. We are raising this incident to address both the long-running index rebuild and the alert failure.
-
-Requesting the DBA team to investigate and provide the Root Cause Analysis (RCA) for both issues on priority.
+Although an alert was configured from the DBA side, it was not triggered during this occurrence. We are raising this incident to address both the long-running index rebuild and the alert failure. Requesting DBA team to analyze and share the root cause.
 
 Vendor ticket reference: [Insert Ticket ID]
 
 
 ---
 
-Let me know if you'd like this in email or ticket format.
+Let me know if you want a version in email format too.
 
