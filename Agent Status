@@ -1,2 +1,8 @@
-Hi Team,
-Any update on the above ask from the Jira team? Please let us know the current status.
+As you’re proceeding with the memory increase for the VELPW environment, we’d like to check if we can also include the CPU core upgrade (from 4 cores to 16 cores) in the same change window.
+
+This is based on the DB team’s recommendation. To avoid any risk of downtime, please plan the upgrade in a way that 01 and PHX are handled together, and 02 is done in a separate slot—ensuring both DBs are not impacted at the same time.
+
+Kindly confirm if the CPU upgrade can be included in the same change and share the proposed schedule.
+
+Thanks,
+[Your Name]
