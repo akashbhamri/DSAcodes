@@ -1,3 +1,3 @@
-Since the Okta integration, our synthetic alert setup has been disrupted, and we’re currently unable to monitor URLs as expected. This alert is critical for our operations, and we need to re-establish monitoring—either by fixing the existing setup or identifying a suitable workaround or alternative solution.
+Following the recent Okta integration, our synthetic alert for URL monitoring has stopped functioning. This alert is crucial for our team, and we need to re-establish it as soon as possible—either by resolving the current issue or implementing an alternative monitoring solution.
 
-Could you please look into this on priority and advise on the best way forward?
+Could you please investigate this on priority and suggest a fix or a feasible workaround?
