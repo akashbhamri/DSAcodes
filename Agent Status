@@ -1,1 +1,7 @@
-We have rescheduled the job to run only on weekends instead of weekdays. We will continue to monitor the BB performance until June 9. After that, we will share the support bundle with the vendor to help assess whether the weekend-only schedule is effective.
+response=$(curl -s -w "HTTP_CODE:%{http_code} TOTAL_TIME:%{time_total}" -o /dev/null "$URL")
+
+HTTP_CODE=$(echo "$response" | cut -d' ' -f1 | cut -d':' -f2)
+RESPONSE_TIME=$(echo "$response" | cut -d' ' -f2 | cut -d':' -f2)
+
+echo "HTTP Code: $HTTP_CODE"
+echo "Response Time: $RESPONSE_TIME seconds"
