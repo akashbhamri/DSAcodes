@@ -1,7 +1,59 @@
-response=$(curl -s -w "HTTP_CODE:%{http_code} TOTAL_TIME:%{time_total}" -o /dev/null "$URL")
+#!/bin/bash
 
-HTTP_CODE=$(echo "$response" | cut -d' ' -f1 | cut -d':' -f2)
-RESPONSE_TIME=$(echo "$response" | cut -d' ' -f2 | cut -d':' -f2)
+# Define tool names and URLs
+declare -A tools
+tools["Okta"]="https://myokta.example.com"
+tools["Jira"]="https://myjira.example.com"
+tools["Confluence"]="https://myconfluence.example.com"
 
-echo "HTTP Code: $HTTP_CODE"
-echo "Response Time: $RESPONSE_TIME seconds"
+MAX_RESPONSE_TIME=1.5
+EXIT_CODE=0
+ALERTS=""
+
+# List of acceptable HTTP status codes
+ACCEPTABLE_CODES=("200" "302" "403" "401")
+
+for tool in "${!tools[@]}"; do
+    url="${tools[$tool]}"
+    echo "Checking [$tool] - $url"
+
+    # Perform curl check
+    response=$(curl -s -o /dev/null -w "HTTP_CODE:%{http_code} TOTAL_TIME:%{time_total}" --connect-timeout 5 --max-time 10 "$url")
+    CURL_EXIT=$?
+
+    if [[ $CURL_EXIT -ne 0 ]]; then
+        echo "❌ [$tool] URL not reachable (curl exit code $CURL_EXIT)"
+        ALERTS+="❌ [$tool] URL not reachable (curl exit code $CURL_EXIT)\n"
+        EXIT_CODE=1
+        continue
+    fi
+
+    HTTP_CODE=$(echo "$response" | awk -F'HTTP_CODE:' '{print $2}' | awk '{print $1}')
+    RESPONSE_TIME=$(echo "$response" | awk -F'TOTAL_TIME:' '{print $2}')
+
+    if [[ ! " ${ACCEPTABLE_CODES[@]} " =~ " ${HTTP_CODE} " ]]; then
+        echo "⚠️ [$tool] Unexpected HTTP status code: $HTTP_CODE"
+        ALERTS+="⚠️ [$tool] Unexpected HTTP status code: $HTTP_CODE\n"
+        EXIT_CODE=1
+    fi
+
+    if (( $(echo "$RESPONSE_TIME > $MAX_RESPONSE_TIME" | bc -l) )); then
+        echo "⚠️ [$tool] URL is reachable but slow (Time: ${RESPONSE_TIME}s > ${MAX_RESPONSE_TIME}s)"
+        ALERTS+="⚠️ [$tool] Slow response (Time: ${RESPONSE_TIME}s)\n"
+        EXIT_CODE=1
+    fi
+
+    if [[ $EXIT_CODE -eq 0 ]]; then
+        echo "✅ [$tool] OK - Status: $HTTP_CODE, Time: ${RESPONSE_TIME}s"
+    fi
+done
+
+# Summary and exit
+if [[ $EXIT_CODE -ne 0 ]]; then
+    echo -e "\n--- ALERT SUMMARY ---"
+    echo -e "$ALERTS"
+    exit $EXIT_CODE
+else
+    echo "✅ All tool URLs are accessible and performing well."
+    exit 0
+fi
