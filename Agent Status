@@ -1,1 +1,1 @@
-ALERT: URL issue detected with ${BUILD_LOG_REGEX, regex="ToolFailureList=(.*)", maxMatches=1, showTruncatedLines=false}
+support team has asked us to enable debug and profiling in Bitbucket. These settings are already enabled on our end. They’ve requested that we share the support bundle with them on 9th June. Based on the analysis of that bundle, they will determine whether we can proceed with the index rebuild over the weekend or if it needs to be rescheduled for a weekday
