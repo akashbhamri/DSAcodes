@@ -1,1 +1,56 @@
-support team has asked us to enable debug and profiling in Bitbucket. These settings are already enabled on our end. They’ve requested that we share the support bundle with them on 9th June. Based on the analysis of that bundle, they will determine whether we can proceed with the index rebuild over the weekend or if it needs to be rescheduled for a weekday
+Absolutely, here's the updated version with your latest point included under the CBCD section:
+
+
+---
+
+Subject: Clarification on API Server 14 Removal and Service Configuration
+
+Hi [Team/Name],
+
+Could you please confirm the following points regarding the recent activity on API Server 14?
+
+1. API Server 14 Removal:
+
+Was the API server on node 14 removed as part of the activity?
+
+If yes, was a RITM or Change Request raised and approved for this removal?
+
+
+
+2. Service Behavior Post-Reboot:
+
+It appears the job is configured to start automatically at the system level during reboot.
+
+Have we disabled this service on Server 14 to prevent it from starting again?
+
+What would be the impact if the API server on 14 is restarted unintentionally?
+
+
+
+3. Job Migration to 02 Server:
+
+Was a new job created and configured on Server 02 to take over the functionality post-patching?
+
+Has the new job on Server 02 been tested and confirmed as working?
+
+
+
+4. CBCD Restart Requirement:
+
+Do we need to start the CBCD service now, or can it be deferred until the API Server is deleted and the Stonebranch job is fully created and validated?
+
+Please clarify the recommended sequence to avoid conflicts or redundant actions.
+
+
+
+
+Please provide a detailed update to ensure all steps are correctly aligned and avoid any unintended behavior during future reboots or patching activities.
+
+Thanks,
+[Your Name]
+
+
+---
+
+Let me know if you want to convert this into a simpler chat message format as well.
+
