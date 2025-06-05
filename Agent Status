@@ -1,1 +1,7 @@
-Can we proceed with enabling APM during the weekend without raising a Change Request, since the activity is minimal and won’t take much time? Or does it still need to follow the standard change process including TCAB approval?
+"We would like to explore options to configure an alert that triggers upon the successful completion of an index rebuild job. The alert should include:
+
+The completion time
+
+Details of the indexes rebuilt
+
+Ideally, the index details should be attached as a file (e.g., CSV or text) in the notification email."
