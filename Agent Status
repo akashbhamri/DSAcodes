@@ -1,27 +1,3 @@
-[Vendor/Team Name],
+We’ve reached out to the vendor regarding the index rebuild job getting stuck on May 28 and 31. While the job has been running daily at 7:00 PM EST since early February without issues, the concern is around why this behavior was observed only on those two specific dates.
 
-We are analyzing the recent performance degradation observed on May 31 around 7:00 PM EST, which coincided with the daily index rebuild job running on the DB server.
-
-We understand this job has been scheduled since early February (Feb 5 or 6) and runs daily at 7:00 PM EST. However, it's important to note that the issue only occurred on May 31 — prior to that, we did not observe any similar performance impact.
-
-Could you please help investigate the following:
-
-1. Review commit traffic patterns to Bitbucket from early April to May 31.
-
-Specifically, is it possible to check if there was a spike or unusually high number of commit transactions on May 31 compared to previous days?
-
-This will help us determine whether the rebuild job and commit load together caused the conflict.
-
-
-
-2. Based on this, please help us update the RCA to include traffic analysis and clarify why the issue only manifested on May 31, despite the job running daily for months without issues.
-
-
-
-For reference, here's the initial RCA we drafted:
-
-> “A scheduled rebuild index job which runs daily at 7:00 PM EST to improve the query performance by defragmenting and optimizing database indexes, conflicted with active commit transactions from Bitbucket users. Usually the rebuild index job takes less than a minute, but due to the conflict with other Bitbucket commit transactions, the rebuild index job took more than an hour and went into a hung state. This led Bitbucket DB queries to run longer than expected and caused performance degradation.”
-
-
-
-Let us know if you need any additional information from our side.
+The vendor has been asked to check if there was any unusual commit traffic or increased database load during that time which might have conflicted with the index rebuild. We are currently awaiting their response
