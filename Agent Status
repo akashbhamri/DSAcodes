@@ -1,3 +1,1 @@
-We’ve reached out to the vendor regarding the index rebuild job getting stuck on May 28 and 31. While the job has been running daily at 7:00 PM EST since early February without issues, the concern is around why this behavior was observed only on those two specific dates.
-
-The vendor has been asked to check if there was any unusual commit traffic or increased database load during that time which might have conflicted with the index rebuild. We are currently awaiting their response
+Hi Sapna, good morning. Sorry to disturb you on a Sunday, but currently no one is available to generate the BB support bundle. If possible, could you please generate it when you get some time today? We need to share it with the vendor regarding the index rebuild issue. Thank you!
