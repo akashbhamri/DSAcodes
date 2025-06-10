@@ -1,5 +1,29 @@
-Hi Vimal,
-We noticed that this activity was not communicated in advance. As per our process, alerts should be muted before performing any such tasks. This has been communicated multiple times, but it’s still not being consistently followed.
+Thanks, Akash! Here's a more refined version of your email incorporating that intent:
 
-Praneeth,
-Requesting your help in ensuring the team informs us ahead of time to avoid these unnecessary alerts. It
+
+---
+
+Subject: Request for Prior Communication on Planned Cluster Activities
+
+Hi [Recipient's Name],
+
+Hope you're doing well.
+
+We observed that the NFS Client Provisioner was upgraded on Saturday, which triggered alerts on our end. Upon review, it appears that this was a planned activity, but we did not receive any prior communication regarding it.
+
+To avoid unnecessary alert investigations in the future, we kindly request that any planned activities—especially those involving reboots or changes impacting alerts—be communicated to us in advance for the following clusters:
+
+[Cluster Names/Details]
+
+This will help us avoid confusion and ensure smooth coordination across teams.
+
+Appreciate your support on this.
+
+Best regards,
+Akash
+
+
+---
+
+Let me know if you want a shorter or more informal version too!
+
