@@ -1,29 +1,3 @@
-Thanks, Akash! Here's a more refined version of your email incorporating that intent:
-
-
----
-
-Subject: Request for Prior Communication on Planned Cluster Activities
-
-Hi [Recipient's Name],
-
-Hope you're doing well.
-
-We observed that the NFS Client Provisioner was upgraded on Saturday, which triggered alerts on our end. Upon review, it appears that this was a planned activity, but we did not receive any prior communication regarding it.
-
-To avoid unnecessary alert investigations in the future, we kindly request that any planned activities—especially those involving reboots or changes impacting alerts—be communicated to us in advance for the following clusters:
-
-[Cluster Names/Details]
-
-This will help us avoid confusion and ensure smooth coordination across teams.
-
-Appreciate your support on this.
-
-Best regards,
-Akash
-
-
----
-
-Let me know if you want a shorter or more informal version too!
-
+If you observe any performance issues in CBCD during releases, please ensure you inform the monitoring team immediately.
+As a reminder, we have stopped restarting CBCD from now on.
+Kindly notify us if you experience any performance degradation.
