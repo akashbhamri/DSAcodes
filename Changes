@@ -1,23 +1,2 @@
-Sure! Here's a professional and polite way to rephrase your request in an email:
-
-
----
-
-Subject: Request for Approval to Add L2 DL to Splunk Alerts
-
-Hi Pranweth,
-
-Hope you're doing well.
-
-I’d like to proceed with raising a request to include the L2 distribution list in our Splunk alert notifications. This will help ensure timely awareness and quicker resolution by the right team.
-
-Please confirm if you're okay with me moving ahead on this.
-
-Thanks,
-[Your Name]
-
-
----
-
-Let me know if you'd like a more formal or informal version!
+We are creating a change plan for correcting the core-per-socket configuration on the following Bitbucket servers, as recommended by the Cloud team: vplbitbucapda01 and vplbitbucapda02. The actual implementation will be carried out by the Cloud team. This change aims to align the configuration with standard requirements. A similar update was previously completed on vplbitbucapda07 and vplbitbucapda08 without any impact.
 
