@@ -1,1 +1,41 @@
-We are correcting the core-per-socket configuration on the following Bitbucket servers as per the Cloud team's recommendation: vplbitbucapda01 and vplbitbucapda02. This adjustment is aimed at aligning the server settings with the required specifications. Similar changes were already successfully implemented on Prod-07 and Prod-08 without any issues.
+Here’s an improved and professional version of the Validation Steps section, including the use of APM (Application Performance Monitoring) for post-validation:
+
+
+---
+
+Validation Plan:
+
+1. Confirm socket configuration changes have been applied successfully on both vplbitbucapda01 and vplbitbucapda02 by checking system-level settings.
+
+
+2. Capture before and after configuration snapshots for audit and reference purposes.
+
+
+3. Verify service health status after the restart at the OS level.
+
+
+4. Use APM tools (e.g., New Relic, Dynatrace, or relevant monitoring platform) to:
+
+Monitor application response times
+
+Track CPU and memory performance
+
+Ensure there are no performance degradations or anomalies
+
+
+
+5. Cross-check logs for any warnings or errors post-implementation.
+
+
+6. Coordinate with the application/Bitbucket team to ensure all functionalities are working as expected.
+
+
+7. Share validation report (including APM graphs, health check status, and screenshots) with the Cloud team and stakeholders.
+
+
+
+
+---
+
+Let me know if you’d like this added to the Excel sheet text as well, or need a backout plan section written just in case.
+
