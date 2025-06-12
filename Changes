@@ -1,2 +1,3 @@
-We are creating a change plan for correcting the core-per-socket configuration on the following Bitbucket servers, as recommended by the Cloud team: vplbitbucapda01 and vplbitbucapda02. The actual implementation will be carried out by the Cloud team. This change aims to align the configuration with standard requirements. A similar update was previously completed on vplbitbucapda07 and vplbitbucapda08 without any impact.
+Please review and approve the attached change plan for the socket configuration correction activity on vplbitbucapda01 and vplbitbucapda02, as recommended by the Cloud team.
 
+This is a low-risk change aimed at aligning the core-per-socket configuration with standard guidelines. The same activity was successfully performed on vplbitbucapda07 and vplbitbucapda08 without any issues. The implementation will be carried out by the Cloud team, and we will monitor system performance via APM during and after the activity.
