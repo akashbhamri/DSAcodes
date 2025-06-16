@@ -1,2 +1,37 @@
-We are creating a change plan for correcting the core-per-socket configuration on the following Bitbucket servers, as recommended by the Cloud team: vplbitbucapda01 and vplbitbucapda02. The actual implementation will be carried out by the Cloud team. This change aims to align the configuration with standard requirements. A similar update was previously completed on vplbitbucapda07 and vplbitbucapda08 without any impact.
+Here’s a refined and professional message you can send to the Soteri vendor to request clarification and action:
+
+
+---
+
+Subject: Clarification and Cleanup Recommendation for AO_D9E976_INVALID_LINE Table
+
+Hi Team,
+
+We’ve identified that the table AO_D9E976_INVALID_LINE, which is associated with the Enhanced Secret Scanner for Bitbucket by Soteri, is occupying over 245 GB in our Bitbucket database.
+
+Could you please help us with the following:
+
+1. What exactly is the purpose of this table? Does it store historical scan results or detected secret lines?
+
+
+2. Is it safe to prune or clean up this table? If yes, could you share recommended procedures or cleanup guidelines?
+
+
+3. Are there any best practices to control the growth of this table (e.g., retention policies, data purging options)?
+
+
+4. Can this impact the plugin’s performance or scanning capabilities if old records are archived or deleted?
+
+
+
+We’re looking to optimize database usage without affecting plugin functionality. Your guidance on this would be much appreciated.
+
+Thanks,
+[Your Name]
+[Your Team / Company Name]
+
+
+---
+
+Let me know if you want to customize this further for a specific tone or internal process.
 
