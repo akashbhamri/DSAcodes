@@ -1,16 +1,1 @@
-Here's a more polished and professional way to say what you’re trying to convey:
-
-
----
-
-"Please note that the heap dump will only be generated when an OutOfMemoryError occurs. Ensure that the specified path exists and has the correct permissions. Also, it's recommended to implement a cleanup mechanism to avoid disk space issues — for example, automatically deleting heap dumps that are older than 5 days if they are not retrieved from the server within that time."
-
-
----
-
-Or, a slightly shorter version:
-
-"Heap dumps will be created only in the event of an OutOfMemoryError. Please ensure the specified directory exists with appropriate permissions. To avoid disk space accumulation, a cleanup mechanism should be implemented to delete heap dumps older than 5 days if they are not retrieved."
-
-Let me know if you want a sample cleanup script too.
-
+We’ve received an update from the Soteri vendor with their recommended actions. Please let me know if we can connect to review it and proceed with the necessary steps.
