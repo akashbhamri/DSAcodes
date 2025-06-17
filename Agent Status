@@ -1,1 +1,1 @@
-We’ve received an update from the Soteri vendor with their recommended actions. Please let me know if we can connect to review it and proceed with the necessary steps.
+We’ve already increased the heap to 8GB. Regarding syncing the Hikari pool size with production, could you please share the reason for proposing this change? Have you observed any specific issue or performance concern that justifies increasing the pool size?
