@@ -1,1 +1,18 @@
-We’ve already increased the heap to 8GB. Regarding syncing the Hikari pool size with production, could you please share the reason for proposing this change? Have you observed any specific issue or performance concern that justifies increasing the pool size?
+Here's a more polished and professional version of your message:
+
+
+---
+
+Hi Team,
+
+Going forward, please use the below reports to view logs directly in Splunk. Simply click on the “Open in Search” option, and the relevant logs—whether for controller logs or any DevOps server logs—will be displayed automatically. This eliminates the need to copy and paste search queries manually.
+
+Additionally, we’ve created the dashboard below to track tool-related errors as they occur. Kindly start using this dashboard for quick visibility into any issues.
+
+Thanks!
+
+
+---
+
+Let me know if you'd like a more casual or more formal version.
+
