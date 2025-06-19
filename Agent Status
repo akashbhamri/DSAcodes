@@ -1,22 +1,24 @@
-Got it! Here's a refined and clear version including your point about the script and Splunk plugin issue:
+Sure! Here's the updated version with that point clearly added:
 
 
 ---
 
 Hi Praneeth,
 
-We’ve raised an RITM for creating a new AD group for the Splunk Jenkins index, since approval for the existing AD group is still pending from the app owner. The request is currently in progress.
+We’ve raised an RITM for creating a new AD group for the Splunk Jenkins index, as we’re not getting approval for the existing group from the app owner. The request is currently in progress.
 
-In Prod, I created a script that verifies the Splunk configuration, and I’m able to see events being pushed through when triggered manually via the script. However, the issue seems to be with the Splunk Jenkins plugin, which is not sending the events as expected.
+In Prod, I created a script that verifies the Splunk configuration, and I can see events being pushed when triggered manually via the script. However, events are still not coming through via the Splunk Jenkins plugin.
 
-In Dev, the plugin is installed and events are visible in Splunk. But the CI/CD setup is incomplete, and there's an additional issue with worker node connectivity, which I'm actively working on.
+Since I don’t have access to Prod, I’m unable to validate or troubleshoot the plugin issue directly there. That’s why I’m focusing on setting up and testing everything thoroughly in the Dev environment.
 
-Once Dev is fully functional and validated, we can replicate the working setup to Prod and address the plugin issue effectively.
+In Dev, the plugin is installed and events are visible in Splunk. However, the CI/CD pipeline isn’t fully set up yet, and there’s also a connectivity issue with the worker node, which I’m currently working to resolve.
 
-Will keep you updated on further progress.
+Once Dev is stable and the end-to-end flow is confirmed, we’ll use that as a reference to address the issue in Prod.
+
+Will keep you posted on progress.
 
 
 ---
 
-Let me know if you want this reworded for a status update or chat message.
+Let me know if you'd like a shorter version for chat or a more formal one for email.
 
