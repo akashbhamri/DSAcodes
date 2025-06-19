@@ -1,10 +1,22 @@
-Here's a short description you can use:
+Got it! Here's a refined and clear version including your point about the script and Splunk plugin issue:
 
-"New index 'jenkins' created; request to create a new role with access to this index."
 
-Or slightly more formal:
+---
 
-"As discussed, a new index named 'jenkins' has been created. Please create a new role with appropriate access to this index."
+Hi Praneeth,
 
-Let me know if you want it tailored for email, ticket, or documentation.
+We’ve raised an RITM for creating a new AD group for the Splunk Jenkins index, since approval for the existing AD group is still pending from the app owner. The request is currently in progress.
+
+In Prod, I created a script that verifies the Splunk configuration, and I’m able to see events being pushed through when triggered manually via the script. However, the issue seems to be with the Splunk Jenkins plugin, which is not sending the events as expected.
+
+In Dev, the plugin is installed and events are visible in Splunk. But the CI/CD setup is incomplete, and there's an additional issue with worker node connectivity, which I'm actively working on.
+
+Once Dev is fully functional and validated, we can replicate the working setup to Prod and address the plugin issue effectively.
+
+Will keep you updated on further progress.
+
+
+---
+
+Let me know if you want this reworded for a status update or chat message.
 
