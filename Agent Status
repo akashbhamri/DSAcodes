@@ -1,18 +1,10 @@
-Here's a more polished and professional version of your message:
+Here's a short description you can use:
 
+"New index 'jenkins' created; request to create a new role with access to this index."
 
----
+Or slightly more formal:
 
-Hi Team,
+"As discussed, a new index named 'jenkins' has been created. Please create a new role with appropriate access to this index."
 
-Going forward, please use the below reports to view logs directly in Splunk. Simply click on the “Open in Search” option, and the relevant logs—whether for controller logs or any DevOps server logs—will be displayed automatically. This eliminates the need to copy and paste search queries manually.
-
-Additionally, we’ve created the dashboard below to track tool-related errors as they occur. Kindly start using this dashboard for quick visibility into any issues.
-
-Thanks!
-
-
----
-
-Let me know if you'd like a more casual or more formal version.
+Let me know if you want it tailored for email, ticket, or documentation.
 
