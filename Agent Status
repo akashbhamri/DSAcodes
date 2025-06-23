@@ -1,27 +1,5 @@
-Here’s a sample professional email you can use to request removal of your DL from the alert for the application you no longer support:
-
-
----
-
-Subject: Request to Remove DL from Validation Alert for Unsupported Application
-
-Hi [Team/Name],
-
-We are currently receiving a validation alert related to an application that our team is no longer supporting. Kindly find the alert details attached for your reference.
-
-We would appreciate it if you could remove our DL ([Your DL Name]) from this alert notification list to avoid unnecessary updates.
-
-Please let us know once this change has been made or if any further action is needed from our side.
-
-Thanks for your support.
-
-Best regards,
-Akash Bhamri
-[Your Role/Team Name]
-[Contact Info if required]
-
-
----
-
-Let me know the exact DL name and the alert screenshot if you'd like me to attach it or include more context.
-
+We observed JVM errors indicating "Retried waiting for GCLocker too often allocating 2950 words."
+This points to memory pressure or delays in garbage collection caused by native thread locks.
+It’s likely related to long JNI operations or heap size limitations.
+We recommend enabling GC logs and reviewing heap usage for further analysis.
+A request has been raised with the vendor for deeper investigation at the JVM level.
