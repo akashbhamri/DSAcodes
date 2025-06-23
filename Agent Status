@@ -1,46 +1,6 @@
-Absolutely — here's a detailed, professional, and assertive message you can send to the vendor or support team, asking for deeper investigation before scaling up the memory:
-
-
----
-
-🧾 Detailed Professional Version:
-
-> Hi [Vendor/Support Team],
-
-We appreciate your analysis and recommendation regarding the heap memory issue observed on the controller (cbcd). We understand that the current setup allocates 8 GB of memory to the pod, and with the JVM options -XX:InitialRAMPercentage=50.0 and -XX:MaxRAMPercentage=50.0, only 4 GB is used for heap.
-
-However, we’d like to point out that this issue appears to be a sudden and isolated incident — we haven't observed similar OutOfMemoryErrors in the recent past. Increasing the pod memory allocation has broader implications for resource planning and cost, and we want to ensure the change is justified before taking action.
-
-To proceed confidently, we request a deeper investigation into the root cause of the memory spike. Specifically, we’d appreciate your help with:
-
-1. What workloads or jobs were actively running at the time the heap memory was exhausted?
-
-
-2. Were there any recent changes in job size, configurations, or deployment before the spike?
-
-
-3. Do you see any evidence of memory leaks or inefficient object usage in the application logs or metrics?
-
-
-4. Is there a pattern or trend in memory usage over time, or was this a true one-off event?
-
-
-5. Can we profile the memory usage during that time window to understand object growth and GC behavior?
-
-
-
-We’re happy to consider increasing the controller memory if there’s a sustained need, but would prefer to first validate whether the current configuration was simply overwhelmed by an unusual, non-repeating load.
-
-Looking forward to your detailed analysis.
-
-Best regards,
-[Your Name]
-[Your Team / Project Name]
-
-
-
-
----
-
-Let me know if you want this shortened, made more casual for Teams/Slack, or customized to your company tone.
-
+index=syf_pks_cde2_dal 
+cluster_name="dal-cde2-devops" 
+kubernetes.pod_name="*CONTAINER-APPS-0" 
+stream=stderr
+| table _time, kubernetes.container_name, log, level, source, stream
+| sort -_time
