@@ -1,3 +1,59 @@
-The Platform team performed a password reset activity on server vbitbucdbda01 for the user rlcbitdev01 around 8:30 AM IST.
-Post-reset, the DEV UFL became inaccessible. Upon checking, it was found that not all nodes were properly restarted, and some continued to use the old password, causing multiple failed login attempts. This led to the user rlcbitdev01 getting locked out.
-To resolve the issue, all BB DEV node processes were forcefully terminated, the password was updated, and a proper restart was performed.
+Absolutely! Here's the full list of official documentation in plain link format — ready to copy and paste:
+
+
+---
+
+📘 Apdex (Application Performance Index)
+
+https://www.apdex.org/documents/apdex-spec-v11-021011.pdf
+
+https://docs.newrelic.com/docs/apm/new-relic-apm/apdex/apdex-score/
+
+https://docs.newrelic.com/docs/apm/new-relic-apm/apdex/apdex-measure-user-satisfaction/#apdex_t
+
+
+
+---
+
+📈 Response Time (Latency)
+
+https://newrelic.com/blog/best-practices/monitoring-distributed-systems-golden-signals
+
+https://docs.newrelic.com/docs/alerts-applied-intelligence/new-relic-alerts/alert-conditions/create-alert-conditions/#web-transaction
+
+
+
+---
+
+⚠️ Error Rate
+
+https://newrelic.com/blog/best-practices/monitoring-distributed-systems-golden-signals
+
+https://docs.newrelic.com/docs/alerts-applied-intelligence/new-relic-alerts/alert-conditions/create-alert-conditions/#error-percentage
+
+
+
+---
+
+📊 Throughput
+
+https://docs.newrelic.com/docs/apm/new-relic-apm/apm-data/apm-metrics-data/#throughput
+
+https://newrelic.com/blog/best-practices/monitoring-distributed-systems-golden-signals
+
+
+
+---
+
+🖥️ CPU & Memory Usage
+
+https://docs.newrelic.com/docs/infrastructure/infrastructure-monitoring/alerting/create-infrastructure-alert-conditions/
+
+https://docs.newrelic.com/docs/infrastructure/infrastructure-monitoring/hosts/monitor-host-metrics/
+
+
+
+---
+
+Let me know if you'd like this formatted as a PDF, markdown file, or Confluence table!
+
