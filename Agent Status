@@ -1,1 +1,3 @@
-"Raghu, I’ve created this chat to track the issue. Could you please check the latest updates on the vendor information? We need to identify the exact cause of the sudden spike in the controller."
+The Platform team performed a password reset activity on server vbitbucdbda01 for the user rlcbitdev01 around 8:30 AM IST.
+Post-reset, the DEV UFL became inaccessible. Upon checking, it was found that not all nodes were properly restarted, and some continued to use the old password, causing multiple failed login attempts. This led to the user rlcbitdev01 getting locked out.
+To resolve the issue, all BB DEV node processes were forcefully terminated, the password was updated, and a proper restart was performed.
