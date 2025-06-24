@@ -1,6 +1,1 @@
-index=syf_pks_cde2_dal 
-cluster_name="dal-cde2-devops" 
-kubernetes.pod_name="*CONTAINER-APPS-0" 
-stream=stderr
-| table _time, kubernetes.container_name, log, level, source, stream
-| sort -_time
+"Raghu, I’ve created this chat to track the issue. Could you please check the latest updates on the vendor information? We need to identify the exact cause of the sudden spike in the controller."
