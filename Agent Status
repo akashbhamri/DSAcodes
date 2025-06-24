@@ -1,6 +1,47 @@
-Yes Basharaf, since CloudBees CD comes with an embedded JRE, it includes only the Java runtime (java) and does not include developer or diagnostic tools like javac, jstack, or jmap.
-
-That’s why we need to separately install the full JDK on our systems to perform advanced diagnostics such as thread dumps or performance analysis.
+Got it! If you're reaching out to the vendor (Atlassian or plugin provider) for guidance, here’s a clean and professional way to frame your message:
 
 
-https://docs.cloudbees.com/docs/cloudbees-cd-kb/latest/cloudbees-cd-kb/kbec-00458-required-data-performance-issue-with-cd?utm_source=chatgpt.com
+---
+
+✉️ Message to Vendor:
+
+> Hi Team,
+
+We are seeing continuous growth in the following database tables related to scan data:
+
+AO_D9E976_SCAN
+
+AO_D9E976_REF_SCAN
+
+AO_D9E976_REPO_SCAN
+
+AO_D9E976_INVALID_LINE
+
+AO_D9E976_PROJECT_ROLLUP
+
+
+As part of our housekeeping efforts, we are planning to drop and regenerate these tables periodically using the "Scan All" feature after cleanup.
+
+Could you please help us with:
+
+1. The ideal or recommended size threshold (in MB or GB) for each of these tables before we take action?
+
+
+2. The recommended frequency (weekly, monthly, etc.) for cleaning them up in a production environment?
+
+
+3. Whether there is any risk to performance or data if these tables grow beyond a certain size?
+
+
+
+We are also looking to set up automated alerts for table growth, so an ideal threshold from your end will help us tune that correctly.
+
+Thanks in advance for your guidance.
+
+
+
+
+---
+
+Let me know if you want to tailor this message to Jira ticket format, or add instance details like Bitbucket/Data Center version.
+
