@@ -1,1 +1,6 @@
-Please work on preparing a proper document for the Soteri high space utilization issue, including table cleanup activities. Also, coordinate with the DB team to explore the possibility of setting up alerts for tables consuming excessive space.
+Yes Basharaf, since CloudBees CD comes with an embedded JRE, it includes only the Java runtime (java) and does not include developer or diagnostic tools like javac, jstack, or jmap.
+
+That’s why we need to separately install the full JDK on our systems to perform advanced diagnostics such as thread dumps or performance analysis.
+
+
+https://docs.cloudbees.com/docs/cloudbees-cd-kb/latest/cloudbees-cd-kb/kbec-00458-required-data-performance-issue-with-cd?utm_source=chatgpt.com
