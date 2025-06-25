@@ -1,1 +1,14 @@
-we have raised a ticket with the vendor to confirm whether the industry-standard thresholds we’re referencing (e.g., Jakob Nielsen’s response time guidelines and typical throughput classifications) are applicable in our context.
+We are currently reviewing JVM performance metrics on our application and noticed that the average JVM response time is around 5–9 ms, which is performing well compared to general industry references that indicate ~50 ms as a typical average for stateless JVM operations.
+
+We would like to confirm the following with you:
+
+✅ Is there any official guidance, recommendation, or best-practice threshold for JVM internal response time from your side?
+
+✅ Does the ~50 ms reference as a healthy average apply to our environment, or do you suggest a different threshold based on the JVM workload and architecture?
+
+✅ Are there recommended maximum limits or alerts thresholds you suggest for JVM response time in [Vendor Tool Name]?
+
+
+This will help us validate whether our current JVM performance aligns with vendor expectations and whether any further tuning is required.
+
+Looking forward to your guidance.
