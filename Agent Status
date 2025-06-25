@@ -1,47 +1,32 @@
-Certainly! Here's a more detailed and context-rich version of your message to ask about the "good" Web Transaction Time (WTT) for the CBCD application:
+As part of our performance review and monitoring process, we're currently evaluating our system's web transaction time and throughput. We've come across the following industry sources and would like to know if they are valid for assessing our environment in the context of your platform and expected behavior:
 
+1. Reddit DevOps Rule-of-Thumb (Throughput Thresholds)
 
----
-
-📧 Detailed Email/Message Template
-
-> Subject: Clarification on Acceptable Web Transaction Time (WTT) for CBCD Application
-
-Hi [Team/CBCD App Owner/PO Name],
-
-I hope you're doing well.
-
-While reviewing the APM metrics (especially in New Relic) for the CBCD application, I noticed varying response times across different web transactions. To ensure our monitoring and alerting is aligned with business expectations and user experience, I’d like to understand the baseline or expected performance threshold for Web Transaction Time (WTT) specific to this application.
-
-Could you please help clarify the following:
-
-1. What is the acceptable average response time (WTT) for the CBCD application under normal load?
-
-
-2. Is there an SLA (Service Level Agreement) defined for end-to-end response times?
-
-
-3. Are there any business-critical transactions (e.g., login, payment, search, etc.) that have different response time expectations?
-
-
-4. Should we consider any external service call durations or DB latency separately, or should we use the total WTT as the benchmark?
-
-
-5. Is there any documentation or historical benchmark that we can refer to for defining alert thresholds (e.g., anything above 800ms should be flagged)?
-
-
-
-My goal is to ensure that our monitoring setup correctly reflects the actual performance expectations and avoids unnecessary alerts or, conversely, missing critical degradation signals.
-
-Please let me know your thoughts or direct me to someone who can provide this information.
-
-Thanks & Regards,
-Akash Bhamri
+> Low: <10–100 RPS (600–6,000 RPM)
+Moderate: 100–1,000 RPS (6,000–60,000 RPM)
+High: 1,000–10,000 RPS (60,000–600,000 RPM)
+[Source: r/devops thread discussing system load expectations]
 
 
 
 
----
+2. Web/API Response Time Expectations (Reddit/StackOverflow)
 
-Would you like me to prepare a version for chat format (e.g., MS Teams or Slack), or want to include New Relic chart/snapshot reference as well?
+> Average response time target: 10–25 ms
+Threshold for concern: >200 ms under load
+[Source: Developer community input on acceptable response time for production APIs]
 
+
+
+
+
+We would appreciate it if you could confirm:
+
+Are these benchmarks in line with the performance standards and architecture of your platform?
+
+Can we use them as a valid reference when evaluating our current throughput ([insert ms])?
+
+Do you have any internal or published guidance you'd recommend for a more platform-specific assessment?
+
+
+Your confirmation will help us make more accurate decisions regarding tuning, scaling, and SLA alignment.
