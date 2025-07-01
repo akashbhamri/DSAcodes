@@ -1,1 +1,34 @@
-"I am cancelling this for now. Once we touch base with the vendor and gather more details and insights, we will decide on setting up the call further."
+As per your observation regarding the JDBC driver compatibility issue with our current Java version, we would like to clarify a few points and need further insights:
+
+1. The JDBC driver version 11.2.0.3.0 you identified — could you please confirm where this driver is originating from?
+→ Is it an embedded driver that comes packaged with the application, or is it something provided by default in the middleware stack?
+→ We would like to understand this because we haven’t installed or configured this driver explicitly on our end.
+
+
+2. Since this driver was functioning previously, we would like to understand:
+→ What has changed now that is triggering the incompatibility?
+→ Is this related to a recent Java upgrade (to Java 11)?
+→ Or are there any recent library/middleware/application changes that have caused this incompatibility to surface now?
+
+
+3. Could you also help us confirm:
+→ Is there a recommended approach to replace or upgrade this embedded JDBC driver if it’s part of the platform?
+→ Would updating the driver have any downstream impact on the application or DB connectivity that we should be aware of?
+
+
+4. Additionally, can you confirm:
+→ Is this JDBC driver version officially supported with the Oracle DB version we are running, combined with Java 11?
+→ If not, do you have a validated compatibility matrix or recommendation for the driver version that should be used with our current setup?
+
+
+5. From your analysis of logs and heap dumps, besides the JDBC compatibility concern:
+→ Are there any other contributing factors leading to the issue (e.g., memory leaks, connection pool problems, classloader issues)?
+→ Should we consider other remediations alongside the driver upgrade?
+
+
+
+
+---
+
+Request:
+Kindly provide clarity on these points, as this will help us assess the path forward in terms of upgrades or configuration changes.
