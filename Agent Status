@@ -1,3 +1,18 @@
-As per our standard process, we are not supposed to add individual users directly to branch permissions. Instead, we manage access through authorized groups to ensure consistency, better access control, and easier audit management.
+Here’s how you can frame that message clearly and professionally:
 
-We noticed that a user has been added directly to branch permissions. Could you please help us understand the reason for this deviation? If there is a valid business need, kindly share it so we can review and handle it appropriately.
+
+---
+
+Hi Vaibhavi,
+
+As discussed, we are currently rolling back the production alert setup. We would like to implement more enhancements and improvements in the non-production environment before proceeding further.
+
+Additionally, we need the query execution details that were running during the index rebuild to help with the investigation. Please also suggest what additional information we can include in the alert, which would help us in troubleshooting such issues effectively.
+
+Once we have the required details and validation, we will raise the RITM to proceed with the production changes.
+
+
+---
+
+Would you like me to make it even shorter, more formal, or more casual?
+
