@@ -1,27 +1,21 @@
-Here’s a polished and professional way to escalate this message:
+Perfect, here’s the revised version with “dead end” moved to the end as you requested:
+
+Bitbucket pod went into memory spike during index rebuild job running for longer than usual.
+
+No RCA from DB team as they don’t maintain query execution data once it’s completed.
+
+Vendor observed table AO_xxxx with huge data contributing to slowness.
+
+We are setting up an alert to capture index rebuild completion time, query details, and other necessary parameters.
+
+As of now, the index rebuild job is rescheduled to run every Saturday at 7 PM.
+
+If the job exceeds 10 minutes, the alert will be triggered automatically.
+
+This will help in proactive monitoring and quick investigation of issues in future.
+
+As of now, we are at a dead end for RCA due to DB limitation.
 
 
----
-
-Subject: Urgent Escalation: Pending RCA for Severity Issue Raised on 26th
-
-Email Body:
-Dear [Recipient's Name],
-
-We raised this case on 26th June, and as you are aware, this is a critical severity issue for us, with our production tool being down. At the time of raising, we were informed that the response and RCA would be provided within 2 days. However, it has now been 5 days, and we have yet to receive any root cause or resolution update.
-
-Given the criticality and prolonged impact on our production environment, we request you to please prioritize this case with immediate effect. We expect urgent attention and a clear timeline for the resolution and RCA.
-
-Kindly escalate this internally and help expedite the resolution.
-
-Looking forward to your swift response.
-
-Best regards,
-[Your Name]
-[Your Contact Info, if needed]
-
-
----
-
-If you want, I can help convert this into a chat message version as well. Want that?
+✅ Ready to use directly. Want me to put it in mail format too?
 
