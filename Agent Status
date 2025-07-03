@@ -1,1 +1,2 @@
-"Even with the 60-day retention in place, we're still receiving alerts. Could you please review what else can be cleaned up on this node, or let us know if it's feasible to reduce the retention period to something lower?"
+We are creating the RITM for now, but this dev DB is critical for us. Since the RITM will require approval and go through the standard process, it may take some time to complete.
+Requesting you to please expedite this one and let us know the procedure to raise an exception or incident for such critical dev DBs, so they can be handled on priority when needed.
