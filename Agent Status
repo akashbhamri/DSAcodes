@@ -1,4 +1,2 @@
-vendor had requested the set_env properties and the diagnostic bundle, which we have already shared. We also followed up regarding our concern with the ODJ C driver, but we are still awaiting their response.
+We are not in a position to proceed with the ODBC driver upgrade unless our concern is addressed. Specifically, we would like to understand whether this driver was installed as part of the uDeploy application upgrade, or if it was manually installed later. This clarification is important for us before taking any further action.
 
-
----
