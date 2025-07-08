@@ -1,3 +1,1 @@
-We’ve reached a dead end in the RCA due to limitations on the DB side — query data is not retained once execution completes, and currently, there is no mechanism in place to capture this information during events like index rebuilds.
-
-To address this gap, we are working with the DB team to set up an alert that will capture the index rebuild completion status along with other key details. This will help ensure we have sufficient context for effective root cause analysis in similar situations going forward.
+"ITSI is a product offered by Splunk itself, while the Jenkins-related indexes were created as part of the Jenkins app installation. Can you please confirm whether the questionnaire explicitly indicates that we are the owners of all these indexes, including the ones associated with ITSI?"
