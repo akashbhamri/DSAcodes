@@ -1,1 +1,3 @@
-"We have shared the heap dump with you, but we’re not seeing any specific analysis or reference to it in your response. Could you please confirm if the heap dump was reviewed and share your observations or findings, if any?"
+We’ve reached a dead end in the RCA due to limitations on the DB side — query data is not retained once execution completes, and currently, there is no mechanism in place to capture this information during events like index rebuilds.
+
+To address this gap, we are working with the DB team to set up an alert that will capture the index rebuild completion status along with other key details. This will help ensure we have sufficient context for effective root cause analysis in similar situations going forward.
