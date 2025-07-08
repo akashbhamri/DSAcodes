@@ -1,6 +1,1 @@
-
-
-We are unable to identify any clear cause for the high heap utilization, and we do not see this addressed anywhere in the shared update. As requested, we have already provided the support bundle and set_env file — kindly review them thoroughly. We are expecting your analysis, as there is currently no solid evidence explaining the heap usage issue.
-
-
----
+"We have a scheduled call tomorrow with Praneeth and Asharf regarding the JDBC driver upgrade suggestions shared by the vendor."
