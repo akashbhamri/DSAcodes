@@ -1,1 +1,2 @@
-"ITSI is a product offered by Splunk itself, while the Jenkins-related indexes were created as part of the Jenkins app installation. Can you please confirm whether the questionnaire explicitly indicates that we are the owners of all these indexes, including the ones associated with ITSI?"
+This seems like a standard SQL deadlock. We’ll check with the DB team if any action is needed, but you can ignore it for now since this is from the Bitbucket dev environment and not critical."
+
