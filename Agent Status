@@ -1,1 +1,5 @@
-This VM requires additional CPU, and we’re planning to scale it up by next weekend. Once the Oracle process completes, the issue is expected to be resolved on its own.
+We have raised an RITM with the platform team to update the JDBC driver in both the Dev and Prod UDeploy environments.
+
+
+
+An RITM has been created to update the JDBC driver in the UDeploy applications for both Dev and Prod environments, due to compatibility issues with Java 11. Kindly let me know if you need any further details.
