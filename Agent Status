@@ -1,1 +1,1 @@
-Team, I noticed that only 3 Jenkins servers are listed in the sheet, but we have other Jenkins servers as well (including worker nodes). Could you please confirm if this is a partial list or if other Jenkins servers will be included in the scope later? Just want to ensure we don’t miss any connections.”
+As there is enough space available in the database, we can back up and restore just the dropped table. If needed, we also have the option to store the full database. The table and its size are mentioned below.
