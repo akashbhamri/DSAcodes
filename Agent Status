@@ -1,1 +1,1 @@
-“Hi Team, just to clarify — are we expected to validate the internet dependencies only for the four Jenkins servers listed, or should this review cover all Jenkins and related servers? Kindly confirm if this is a partial report or if any other servers are planned to be included in the scope of this migration.”
+Bitbucket alerts were triggered this weekend after the activity. We have created an RITM for this, and the platform team is currently working on KT sessions to investigate and identify the root cause.
