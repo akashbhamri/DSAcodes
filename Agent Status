@@ -1,1 +1,2 @@
-Could you please help confirm the exact start and end time for this activity? I noticed alerts were triggered even after the window ended. Was the node brought down post end time, or was there any additional activity planned?
+This is a temporary deadlock alert from the Pranerth process, observed only in the Bitbucket Dev environment. It resolves automatically after the process terminates and restarts. Since it’s from a non-critical environment, no immediate action is required.
+Temporary deadlock alert from Pranerth, specific to Bitbucket Dev (non-critical). It clears itself after process restart.
