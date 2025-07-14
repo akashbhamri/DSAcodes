@@ -1,2 +1,50 @@
-This is a temporary deadlock alert from the Pranerth process, observed only in the Bitbucket Dev environment. It resolves automatically after the process terminates and restarts. Since it’s from a non-critical environment, no immediate action is required.
-Temporary deadlock alert from Pranerth, specific to Bitbucket Dev (non-critical). It clears itself after process restart.
+Here’s a clear answer you can use for each question, mentioning MSSQL team where needed:
+
+
+---
+
+✅ 1. Will the lock get cleared after some time?
+
+> Yes, the lock gets cleared automatically when SQL Server kills the deadlock victim process. Once terminated, associated locks are released immediately. No manual action is required in this case.
+
+
+
+
+---
+
+✅ 2. How do we know if the lock is cleared or not?
+
+> Splunk only shows the deadlock event, but it doesn’t confirm live lock status. To verify if any locks are currently active, the MSSQL team needs to check directly by running queries like:
+
+SELECT request_session_id, resource_type, resource_description
+FROM sys.dm_tran_locks
+WHERE request_status = 'GRANTED';
+
+This will show if any active locks remain.
+
+
+
+
+---
+
+✅ 3. Do we get alerts continuously if the lock does not get cleared?
+
+> In Splunk, alerts are triggered based on deadlock events, not active lock status. You’ll get alerts only when a new deadlock occurs within the search window (e.g., every 5 or 15 minutes). If there are no new deadlocks, no alerts are generated.
+
+> 📌 Note: Even if lock remains active (rare), Splunk wouldn’t show it. MSSQL team must monitor that side.
+
+
+
+
+
+
+---
+
+🟢 Final Summary (if you want to close it professionally):
+
+> “Summary: This alert confirms a deadlock incident which resolves automatically. Live lock status should be checked by MSSQL team via direct queries. Splunk will only alert us on fresh deadlock events and not on active locks.”
+
+
+
+Let me know if you want me to shorten this for Teams message.
+
