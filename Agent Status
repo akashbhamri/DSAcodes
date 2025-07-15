@@ -1,1 +1,7 @@
-As discussed on the call, we have missed capturing active session details during recent incidents which made it difficult to identify the exact root cause, especially during index rebuild activities. To avoid this in future, please ensure active session details are also captured as part of alerting whenever such events occur.
+Hi Mark,
+
+This source type is not managed by our team. There are other application teams who also store logs under the syf_apps index.
+
+For your reference, I’ve attached the host details where these logs are getting populated — these hosts are not handled or supported by our team.
+
+Please let us know if you need any further details.
