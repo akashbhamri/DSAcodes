@@ -1,1 +1,11 @@
-“Could you please provide a justification from your side? Also, are you experiencing the same issue? I haven't received any updates from either of you so far.”
+index=udeploy_logs sourcetype=udeploy_server_logs 
+"/rest/deploy/componentProcessRequest/Table"
+| rex "completed in (?<duration_ms>\d+) ms"             # pull out the duration in ms
+| stats 
+    count                          as hits, 
+    avg(duration_ms)               as avg_ms, 
+    max(duration_ms)               as max_ms, 
+    perc95(duration_ms)            as p95_ms 
+  by host, _source  
+| sort - max_ms  
+| where max_ms > 60000            # only show calls over 1 minute
