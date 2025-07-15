@@ -1,1 +1,8 @@
 Downtime: 13 minutes (06:23 AM to 06:36 AM IST / 08:53 PM to 09:06 PM EST) during service restart.
+
+
+Business Impact:
+
+One deployment/release was impacted for approximately 10 minutes during the restart window.
+
+Application recovered successfully after restart, with no further alerts observed
