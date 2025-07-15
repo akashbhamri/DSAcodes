@@ -1,1 +1,1 @@
-Hi Jerel, sharing the list of all servers with their respective IP addresses as per our discussion.
+As discussed on the call, we have missed capturing active session details during recent incidents which made it difficult to identify the exact root cause, especially during index rebuild activities. To avoid this in future, please ensure active session details are also captured as part of alerting whenever such events occur.
