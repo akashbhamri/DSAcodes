@@ -1,1 +1,2 @@
-Yes, the table will also be part of the backup since it’s within the database. As per Shiny’s confirmation, since there is sufficient storage available, we can restore the database with a different name and extract only the required table from it. There’s no need to restore the entire database for this purpose.
+
+"Shiny, I never mentioned anything about truncating the table. Regarding the table size, we just want to review the current data present in the 'nevermind' database. We'll check this internally and get back to you if we decide to proceed further."
