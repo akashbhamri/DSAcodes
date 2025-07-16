@@ -1,1 +1,1 @@
-"As of now, we're setting the mute rule based on the change window timing. Please ensure we communicate clearly once the activity is completed, so the team can promptly disable the mute rule."
+Yes, the table will also be part of the backup since it’s within the database. As per Shiny’s confirmation, since there is sufficient storage available, we can restore the database with a different name and extract only the required table from it. There’s no need to restore the entire database for this purpose.
