@@ -1,3 +1,35 @@
-As discussed during our call, please proceed with creating the rule as mentioned to help prevent this issue going forward.
-Requesting your support in confirming the status of this rule for all L2 team members.
-Thank you for your help!
+In this only
+Great! Here's the final version with everything included:
+
+You're renaming instead of dropping.
+
+You're informing the Soteri vendor and awaiting their suggestions.
+
+You'll delete the tables only if no issues are found.
+
+You require sign-off from the DB team for the rename.
+
+This version is professional and suitable for email, documentation, or a PPT slide:
+
+
+---
+
+🔧 Soteri Table Cleanup Approach – Pending Vendor Review & DB Sign-Off
+
+As discussed during the call, the DB team will rename the identified tables by appending _copy instead of dropping them directly. This will ensure data preservation while allowing us to proceed with validation.
+
+Once the renaming is complete, we will restart the Soteri plugin to allow it to recreate the required tables.
+
+The system will be monitored over the next couple of weeks to verify that Soteri functions as expected with no issues.
+
+We are currently informing the Soteri vendor of this approach and will proceed further based on their feedback and recommendations.
+
+If no issues are observed during the monitoring period, we will proceed to delete the renamed tables to free up space.
+
+A formal sign-off from the DB team is required before performing the table renaming activity.
+
+
+---
+
+Would you like me to format this as an email draft for you to send to the DB team and vendor?
+
