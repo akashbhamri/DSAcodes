@@ -1,35 +1,48 @@
-In this only
-Great! Here's the final version with everything included:
-
-You're renaming instead of dropping.
-
-You're informing the Soteri vendor and awaiting their suggestions.
-
-You'll delete the tables only if no issues are found.
-
-You require sign-off from the DB team for the rename.
-
-This version is professional and suitable for email, documentation, or a PPT slide:
+Absolutely! Here's your updated content section with the total alert count and removal of 85% threshold alerts clearly mentioned:
 
 
 ---
 
-🔧 Soteri Table Cleanup Approach – Pending Vendor Review & DB Sign-Off
+> 13/05/2025 – After discussion, we removed the 85% threshold and now only have a 90% threshold for CPU, memory, and filesystem alerts.
 
-As discussed during the call, the DB team will rename the identified tables by appending _copy instead of dropping them directly. This will ensure data preservation while allowing us to proceed with validation.
+As part of this change, 50 alerts triggered at the 85% threshold were removed, reducing noise and improving alert relevance.
 
-Once the renaming is complete, we will restart the Soteri plugin to allow it to recreate the required tables.
+We are currently receiving all necessary alerts based on the 90% threshold, and no further alert adjustment is required at this stage.
 
-The system will be monitored over the next couple of weeks to verify that Soteri functions as expected with no issues.
+Additionally, we are in the process of setting up enhanced APM monitoring alerts, which will help us monitor the tool more efficiently and proactively.
 
-We are currently informing the Soteri vendor of this approach and will proceed further based on their feedback and recommendations.
 
-If no issues are observed during the monitoring period, we will proceed to delete the renamed tables to free up space.
-
-A formal sign-off from the DB team is required before performing the table renaming activity.
 
 
 ---
 
-Would you like me to format this as an email draft for you to send to the DB team and vendor?
+Let me know if you want to update the alert counts (like received, closed, active, etc.) as well!
+
+
+Thank you for the clarification!
+
+You're asking how to mention the change in total alert count due to removing the 85% threshold, just like in the table you shared.
+
+Here’s how you can phrase it, formatted in the same style:
+
+
+---
+
+📌 Suggested Entry (for your alert summary):
+
+Total Alerts Received: 12
+Actionable Active Alerts: 1
+Closed Alerts: 11
+Removed Alerts: 50 (from 85% threshold)
+Weekend Activity Alerts: 3
+Remarks:
+
+> “As part of the threshold cleanup activity, the 85% CPU/memory/filesystem alert logic was disabled. A total of 50 alerts triggered at 85% were removed. Now, only the 90% threshold is active, ensuring more relevant alerting.”
+
+
+
+
+---
+
+Let me know your exact alert numbers and I’ll customize this further.
 
