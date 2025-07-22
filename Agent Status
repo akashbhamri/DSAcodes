@@ -1,3 +1,1 @@
-"While creating the process, we should ensure that the relevant team names—those the user is part of—are also added correctly. This is important because such processes should always reflect accurate team mappings during the initial setup itself.
-
-"How can we ensure the correct teams are added during the process creation? Are we following any reference from an existing process, or is there a specific RITM that was used for this setup? 
+"Hi Praneeth, I’ve created a script that successfully triggers alerts when the tool becomes unreachable. Now, I’d like to test if it behaves the same way when the controller goes down. Would it be possible to bring down the test controller for a few minutes to validate this?"
