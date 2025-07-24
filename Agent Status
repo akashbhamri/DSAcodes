@@ -1,1 +1,1 @@
-“Team, we’ve created a custom script alert to monitor controller unreachability and added the L2 DL to the notification list. This is marked as a critical alert. Please notify us here as soon as you receive it. For your reference, a snapshot is attached below.”
+“Can someone from the Oracle team please look into this again? This query is being triggered from the backend and is causing noticeable degradation in our tool’s performance whenever it runs.”
