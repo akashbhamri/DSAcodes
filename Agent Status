@@ -1,1 +1,1 @@
-“Can someone from the Oracle team please look into this again? This query is being triggered from the backend and is causing noticeable degradation in our tool’s performance whenever it runs.”
+"Fixes are handled by the platform team, and we notify them whenever we face any Stonebranch-related issues during patching activities."
