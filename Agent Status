@@ -1,1 +1,2 @@
-One of the pipelines is consuming a significant amount of space in the appdata directory. Since the current retention is set at 60%, we’ll either need to lower the retention threshold or increase the available storage.
+"We have fetched the data from ServiceNow and are currently validating all policy conditions to ensure that all servers are properly included."
+
