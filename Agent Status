@@ -1,13 +1,1 @@
-
-Subject: Request to Review and Address Recurring High Server Utilization
-
-Hi [Name],
-
-As discussed during the call, we’ve observed that the server utilization is spiking frequently, and this has become a recurring issue.
-
-Could you please review this internally and also coordinate with the IAC team to identify the root cause and suggest possible long-term solutions to prevent this from happening again?
-
-Additionally, kindly keep us posted on the progress and any updates on this.
-
-Thanks,
-[Your Name]
+One of the pipelines is consuming a significant amount of space in the appdata directory. Since the current retention is set at 60%, we’ll either need to lower the retention threshold or increase the available storage.
