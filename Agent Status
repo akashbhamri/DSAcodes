@@ -1,2 +1,37 @@
-"We have fetched the data from ServiceNow and are currently validating all policy conditions to ensure that all servers are properly included."
+Got it! Here's the email format with the AD team's RCA content embedded directly into the body:
+
+
+---
+
+Subject: Recurring Account Lockout – AD Team RCA Update
+
+Hi Rodney,
+
+The SVC-APP-RLCT service account was locked again today, and this has become a recurring issue. The Unix team had assigned this to the AD team, and we had a call where Irene Sylvia from AD joined and provided the RCA details.
+
+As per the AD team:
+
+> The issue occurred due to the SVC-APP-RLCT service account getting locked repeatedly as a result of incorrect password attempts. This account is integrated across multiple tools for automation and service-to-service communication.
+
+However, the exact source of the incorrect password attempts could not be identified. The AD team was unable to trace the issue because all authentication traffic is routed via a VIP (Load Balancer), which masks the actual Domain Controller (DC) causing the lockout. Hence, the DC is not directly visible in the logs.
+
+Fix: The account was automatically unlocked. No changes were made from our end.
+
+Business Impact: No impact.
+
+Next Steps: The platform team is working to eliminate the dependency on the shared SVC-APP-RLCT account and will implement separate service accounts per tool. This is to isolate authentication flows, improve traceability, and prevent similar issues going forward.
+
+
+
+Since nothing further can be done from the AD team’s side, this has now been assigned to our DL.
+
+Let me know if you need any additional details.
+
+Best regards,
+[Your Name]
+
+
+---
+
+Let me know if you want to include timestamps or shorten it further.
 
