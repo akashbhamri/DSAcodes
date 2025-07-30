@@ -1,4 +1,1 @@
-“We’ve connected with the DB team regarding the issue. They’re in the process of optimizing the query and will keep us posted on the progress.”
-
-
-“We are tracking this issue under the current incident ID.”
+/appbin space was high on an IAC dev server, which led to an alert. We’ve cleared the space, and the server is stable now. No issues observed in other dev or prod servers."
