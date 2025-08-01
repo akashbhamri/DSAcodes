@@ -1,5 +1,6 @@
-Hope you're doing well. As per my manager's request, could you please help confirm the BTR for the UDeploy AD account update in the Dev environment?
+Please go ahead and disable or remove the synthetic policies for these monitors. As they're currently unable to ping the configured locations in New Relic, we've set up custom script-based alerts as a replacement for all of them.
 
-Also, if possible, please let me know whether the new account details have been updated in the Confluence documentation.
+Feel free to reach out if you need any additional information or clarification.
 
-Appreciate your support!
+Best regards,
+Akash
