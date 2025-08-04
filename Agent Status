@@ -1,1 +1,8 @@
 "We require a BTR for the UDeploy HA setup. Please let me know a suitable time to schedule thi
+
+
+"Is it possible to add log rotation or cleanup jobs for Chef-related files?"
+
+"Was the root partition ever reviewed for expected growth with Chef?"
+
+"Can we remount or symlink heavy directories (like /var/chef) to another volume with more space?"
