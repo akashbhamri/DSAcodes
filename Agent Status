@@ -1,6 +1,1 @@
-Please go ahead and disable or remove the synthetic policies for these monitors. As they're currently unable to ping the configured locations in New Relic, we've set up custom script-based alerts as a replacement for all of them.
-
-Feel free to reach out if you need any additional information or clarification.
-
-Best regards,
-Akash
+"We require a BTR for the UDeploy HA setup. Please let me know a suitable time to schedule thi
