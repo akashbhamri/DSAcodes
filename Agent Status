@@ -1,3 +1,2 @@
-We’re noticing this alert being triggered frequently, but it resolves automatically within a second. From what we’ve observed, it’s caused when an API misses a ping by just a few milliseconds, which seems to be expected behavior given the high volume of API calls in BB.
 
-Since it's not causing any actual impact and is adding noise, can we consider disabling this alert temporarily? I'd like to focus on investigating more critical issues reflected in the BB logs.
+3. "Unfortunately, the account has been locked again due to failed login attempts. Asharaf, I've attached a screenshot for your review."
