@@ -1,25 +1,55 @@
-Sure Akash! Here's a more polished and professional version of your message:
+Here are the points formatted for a PowerPoint slide — clean, concise, and ready to add under each job title:
 
 
 ---
 
-Subject: Request for BTR Session – Service Account Configuration
+🔹 1. CONTROLLERS_REACHABILITY_CHECK
 
-Hi [Recipient's Name],
+Checks the availability of all controllers.
 
-Hope you're doing well.
+Monitors response time and return status codes.
 
-We require a BTR session to go over the new service account and the configurations we've done so far, as discussed. This session is important to ensure everything is in place before the scheduled patching activity this weekend.
+Triggers alerts on failed reachability or incorrect status codes.
 
-Could you please let us know a suitable time to schedule this session?
-
-Looking forward to your confirmation.
-
-Thanks & Regards,
-Akash Bhamri
 
 
 ---
 
-Let me know if you want to mention the service account name or include more technical details.
+🔹 2. CRITICAL_TOOL_REACHABILITY_CHECK
+
+Verifies uptime and accessibility of critical DevOps tools.
+
+Tools include: UDeploy, Bitbucket, CBCD, SonarQube, Nexus, and Jenkins.
+
+Sends alerts if any tool is down or unresponsive.
+
+
+
+---
+
+🔹 3. Network_Health_Check
+
+Performs bulk network connectivity checks for all servers.
+
+Avoids manual one-by-one verification.
+
+Stores reachability and latency data in a CSV file for reference.
+
+
+
+---
+
+🔹 4. Thread_AND_Heap_Dump_Collector
+
+Automates thread and heap dump collection from servers.
+
+Helps in analyzing performance issues and memory leaks.
+
+Useful during application slowness or server crashes.
+
+
+
+---
+
+Let me know if you want these converted into an actual .pptx file or want graphical icons added per point.
 
