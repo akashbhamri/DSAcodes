@@ -1,1 +1,18 @@
-just have a quick question. I’m currently serving my notice period at Capgemini, and I was planning to take the AJ-400 certification. However, I was informed that since I’m in my notice period, I might not be eligible. I just wanted to confirm this before I join the session."
+uDeploy Dev & Prod faced heap memory issues causing UI downtime; restarted to restore service.
+
+
+uDeploy – Dev & Prod Update
+
+Issue: In both environments, heap memory spike caused OutOfMemoryError and UI became inaccessible.
+
+Collected logs & thread dumps, restarted the application to fix the issue, restore availability, and control impact, then shared details with vendor.
+
+Vendor identified JDBC driver compatibility issue with Java 11 in both environments → recommended replacing ojdbc6.jar with ojdbc8.jar.
+
+Heap memory increased (Dev: 2GB → 8GB, Prod: 4GB → 8GB) and HikariCP pool size increased in Dev (90 → 445).
+
+JDBC driver upgrade & vendor patch applied — Dev on July 25, 2025; Prod on July 26, 2025.
+
+DB query optimization ongoing with DB team to improve performance.
+
+Monitoring in progress – no issues observed post-fix. RCA ongoing (Dev: INCA049439, Prod: INC4117028).
