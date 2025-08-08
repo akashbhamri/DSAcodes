@@ -1,18 +1,2 @@
-uDeploy Dev & Prod faced heap memory issues causing UI downtime; restarted to restore service.
 
-
-uDeploy – Dev & Prod Update
-
-Issue: In both environments, heap memory spike caused OutOfMemoryError and UI became inaccessible.
-
-Collected logs & thread dumps, restarted the application to fix the issue, restore availability, and control impact, then shared details with vendor.
-
-Vendor identified JDBC driver compatibility issue with Java 11 in both environments → recommended replacing ojdbc6.jar with ojdbc8.jar.
-
-Heap memory increased (Dev: 2GB → 8GB, Prod: 4GB → 8GB) and HikariCP pool size increased in Dev (90 → 445).
-
-JDBC driver upgrade & vendor patch applied — Dev on July 25, 2025; Prod on July 26, 2025.
-
-DB query optimization ongoing with DB team to improve performance.
-
-Monitoring in progress – no issues observed post-fix. RCA ongoing (Dev: INCA049439, Prod: INC4117028).
+"Rahul, I’ve created a duplicate slide and merged both Dev & Prod content into one. Review once, and if it’s fine, I’ll delete the separate slides."
