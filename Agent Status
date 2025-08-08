@@ -1,2 +1,40 @@
+Here's a more professional and polished version of the email you can use to request the patching reschedule:
 
-"Rahul, I’ve created a duplicate slide and merged both Dev & Prod content into one. Review once, and if it’s fine, I’ll delete the separate slides."
+
+---
+
+Subject: Request to Reschedule Patching - RITM2934317, RITM2934319 (DevOps Servers)
+
+Hi Team,
+
+Kindly reschedule the patching activities for the below-mentioned servers to August 16th and 17th, as we have planned agent installations on these servers during the current window. Exception requests have already been raised to support this change.
+
+Updated Patching Schedule:
+
+RITM2934317
+New Window: 2025-08-16 00:00:00 to 2025-08-16 05:00:00
+Servers: vlducdapad017
+
+RITM2934319
+New Window: 2025-08-17 00:00:00 to 2025-08-17 05:00:00
+Servers: vlducdapad007
+
+CHG0814259 (Split 09/08)
+New Window: 2025-08-09 05:00:00 to 2025-08-09 06:00:00
+Servers: vlducdapad005
+
+CHG0814260 (Split 09/08)
+New Window: 2025-08-09 06:00:00 to 2025-08-09 07:00:00
+Servers: vlducdapad017
+
+
+Please let me know once the changes are updated in the schedule.
+
+Thanks & Regards,
+Harichandana
+
+
+---
+
+Let me know if you'd like to personalize or reword any part based on your tone or internal communication style.
+
