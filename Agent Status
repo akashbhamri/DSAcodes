@@ -1,1 +1,1 @@
-Since our non-production server is also classified as critical, we cannot take it down during business hours. This activity should be planned for the weekend only.
+Since the pipeline has been migrated from the internal controller to the test controller, we are encountering issues in granting access via script. I am currently coordinating with the platform team to address this.
