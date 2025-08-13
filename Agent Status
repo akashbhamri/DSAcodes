@@ -1,1 +1,1 @@
-Since the pipeline has been migrated from the internal controller to the test controller, we are encountering issues in granting access via script. I am currently coordinating with the platform team to address this.
+Could you please grant access to the below resource in the internal controller? We’ve recently had an increase in access-related requests, and this is blocking us from proceeding with the current sync pipeline in the test environment. Once the pipeline setup is complete and functioning as expected, we will remove the access.
