@@ -1,1 +1,121 @@
-Could you please grant access to the below resource in the internal controller? We’ve recently had an increase in access-related requests, and this is blocking us from proceeding with the current sync pipeline in the test environment. Once the pipeline setup is complete and functioning as expected, we will remove the access.
+Alright Akash — here’s an expanded but still easy-to-read version.
+I’ve added just enough detail so it’s richer than the last one, but without unnecessary repetition.
+
+
+---
+
+Incident Report – uDeploy Dev High CPU & Heap Utilization
+
+Status: Resolved – Inconclusive RCA (Vendor Review Pending)
+Start: 26-May-2025 07:00 EST
+End: 28-May-2025 09:45 EST
+Duration: ~50 hours
+
+
+---
+
+Summary
+
+The uDeploy Development environment went down due to heap memory exhaustion and sustained high CPU usage, causing repeated OutOfMemoryError events and making the UI unresponsive. This resulted in a complete halt to deployments in the Dev environment for over two days.
+The exact root cause remains undetermined, but multiple corrective actions and a vendor-supplied patch have been implemented. Since then, the system has been operating normally with no recurrence observed.
+
+
+---
+
+Impact
+
+Environment affected: uDeploy Dev
+
+Users affected: All teams using Dev for builds and deployments.
+
+Business impact: Deployment delays, development testing slowdown, and loss of access to Dev UI during outage window.
+
+
+
+---
+
+Actions Taken
+
+1. Service Recovery
+
+Restarted uDeploy Dev to restore temporary access.
+
+
+
+2. Configuration Changes
+
+Increased Java heap size from 2 GB → 8 GB.
+
+Increased Hikari connection pool size from 90 → 445 to match Production.
+
+Enabled set_env configuration for advanced heap/GC metrics.
+
+
+
+3. Vendor Recommendations
+
+Replaced outdated ojdbc6.jar with ojdbc8.jar for Java 11 compatibility.
+
+Applied vendor-supplied patch on 26-Jul-2025.
+
+
+
+4. Diagnostics & Collaboration
+
+Collected and shared logs, heap dumps, GC logs, and thread dumps with vendor.
+
+Worked with DB team to review and optimize queries (Tracked under ID: INC04117028).
+
+
+
+
+
+---
+
+Observations
+
+CPU and heap usage dropped to normal levels immediately after changes.
+
+No performance degradation has been detected since patch application.
+
+Vendor analysis is still ongoing; they have not identified the exact trigger for the heap exhaustion.
+
+
+
+---
+
+Inconclusive RCA
+
+The precise cause of the high CPU and heap utilization could not be confirmed.
+
+Applied configuration adjustments and vendor patch successfully resolved the symptoms.
+
+Further confirmation from the vendor is pending to determine the root issue (possible memory leak, JDBC issue, or query load pattern).
+
+
+
+---
+
+Next Steps
+
+1. Maintain enhanced monitoring for heap, CPU, and GC behavior.
+
+
+2. Keep Dev and Prod configurations fully aligned.
+
+
+3. Apply validated fixes to Prod once the change freeze is lifted.
+
+
+4. Update RCA once the vendor provides their final report and recommendations.
+
+
+
+
+---
+
+This version is balanced — more detailed than the short one but still clear, direct, and non-repetitive.
+
+If you want, I can now add a compact timeline section to this so it looks even more complete for management review.
+That way you’ll have both a summary view and the technical detail in one page.
+
