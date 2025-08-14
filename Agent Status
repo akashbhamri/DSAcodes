@@ -119,3 +119,220 @@ This version is balanced — more detailed than the short one but still clear, d
 If you want, I can now add a compact timeline section to this so it looks even more complete for management review.
 That way you’ll have both a summary view and the technical detail in one page.
 
+
+Great — I expanded the report with more technical detail, a clear timeline, stakeholders/owners, evidence collected, and concrete follow-ups while keeping the language professional and easy to read. I kept the Inconclusive RCA wording and made sure to state that the vendor patch was applied and the system is now stable.
+
+
+---
+
+Incident Report – uDeploy Dev High CPU & Heap Utilization
+
+Incident Title:
+uDeploy Dev Inaccessible due to High CPU & Heap Utilization
+
+Status:
+Resolved – Inconclusive RCA (Vendor analysis pending)
+
+Incident Window:
+Start: 2025-05-26 07:00 EST
+End: 2025-05-28 09:45 EST
+Duration: ~50 hours 45 minutes
+
+
+---
+
+1) Executive Summary
+
+uDeploy Dev became unresponsive due to heap exhaustion and sustained high CPU usage, producing repeated OutOfMemoryError events and making the UI inaccessible. Immediate remediation (service restart and configuration changes) restored service. The vendor-supplied patch and JDBC driver upgrade were applied and the environment has remained stable. The definitive root cause is still under vendor investigation — RCA is therefore inconclusive.
+
+
+---
+
+2) Impact
+
+uDeploy Dev UI inaccessible to all users for the incident window.
+
+Deployments and development work that depend on the Dev environment were delayed.
+
+Teams impacted: DevOps (platform), Application owners, DB team.
+
+
+
+---
+
+3) Timeline (key events)
+
+2025-05-26 07:00 EST – High CPU/heap observed; UI became unresponsive.
+
+2025-05-26 – Started collecting diagnostics (heap dumps, thread dumps, logs).
+
+2025-05-26 – Restarted uDeploy Dev application to restore availability.
+
+2025-05-26 to 05-27 – Temporary stability observed; mitigation work continues.
+
+Post-incident – Increased heap and Hikari pool in Dev (sandbox changes validated).
+
+2025-07-26 – Vendor patch and JDBC driver upgrade (ojdbc6.jar → ojdbc8.jar) applied.
+
+Post-patch – Monitoring continues; no recurrence observed.
+
+
+
+---
+
+4) What we changed / Technical actions taken
+
+Immediate remediation
+
+Restarted uDeploy Dev application to restore availability.
+
+
+Configuration changes
+
+Heap size: increased from 2 GB → 8 GB (Dev).
+
+Hikari connection pool: increased from 90 → 445 to align with production.
+
+Enabled set_env configuration in sandbox to collect GC timing and heap metrics.
+
+
+Vendor/DB changes
+
+Replaced JDBC driver ojdbc6.jar with ojdbc8.jar (vendor recommendation).
+
+Applied vendor patch (applied on 2025-07-26).
+
+Collaborated with DB team to review/optimize slow queries (tracked under INC04117028).
+
+
+Diagnostics collected
+
+Application logs (timestamps of errors/unresponsiveness).
+
+Heap dumps and thread dumps (captured during high-usage windows).
+
+GC logs (post set_env enablement).
+
+Database slow query logs and connection statistics.
+
+
+
+---
+
+5) Observations & Evidence
+
+Heap exhaustion and repeated OutOfMemoryError events coincide with the outage window.
+
+After increasing heap and pool size the application stabilized and CPU usage dropped.
+
+Post-patch and JDBC upgrade, no further memory/CPU spikes observed during monitoring.
+
+Vendor analysis remains open — collected artifacts were shared with vendor for deeper diagnosis.
+
+
+
+---
+
+6) Inconclusive RCA
+
+Status: Inconclusive.
+
+Temporary remediation and vendor patch mitigated the symptoms, but the exact root cause (application memory leak, JDBC incompatibility under certain loads, specific query pattern, or environment/config mismatch) has not been definitively confirmed.
+
+Vendor investigation is in progress; we will update this RCA when vendor findings are available.
+
+
+Important: Although we applied all recommended changes and the patch, we cannot yet say which single factor caused the original outage.
+
+
+---
+
+7) Current State
+
+uDeploy Dev is stable after configuration changes and patch.
+
+No recurrence observed in monitored intervals.
+
+Change freeze delayed immediate rollout to production; plan is to apply validated changes to Prod once freeze is lifted and vendor RCA is complete.
+
+
+
+---
+
+8) Owners & Stakeholders
+
+Incident owner: DevOps / Platform team (Akash)
+
+DB owner: Database team
+
+Vendor: IBM (investigation & patch)
+
+Communication: Platform manager / incident communications lead
+
+
+
+---
+
+9) Recommended Follow-up Actions (short & medium term)
+
+Short-term (next 1–2 weeks)
+
+1. Maintain enhanced monitoring (heap, CPU, GC pause times, DB connection pool) and alerting.
+
+
+2. Schedule a vendor call to prioritize RCA findings and request a target delivery date for the final RCA.
+
+
+3. Validate sandbox changes under production-like load tests.
+
+
+
+Medium-term (post-freeze / 1 month)
+
+1. Apply the same validated configuration and patch to Production (after change freeze).
+
+
+2. Run a controlled load test in staging to reproduce the issue (if possible) using captured query patterns.
+
+
+3. Implement a baseline configuration checklist to keep Dev/Stage/Prod parity (heap, Hikari size, JDBC driver version).
+
+
+
+Long-term
+
+1. If vendor confirms application memory leak or code issue, create a remediation plan with dev teams (code fix/release).
+
+
+2. Automate periodic GC/heap snapshot collection for early detection.
+
+
+3. Adopt pre-deploy configuration validation gates in CI/CD.
+
+
+
+
+---
+
+10) Communication & Reporting
+
+Status updates to platform stakeholders weekly until final RCA is received.
+
+Share vendor RCA and recommended long-term fix with application teams and leadership once available.
+
+
+
+---
+
+If you want, I can:
+
+Convert this into a one-page PDF (management-friendly).
+
+Provide a compact timeline table version for slide decks.
+
+Add a short email template to notify stakeholders with this summary.
+
+
+Which format would you like next?
+
+
