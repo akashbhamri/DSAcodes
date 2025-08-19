@@ -1,1 +1,92 @@
-appdata utilization on the server has reached 97%. An ongoing incident is already logged, and the platform team is working on cleanup activities to address this.
+Got it 👍 You want me to reformat the uDeploy RCA into the same professional structure as the Bitbucket RCA in your first screenshot (with headings like Issue Subject, Start/End Time, Summary, Root Cause Analysis, Technical Details, Actions Taken, Preventive Measures).
+
+Here’s your uDeploy incident rewritten in the Bitbucket RCA style:
+
+
+---
+
+🔹 Issue Subject: uDeploy Dev Inaccessible due to High CPU & Heap Utilization – Root Cause Inconclusive
+
+Start Time: 2025-05-28 07:00 AM EST
+End Time: 2025-05-28 09:45 AM EST
+
+
+---
+
+📌 Issue Summary
+
+On May 28, 2025, the uDeploy Development environment became unavailable due to heap memory exhaustion and sustained high CPU usage, resulting in repeated OutOfMemoryError events. This caused the uDeploy Dev UI to become unresponsive and all deployments in the Dev environment were blocked for over two hours.
+
+The DBA and application teams implemented multiple corrective actions along with a vendor-supplied patch, after which the system stabilized. Since then, the environment has been functioning normally with no recurrence observed. However, the exact root cause could not be conclusively identified.
+
+
+---
+
+📌 Root Cause Analysis
+
+The outage was triggered by heap exhaustion and high CPU utilization coinciding with the outage window.
+
+Post incident, increasing heap size and upgrading JDBC libraries stabilized the environment.
+
+Despite improvements, the exact trigger (application memory leak, JDBC incompatibility, query patterns, or environment/config mismatch) could not be determined, and thus RCA remains inconclusive.
+
+
+
+---
+
+📌 Technical Details & Observations
+
+1. Heap exhaustion and repeated OutOfMemoryError events aligned with the outage period.
+
+
+2. Heap size was increased in Dev (from 2 GB → 6 GB).
+
+
+3. Application max heap increased (from 4096 MB → 4451 MB) to match production.
+
+
+4. JDBC driver upgraded as per vendor recommendation (ojdbc6.jar → ojdbc8.jar).
+
+
+5. Vendor patch applied on 2025-07-26.
+
+
+6. Post remediation, no further CPU/memory spikes observed.
+
+
+
+
+---
+
+📌 Actions Taken
+
+Immediate restart of the uDeploy Dev application to restore availability.
+
+Heap configuration changes applied in Dev and aligned with Prod.
+
+JDBC upgrade and vendor patch installation completed.
+
+DB team engaged to review/optimize slow queries (tracked under INC41170268).
+
+
+
+---
+
+📌 Preventive Measures
+
+Continue monitoring heap utilization and CPU spikes with enhanced alerts.
+
+Work with vendor/DBA to further analyze and optimize queries.
+
+Validate environment/application configurations to avoid potential mismatches.
+
+Keep vendor patches proactively updated across all environments.
+
+
+
+---
+
+👉 This now matches the Bitbucket RCA format (with same headings/structure).
+
+Do you want me to also condense this into a short stakeholder version (1-paragraph + action items) for quick email/management updates, like a high-level summary?
+
