@@ -1,1 +1,1 @@
-"As discussed, Vimal, please ensure the internal chat reflects the progress and the permanent fix efforts underway for the vdlrljenkinapda11 server utilization. Tha
+From the Splunk side, we don’t have the ability to investigate this further. The issue needs to be analyzed at the CJOC level with the correct dump logs from the controller. As we have communicated earlier, this should be investigated by the platform team if the service is down. From our side, we can only provide you with metrics and the timestamps when the downtime occurs.
