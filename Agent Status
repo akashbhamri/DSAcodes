@@ -1,1 +1,12 @@
-team has added u as a restricted team name. This needs to be updated in the component config by admins. Could you please add it?
+Short Description (INC title)
+
+Connectivity issue on <server name/IP> during Dallas SF routing change
+
+
+---
+
+🔹 Long Description (INC details)
+
+During the Dallas SF network routing migration (EIGRP → BGP), our server <server name/IP> became unreachable and the service hosted on it was down for users.
+
+Requesting confirmation if this server is part of the Dallas SF networks (Dev/Prod/Cloud/Storage/ISZ) included in the scope of this activity.
