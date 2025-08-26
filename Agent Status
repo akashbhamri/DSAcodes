@@ -1,1 +1,338 @@
-“I’m working alone on both the RCA (along with the networking team) and the summary that needs to be updated internally. I also joined the internal call, but during that time no one mentioned it was updated later. Afterward, I faced issues and had to restart AWS multiple times, so I wasn’t able to update the Excel.”
+Nice — I turned the photos into a clean, professional access-provisioning SOP you can copy into Confluence / Word / email. I filled gaps with sensible defaults and placeholders you can replace (like URLs, admin names, and pipeline names). Paste this into your doc editor and adjust the links/names as needed.
+
+Access Provisioning & Troubleshooting SOP
+
+Purpose: Standard process for handling access requests for Bitbucket, CloudBees CI, uDeploy, Nexus and Jenkins/AD groups.
+Scope: DevOps support team handling RITM/SSO access requests.
+Owner: DevOps Support Team — replace with team/owner name
+Last updated: YYYY-MM-DD (replace)
+
+
+---
+
+Quick checklist (before you start)
+
+RITM contains component/app name or URL.
+
+Requester SSO ID (email/UID) available.
+
+Screenshots, error messages, and target environment (DEV/PROD) provided.
+
+Admin contacts (Bitbucket/CloudBees/uDeploy) available.
+
+
+
+---
+
+1. General workflow
+
+1. Identify request — Review RITM for component/application name, project, and any URLs. If missing, message the requester to collect required details.
+
+
+2. Verify user login — Ask requester: “Can you log into <tool> (Bitbucket/CloudBees/uDeploy) right now?”
+
+If yes: no further action for login; proceed to confirm project/team admin.
+
+If no: follow the tool-specific “Unable to log in” steps below.
+
+
+
+3. Confirm project admin / owner — Request project URL or repo name to identify project admins. Provide reference link to project admin details (Confluence).
+
+
+4. If necessary, add user via pipeline (tool-specific). Run pipeline with required inputs and monitor console output.
+
+
+5. Confirm resolution with requester and close the RITM.
+
+
+
+
+---
+
+2. Bitbucket Access Request
+
+Steps
+
+1. Identify request — Verify RITM contains Bitbucket project and repo information.
+
+
+2. Verify user login — Ask requester to confirm login to Bitbucket.
+
+If successful → guide them to request access from project admins.
+
+If not → proceed to next step.
+
+
+
+3. Confirm project admin details
+
+Ask the requester for the project URL or repo name to find the project admins.
+
+Reference: Bitbucket Project Admin details — AppDevOps Confluence (replace link).
+
+
+
+4. If user unable to log in
+
+Add the user to the Stash user list using the pipeline:
+UserAddition_To_Stash_Group [DEVOPS_PLATFORM » Bitbucket] [Jenkins]
+
+Inputs: SSO_ID, Project/Repo, RequestedRole (e.g., developer/read-only).
+
+
+If pipeline fails, escalate to Bitbucket admins (e.g., Manohar) to ensure SSO is added to the stash list or to fix SSH/SSO mapping issues.
+
+
+
+5. Ticket closure
+
+Confirm with requester they can access the repo.
+
+Close RITM with notes (pipeline run ID, build console link, admin escalations if any).
+
+
+
+
+
+---
+
+3. CloudBees CI (Managed Controller) — Verify AD groups & Jenkins folder permissions
+
+Steps
+
+1. Open the RITM and check the CloudBees CI URL mentioned.
+
+
+2. Verify AD group details
+
+Click on the provided CloudBees CI URL (example: All (DEV) » TKGI_AppSec [Jenkins]).
+
+Navigate to the Groups section.
+
+Identify the AD group used for the folder/project (e.g., APP-DEVELOPER-SECURITY or APP_CONTROLLER-DEVELOPER).
+
+
+
+3. Guide the user
+
+Inform the requester of the relevant AD group and the access level it provides.
+
+Instruct requester to raise a SIAM request for access to that AD group, or raise it on their behalf if your process allows.
+
+Reference doc: Jenkins Folder and Active Directory Management — AppDevOps Confluence (insert link).
+
+
+
+4. If AD group needs update
+
+Requester must raise SIAM or you can run the approved provisioning pipeline (if applicable).
+
+
+
+5. Ticket closure
+
+Confirm the user’s access on CloudBees and close the RITM.
+
+
+
+
+
+---
+
+4. uDeploy (Dev / Prod) — Component configuration & team mapping
+
+Steps
+
+1. Identify the request
+
+Review the RITM description for component/application name or uDeploy URL. Ask requester if not present.
+
+
+
+2. Check in uDeploy
+
+Login to uDeploy (Dev/Prod) as required.
+
+Use the search option to locate the component or open the provided URL.
+
+
+
+3. Teams Configuration
+
+Navigate to the component Configuration section.
+
+Under configuration, find the team name mapped to the component.
+
+If team exists: add the requester’s SSO ID to the team using the Access Provision pipeline.
+
+If no team exists: ask the requester which team should be mapped and coordinate with DevOps admin to map the team.
+
+Important note: Do NOT add SSO to Restricted_access team. Confirm with admins before mapping to restricted teams.
+
+
+
+4. Run pipeline (if required)
+
+Provide the required details and run the uDeploy_Access_Provisioning pipeline (or equivalent).
+
+Monitor console output. If the build fails, capture the console logs and identify the error.
+
+
+
+5. Confirm
+
+Ask requester to verify access. If successful, close RITM; otherwise, troubleshoot errors or escalate.
+
+
+
+
+
+---
+
+5. Nexus Access
+
+(Use same pattern as Bitbucket/uDeploy — verify RITM, check login, map to group or role, run provisioning pipeline, confirm.)
+
+Suggested steps
+
+1. Review RITM for Nexus repo details.
+
+
+2. Verify requester login to Nexus.
+
+
+3. If login fails, identify repository admin and request SSO addition to the repo access list or run the appropriate provisioning pipeline.
+
+
+4. Confirm with requester and close RITM.
+
+
+
+
+---
+
+6. Jenkins / AD Groups — Identify & provision
+
+Steps
+
+1. From the CloudBees/Jenkins folder UI, go to Groups.
+
+
+2. Identify the relevant AD group(s) assigned to the folder (e.g., DEVOPS-SYSTEM-ADMIN, APP_CONTROLLER-DEVELOPER).
+
+
+3. If requester needs membership, direct them to raise SIAM for AD group membership, or run the approved AD provisioning pipeline if you are authorized.
+
+
+4. Document the AD group name and permissions in the RITM notes.
+
+
+
+
+---
+
+7. Troubleshooting & common errors
+
+Pipeline fails: Capture console log, note error messages, and re-run after fixing input values. If permission/SSO mapping errors, escalate to relevant admin (Bitbucket/AD/SAML team).
+
+SSO not mapped: Confirm with admins that the user’s SSO is present in the underlying system (AD/IDP).
+
+User can log in but no access to resource: Likely missing project-level permission — contact project admin or add via provisioning pipeline.
+
+Restricted team mapping: Do not map SSO into Restricted_access without admin approval.
+
+
+
+---
+
+8. SIAM / Access Request Templates
+
+A. SIAM Request to join AD group (example)
+
+Subject: Request to add <SSO_ID> to AD group <AD_GROUP_NAME>
+
+Hello [SIAM/Admin Team],
+
+Please add the following user to the AD group below:
+
+- Requester name: <Full Name>
+- Requester SSO ID: <user@company.com>
+- Target AD group: <AD_GROUP_NAME>
+- Requested role: <Developer/ReadOnly/Admin>
+- Component/Folder/Repo: <e.g., TKGI_AppSec / repo-name>
+- Reason: <Brief justification>
+- RITM: <RITM-XXXXXXX>
+
+Thanks,
+<Your name / DevOps Support>
+
+B. Message to Requester (example)
+
+Hi <Name>,
+
+I’ve reviewed your request <RITM-XXXXX>. To proceed I need:
+1) Confirm you cannot login to <tool> (yes/no).
+2) Confirm the project/repo URL or component name.
+3) Preferred access level (Developer / ReadOnly / Admin).
+
+Once I have this, I’ll either add you via the provisioning pipeline or escalate to the project admins.
+
+Thanks,
+<Support Engineer>
+
+
+---
+
+9. Closing the RITM (what to include)
+
+Steps performed (pipelines run, groups identified).
+
+Pipeline name and build number (if run).
+
+Screenshot or console log snippet (if troubleshooting).
+
+Confirmation from requester that issue is resolved.
+
+Any escalations and who was contacted.
+
+
+
+---
+
+Appendix — Admin contacts & useful links
+
+Bitbucket Admin: manohar@company.com (replace)
+
+CloudBees Admin: devops-ci-admin@company.com
+
+uDeploy Admin: udeploy-admin@company.com
+
+Confluence: Jenkins Folder and Active Directory Management — AppDevOps (insert link)
+
+Pipeline references:
+
+UserAddition_To_Stash_Group [DEVOPS_PLATFORM » Bitbucket]
+
+uDeploy_Access_Provisioning (replace with actual pipeline names)
+
+
+
+
+---
+
+If you want, I can:
+
+convert this into a Word/PDF and attach it, or
+
+format it as a Confluence-ready page with placeholders and anchors, or
+
+shorten it into a single quick-reference cheat-sheet for the support queue.
+
+
+Which of those would you like next?
+
+
+
+
+Access Provisioning Guide
